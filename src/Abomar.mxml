@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" backgroundColor="0xCCCCCC" fontSize="12" fontFamily="Arial" color="black"
+			   xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="appcreationCompleteHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="800" minHeight="600" preinitialize="preInit(event)" xmlns:views="com.module.views.*" xmlns:business="com.module.business.*" xmlns:control="com.module.control.*">
+	<fx:Script>
+		<![CDATA[
+			import com.module.views.CustomerBox;
+			import com.module.views.InventoryBox;
+			import com.module.views.LoginPanel;
+			import com.module.views.ProductBox;
+			import com.module.views.ReportBox;
+			import com.module.views.SalesBox;
+			import com.module.views.UserBox;
+			import com.variables.AccessVars;
+			import com.variables.SecurityType;
+			
+			import flashx.textLayout.formats.Float;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			private var logPanel:LoginPanel;
+			
+			protected function preInit(event:FlexEvent):void
+			{
+				var configLoad:URLLoader = new URLLoader(new URLRequest("config/config.xml"));
+				configLoad.addEventListener(Event.COMPLETE,configLoadComp);
+			}
+			
+			protected function configLoadComp(event:Event):void
+			{
+				var configXML:XML = XML(event.target.data);
+				/* SecurityType.HOST = configXML.@host;
+				SecurityType.DBUSER = configXML.@user;
+				SecurityType.DBPASS = configXML.@pass;
+				SecurityType.DBNAME = configXML.@dbname; */
+				SecurityType.HTTP_HOST = configXML.http.@host;
+				
+				super.initialized = true;
+			}
+			
+			protected function appcreationCompleteHandler(event:FlexEvent):void
+			{
+				AccessVars.instance().mainApp = this;
+				showLoginPanel();
+			}
+			
+			public function showLoginPanel():void{
+				if (logPanel){
+					PopUpManager.removePopUp(logPanel);
+					logPanel = null;
+				}
+				logPanel = new LoginPanel();
+				PopUpManager.addPopUp(logPanel,this,true);
+				PopUpManager.centerPopUp(logPanel);
+			}
+			
+			public function loginUser():void{
+				menNav.cntrl.visible = true;
+				floatMenuVisible(true);
+				//PopUpManager.removePopUp(logPanel);				
+				//logPanel = null;
+			}
+			
+			public function initializeApp():void{
+				floatMenuVisible(false);
+			}
+			
+			protected function appChange(event:MouseEvent,type:int):void
+			{
+				floatMenuVisible(false);
+				if (mainCont.numElements > 1)
+					mainCont.removeElementAt(0);
+				var objBox:VGroup;
+				switch(type){
+					case 0:
+						objBox = new UserBox();
+					break;
+					case 1:
+						objBox = new CustomerBox();
+					break;
+					case 2:
+						objBox = new ProductBox();
+					break;
+					case 3:
+						objBox = new SalesBox();
+					break;
+					case 4:
+						objBox = new InventoryBox();
+					break;
+					case 5:
+						objBox = new ReportBox();
+					break;
+				}
+				mainCont.addElementAt(objBox,0);
+			}
+			
+			public function floatMenuVisible(value:Boolean):void{
+				floatMenu.visible = floatMenu.includeInLayout = value;
+				if (mainCont.numElements > 1)
+					mainCont.removeElementAt(0);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<business:Services id="httpService"/>
+		<control:Controller id="controller"/>
+	</fx:Declarations>
+	<s:VGroup width="100%" height="100%">
+		<views:MenuNav width="100%" id="menNav"/>
+		<s:BorderContainer id="mainCont" width="100%" height="100%">
+			<s:BorderContainer id="floatMenu" visible="false" includeInLayout="false" horizontalCenter="0" verticalCenter="0"
+							   >
+				<s:borderStroke> 
+					<mx:SolidColorStroke 
+						color="0xAAAAAA" 
+						weight="2"/> 
+				</s:borderStroke>
+				<s:VGroup  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+					<s:HGroup>
+						<s:Button label="User" iconPlacement="top" width="80" height="80" click="appChange(event,0)"  useHandCursor="true" buttonMode="true"/>
+						<s:Button label="Customer" iconPlacement="top" width="80" height="80" click="appChange(event,1)"  useHandCursor="true" buttonMode="true"/>
+						<s:Button label="Products" iconPlacement="top" width="80" height="80" click="appChange(event,2)"  useHandCursor="true" buttonMode="true"/>
+					</s:HGroup>
+					<s:HGroup>
+						<s:Button label="Sales" iconPlacement="top" width="80" height="80" click="appChange(event,3)"  useHandCursor="true" buttonMode="true"/>
+						<s:Button label="Inventory" iconPlacement="top" width="80" height="80" click="appChange(event,4)"  useHandCursor="true" buttonMode="true"/>
+						<s:Button label="Report" iconPlacement="top" width="80" height="80" click="appChange(event,5)"  useHandCursor="true" buttonMode="true"/>
+					</s:HGroup>
+				</s:VGroup>
+			</s:BorderContainer>
+		</s:BorderContainer>
+		
+	</s:VGroup>
+	
+</s:Application>
