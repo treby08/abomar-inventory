@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Object xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.variables.SecurityType;
+			
+		    public static var  LOGIN_SERVICE:String = "login_service";
+		    public static var  USER_TYPE_LIST:String = "user_type_list";
+		    public static var  USER_SERVICE:String = "user_service";
+		    public static var  CUSTOMER_SERVICE:String = "customer_service";
+		    public static var  PRODUCT_SERVICE:String = "product_service";
+		    public static var  SALES_SERVICE:String = "sales_service";
+		
+		    
+			public function getHTTPService( name : String ) : HTTPService
+		    {
+		      	return this[name];
+		    }
+			
+		]]>
+	</mx:Script>
+		
+	<mx:HTTPService id="login_service"
+		url="{SecurityType.HTTP_HOST+'/login.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="user_type_list"
+		url="{SecurityType.HTTP_HOST+'/userTypeList.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="user_service"
+		url="{SecurityType.HTTP_HOST+'/userAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="customer_service"
+		url="{SecurityType.HTTP_HOST+'/customerAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="product_service"
+		url="{SecurityType.HTTP_HOST+'/productAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="sales_service"
+		url="{SecurityType.HTTP_HOST+'/salesAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+						
+</mx:Object>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.module.events.ItemsTransEvent;
+			import com.module.events.UserEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			private var _totalQty:int = 0;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				
+				var log2:UserEvent = new UserEvent(UserEvent.SEARCH_CUSTOMER,{searchstr:"",csBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				
+				/* var styleName:String = "." + dg.getStyle("headerStyleName");
+				var cssDecl:CSSStyleDeclaration = StyleManager.getStyleDeclaration(styleName);
+				cssDecl.setStyle("textAlign", 'center'); */
+				
+			}
+			
+			public function setDataProvider(arr:ArrayCollection,type:int):void{
+				if (type == 0){
+					cmbProd.dataProvider = arr;
+					cmbProd.labelFunction = mycmbProdLabelFunction;
+				}else if (type == 1){
+					cmbCustomer.dataProvider = arr;
+					cmbCustomer.labelFunction = mycmbCusLabelFunction;
+				}
+			}
+			
+			public function removeItemHandler(obj:Object):void{
+				txtSubtot.text = roundDec(Number(txtSubtot.text)- obj.total).toFixed(2);
+				txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
+				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
+				_totalQty = Number(Number(numItems.text) - obj.qty);
+				numItems.text = String(_totalQty);
+			}
+			
+			private function mycmbProdLabelFunction(item:Object):String{
+				return (item)?item.pCode +" - "+item.pName:"";
+			}
+			private function mycmbCusLabelFunction(item:Object):String{
+				return (item)?item.fname +" "+item.lname+" - "+item.businame:"";
+			}
+			
+			protected function cmbProdchangeHandler(event:IndexChangeEvent):void
+			{
+				if (cmbProd.selectedItem == null) return;
+				var obj:Object = cmbProd.selectedItem;
+				txtPrice.text = obj.price;
+				txtStock.text =  obj.stockCnt;
+				txtQty.maximum = Number(obj.stockCnt);
+				if (txtQty.value !=0){
+					txtQtychangeHandler(null);
+				}
+			}
+			
+			protected function txtQtychangeHandler(event:Event):void
+			{
+				if (txtStock.text =="0" || txtQty.value == 0) return;
+				
+				
+				txtSub.text = roundDec(Number(txtPrice.text)*int(txtQty.value)).toFixed(2);
+			}
+			
+			private function roundDec(numIn:Number, decimalPlaces:int = 2):Number {
+				var nExp:int = Math.pow(10,decimalPlaces) ; 
+				var nRetVal:Number = Math.round(numIn * nExp) / nExp
+				return nRetVal;
+			}
+			
+			protected function cmbCustomerchangingHandler(event:IndexChangeEvent):void
+			{
+				if (cmbCustomer.selectedItem == null) return;
+				var obj:Object = cmbCustomer.selectedItem;
+				txtBname.text = obj.businame;
+				txtBAdd.text = obj.baddress;
+				txtBPhone.text = obj.bPhoneNum;
+				txtBMobile.text = obj.bMobileNum;
+			}
+			
+			protected function btnAddclickHandler(event:MouseEvent):void
+			{	
+				if (cmbProd.selectedItem == null || txtQty.value == 0) return;
+				var arrCol:ArrayCollection;
+				if (dg.dataProvider == null)
+					arrCol = new ArrayCollection();
+				else
+					arrCol = dg.dataProvider as ArrayCollection;
+				
+				var obj:Object = cmbProd.selectedItem;
+				_totalQty +=txtQty.value;
+				arrCol.addItem({prodDBID:obj.prodID,prodID:obj.pCode,prodName:obj.pName,qty:txtQty.value,price:obj.price,vat:txtVat.text,total:txtSub.text});
+				dg.dataProvider = arrCol;
+				
+				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
+				txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
+				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
+				numItems.text = String(_totalQty);
+				cmbProd.selectedIndex = -1;
+				cmbProd.textInput.text = "";
+				txtQty.value = 0;
+				txtPrice.text = txtSub.text = "0.00";
+				txtQtychangeHandler(null);
+				txtStock.text = "0";
+				cmbProd.setFocus();
+			}
+			
+			protected function CheckOutclickHandler(event:MouseEvent):void
+			{
+				if (dg.dataProviderLength == 0 )return;
+				var obj:Object = {}
+				obj.sales_custID = cmbCustomer.selectedItem.custID;
+				obj.sales_branchID = 1;//cmbCustomer.selectedItem.custID;
+				obj.totalAmt = txtGT.text;
+				obj.vat = txtVat.text;
+				var strItem:Array = new Array();
+				for each (var item:Object in dg.dataProvider){
+					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total);
+				}
+				obj.salesDetails = strItem.join("||");
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Label text="Sales" fontWeight="bold" fontSize="18" fontStyle="italic"/>
+	
+	<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+		<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
+			<s:borderStroke> 
+				<mx:SolidColorStroke 
+					color="0xCCCCCC" 
+					weight="2"/> 
+			</s:borderStroke> 
+			<s:HGroup  width="100%" height="100%">
+				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:Label text="Sales Information"/>
+					<mx:HRule width="100%" height="2"/>
+					<s:HGroup  width="100%">
+						<s:Label text="Customer:" width="90"/>
+						<s:ComboBox id="cmbCustomer" width="100%" tabIndex="1" changing="cmbCustomerchangingHandler(event)"/>
+						<s:Label text="*" color="red"/>
+					</s:HGroup>
+					<s:HGroup width="100%">
+						<s:Label text="Business Name:" width="90"/>
+						<s:TextInput id="txtBname" width="100%" editable="false" />
+					</s:HGroup>
+					<s:HGroup width="100%">
+						<s:Label text="Business Address:" width="90"/>
+						<s:TextArea id="txtBAdd" width="100%" height="50" editable="false"/>
+					</s:HGroup>
+					<s:HGroup width="100%">
+						<s:Label text="Business Phone Number:" width="90"/>
+						<s:TextInput id="txtBPhone" width="100%" restrict="0-9\-()" editable="false"/>
+					</s:HGroup>
+					<s:HGroup width="100%">
+						<s:Label text="Business Mobile Number:" width="90"/>
+						<s:TextInput id="txtBMobile" width="100%" restrict="0-9\-" editable="false"/>
+					</s:HGroup>
+				</s:VGroup>
+				
+				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:Label text="Select a Product"/>
+					<mx:HRule width="100%" height="2"/>
+					<s:HGroup width="100%">
+						<s:Label text="Product Name:" width="90"/>
+						<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
+						<s:Label text="*" color="red"/>
+					</s:HGroup>
+					<s:HGroup width="100%">
+						<s:Label text="Quantity:" width="90"/>
+						<s:NumericStepper id="txtQty" width="100%" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
+						<s:Label text="*" color="red"/>
+						<s:Label text="Net Price:" width="90"/>
+						<mx:Text id="txtPrice" width="100%" text="0.00" textAlign="right" selectable="false"/>
+						
+					</s:HGroup>
+					
+					<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
+						<s:HGroup verticalAlign="middle" paddingLeft="10">
+							<s:Label text="Stock:" backgroundColor="0xFCFCFC" fontWeight="bold"/>
+							<mx:Text id="txtStock" text="0" textAlign="right" width="30" fontWeight="bold"/>
+						</s:HGroup>
+						<s:Spacer width="35%"/>
+						<s:HGroup width="50%" fontSize="16" verticalAlign="middle">
+							<s:Label text="Extend:" width="90"/>
+							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
+						</s:HGroup>
+					</s:HGroup>
+					
+					
+					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">
+						<s:Spacer width="100%"/>
+						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
+						<s:Button id="btnCheckOut" label="Check Out" click="CheckOutclickHandler(event)"/>
+					</s:HGroup>
+				</s:VGroup>
+			</s:HGroup>
+		</s:BorderContainer>
+		<s:Spacer height="5"/>
+		<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" >
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer"/>
+					<s:GridColumn width="100" dataField="prodID" headerText="Product ID"/>
+					<s:GridColumn dataField="prodName" headerText="Product Name">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:DefaultGridItemRenderer textAlign="left"/>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="qty" headerText="Quantity" width="100"/>
+					<s:GridColumn dataField="price" headerText="Net Price" width="180">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:DefaultGridItemRenderer textAlign="right"/>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="total" headerText="Total">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+		<s:HGroup width="100%" verticalAlign="bottom" fontSize="14">
+			<s:Label text="Number of Items: "/>
+			<s:Label id="numItems" text="0"/>
+			<s:Spacer width="100%"/>
+			<s:VGroup width="40%">
+				<s:HGroup width="100%">
+					<s:Label text="Subtotal:" width="90"/>
+					<mx:Text id="txtSubtot" width="100%" text="0.00" textAlign="right"/>
+				</s:HGroup>
+				<s:HGroup width="100%">
+					<s:Label text="VAT:" width="90"/>
+					<mx:Text id="txtVat" width="100%" text="0.00" textAlign="right"/>
+				</s:HGroup>
+				<s:HGroup width="100%">
+					<s:Label text="Grand Total:" fontSize="16"/>
+					<s:Label id="txtGT" textAlign="right" text="0.00" fontSize="18" width="100%"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:HGroup>
+	</s:VGroup>
+</s:VGroup>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" backgroundColor="white"
+		  xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="creationCompleteHandler(event)"
+		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="55">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.variables.AccessVars;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			protected function logoutClickHandler(event:MouseEvent):void
+			{
+				cntrl.visible = false;
+				AccessVars.instance().mainApp.initializeApp();
+				AccessVars.instance().mainApp.showLoginPanel();
+				
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				
+			}
+			
+			
+			protected function profileClickHandler(event:MouseEvent):void
+			{
+				var profPanel:ProfilePanel = new ProfilePanel();
+				PopUpManager.addPopUp(profPanel,AccessVars.instance().mainApp,true);
+				PopUpManager.centerPopUp(profPanel);
+				profPanel = null;
+			}
+			
+			protected function homeClickHandler(event:MouseEvent):void
+			{
+				AccessVars.instance().mainApp.floatMenuVisible(true);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:HGroup width="100%" height="100%">
+		<s:Image source="assets/logo.png"/>
+		<s:Spacer width="100%"/>
+		<s:HGroup id="cntrl" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+				  visible="false">
+			<s:Button label="Home" useHandCursor="true" click="homeClickHandler(event)"/>
+			<s:Button label="Profile" useHandCursor="true" click="profileClickHandler(event)"/>
+			<mx:VRule height="20"/>
+			<s:Button label="Logout" useHandCursor="true" click="logoutClickHandler(event)"/>
+		</s:HGroup>
+	</s:HGroup>
+	
+</s:BorderContainer>
