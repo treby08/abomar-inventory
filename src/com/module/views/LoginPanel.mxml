@@ -8,12 +8,17 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import assets.skins.skin_Button;
+			
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.business.Services;
 			import com.module.events.LoginEvent;
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
 			
+			import flash.utils.setTimeout;
+			
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.AsyncToken;
@@ -29,6 +34,11 @@
 				if (txtUser.text != "" && txtPass.text != ""){
 					var log:LoginEvent = new LoginEvent(LoginEvent.SIGN_IN,{username:txtUser.text,password:txtPass.text})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				}else{
+					Alert.show("Incorrect username/password","Login Error",4,null,function():void{
+						AccessVars.instance().mainApp.showLoginPanel();
+					});
+					
 				}
 			}
 			
@@ -36,7 +46,7 @@
 			{
 				//txtUser.text = "admin";
 				//txtPass.text = "qwerty";
-				txtUser.setFocus();
+				//setTimeout(function():void{txtUser.setFocus();txtUser.prompt = "User"},1000);
 			}
 			
 		]]>
@@ -46,14 +56,11 @@
 		
 	</fx:Declarations>
 	<s:HGroup width="100%" height="100%" horizontalAlign="center" paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10">
-		<s:VGroup width="100%" height="100%" gap="18">
-			<s:Label text="Username:" />
-			<s:Label text="Password: " />
-		</s:VGroup>
+		
 		<s:VGroup width="100%" height="100%">
-			<s:TextInput id="txtUser" width="100%" enter="{btnlogin.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}"/>
-			<s:TextInput id="txtPass" width="100%" displayAsPassword="true" enter="{btnlogin.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}"/>
+			<s:TextInput id="txtUser" width="100%" enter="{btnlogin.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}" prompt="Username"/>
+			<s:TextInput id="txtPass" width="100%" displayAsPassword="true" enter="{btnlogin.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}" prompt="Password"/>
 		</s:VGroup>
-		<s:Button id="btnlogin" label="Login" click="logclickHandler(event)" height="90%"/>
+		<s:Button id="btnlogin" label="Login" click="logclickHandler(event)" height="90%" skinClass="assets.skins.skin_Button"/>
 	</s:HGroup>
 </s:Panel>
