@@ -46,10 +46,10 @@
 		<s:Image source="assets/logo2.png"/>
 		<s:Spacer width="100%"/>
 		<s:HGroup id="cntrl" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
-				  visible="false">
+				  visible="false" gap="10">
 			<s:Button label="Home" icon="assets/icons/icon_home.png" useHandCursor="true" click="homeClickHandler(event)" buttonMode="true"/>
 			<s:Button label="Profile" icon="assets/icons/icon_prof.png" useHandCursor="true" click="profileClickHandler(event)" buttonMode="true"/>
-			<mx:VRule height="82"/>
+			<mx:VRule height="75"/>
 			<s:Button label="Logout" icon="assets/icons/icon_logout.png" useHandCursor="true" click="logoutClickHandler(event)" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>

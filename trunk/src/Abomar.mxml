@@ -112,22 +112,22 @@
 	<s:VGroup width="100%" height="100%">
 		<views:MenuNav width="100%" id="menNav"/>
 		<s:BorderContainer id="mainCont" width="100%" height="100%" >
-			<s:BorderContainer id="floatMenu" visible="false" includeInLayout="false" horizontalCenter="0" verticalCenter="0"
+			<s:BorderContainer id="floatMenu" borderAlpha="0" visible="false" includeInLayout="false" horizontalCenter="0" verticalCenter="0"
 							   >
-				<s:borderStroke> 
+				<!--<s:borderStroke> 
 					<mx:SolidColorStroke 
 						color="0xAAAAAA" 
 						weight="2"/> 
-				</s:borderStroke>
-				<s:VGroup  paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
-					<s:HGroup>
+				</s:borderStroke>-->
+				<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="25">
+					<s:HGroup gap="30">
 						<s:Button label="User" icon="assets/icons/icon_user.png" iconPlacement="top" width="120" height="100" click="appChange(event,0)"  useHandCursor="true" buttonMode="true"/>
 						<s:Button label="Customer" icon="assets/icons/icon_cust.png" iconPlacement="top" width="120" height="100" click="appChange(event,1)"  useHandCursor="true" buttonMode="true"/>
 						<s:Button width="120" height="100" label="Products" buttonMode="true"
 								  click="appChange(event,2)" icon="assets/icons/icon_prod.png"
 								  iconPlacement="top" useHandCursor="true"/>
 					</s:HGroup>
-					<s:HGroup>
+					<s:HGroup gap="30">
 						<s:Button label="Sales" icon="assets/icons/icon_sales.png" iconPlacement="top" width="120" height="100" click="appChange(event,3)"  useHandCursor="true" buttonMode="true"/>
 						<s:Button label="Inventory" icon="assets/icons/icon_inv.png" iconPlacement="top" width="120" height="100" click="appChange(event,4)"  useHandCursor="true" buttonMode="true"/>
 						<s:Button width="120" height="100" label="Report" buttonMode="true"
