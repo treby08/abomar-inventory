@@ -22,7 +22,7 @@
       @productversion Flex 4
 -->
 <s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
-      minWidth="22" minHeight="22"
+      minWidth="30" minHeight="22"
       alpha.disabled="0.5">
 
     <fx:Metadata>
@@ -43,16 +43,16 @@
     <s:Rect left="0" right="0" top="0" bottom="0"
           width="69" height="20"
           radiusX="2" radiusY="2">
-        <s:stroke>
-            <s:SolidColorStroke color="#CCCCCC" color.over="#a8a800" color.down="#e2e615" />
+       <s:stroke>
+            <s:SolidColorStroke color="#FFFFFF" color.over="#a8a800" color.down="#e2e615" weight="1"/>
         </s:stroke>
 		<s:filters>
-			<s:DropShadowFilter distance="1.5"/>
+			<s:DropShadowFilter distance="1"/>
 		</s:filters>
         <s:fill>
 			<s:LinearGradient rotation="90">
-				<!--<s:GradientEntry alpha="0.8" color="#FFFFFF" ratio="0.2"/>-->
-				<s:GradientEntry color="#226303"/>
+				<s:GradientEntry alpha="1" color="#7ebd5e" ratio="0.4" />
+				<s:GradientEntry color="#226303" ratio="1" color.over="#ebe417"/>
 				<!--<s:SolidColor color="#226303" color.up="#226303" color.over="#518f32" color.down="#428024" />-->
 			</s:LinearGradient>
 			
@@ -82,12 +82,12 @@
     </s:Rect>
     <!-- label -->
     <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
-    <s:Label id="labelDisplay" color="#e2e615" color.up="#e2e615" color.over="#e2e615" color.down="#a8a800"
+    <s:Label id="labelDisplay" color="#e2e615" color.up="#e2e615" color.over="#226303" color.down="#a8a800"
              horizontalCenter="0" verticalCenter="1" verticalCenter.down="2"
              left="10" right="10" top="2" bottom="2"
-             textAlign="center"
-             verticalAlign="middle"
-             maxDisplayedLines="1">
+             textAlign="center" fontFamily="Arial, Helvetica, '_sans'" fontSize="12"			 
+             verticalAlign="middle" 
+             maxDisplayedLines="1" buttonMode="true">
     </s:Label>
 	
 	
