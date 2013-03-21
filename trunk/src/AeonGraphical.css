@@ -71,11 +71,15 @@ s|Application
 s|Button
 {
 	skin-class: ClassReference("assets.skins.skin_Button");
-	cursor:"pointer";
+	buttonMode:"true";
 }
 s|Panel
 {
 	skin-class: ClassReference("assets.skins.skin_Panel");
+}
+#labelDisplay
+{
+	typographicCase: lowercaseToSmallCaps
 }
 
 /* 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" title="Adomar Login" creationComplete="creationCompleteHandler(event)"
+		 xmlns:s="library://ns.adobe.com/flex/spark" title="Abomar Login" creationComplete="creationCompleteHandler(event)"
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="300" height="115" xmlns:business="com.module.business.*">
 	<s:layout>
 		<s:VerticalLayout/>
@@ -61,6 +61,6 @@
 			<s:TextInput id="txtUser" width="100%" enter="{btnlogin.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}" prompt="Username"/>
 			<s:TextInput id="txtPass" width="100%" displayAsPassword="true" enter="{btnlogin.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}" prompt="Password"/>
 		</s:VGroup>
-		<s:Button id="btnlogin" label="Login" click="logclickHandler(event)" height="90%" skinClass="assets.skins.skin_Button"/>
+		<s:Button id="btnlogin" fontSize="10" icon="assets/icons/icon_login.png" iconPlacement="left" label="Login" click="logclickHandler(event)" height="90%" skinClass="assets.skins.skin_Button"/>
 	</s:HGroup>
 </s:Panel>

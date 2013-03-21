@@ -182,10 +182,10 @@ in accordance with the terms of the license agreement accompanying it.
         
         <!-- layer 2: background fill -->
         <!--- Defines the appearance of the PanelSkin class's background. -->
-        <s:Rect id="background" left="1" top="1" right="1" bottom="1">
+        <s:Rect id="background" left="1" top="0" right="1" bottom="0">
 			<s:stroke>
 				<!--- @private -->
-				<s:SolidColorStroke id="bStroke" weight="2" color="0xA1A5AF"/>
+				<s:SolidColorStroke id="bStroke" weight="0" color="0xA1A5AF"/>
 			</s:stroke>
             <s:fill>
                 <!--- @private
