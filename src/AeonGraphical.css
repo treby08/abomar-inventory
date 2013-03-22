@@ -51,7 +51,7 @@ Accordion {
 s|Application
 {
 	/*backgroundImage: Embed(source="AeonGraphical.swf",symbol="mx.skins.application.ApplicationBackground");*/
-	backgroundImage: "bg.png";
+	backgroundImage: "assets/bg.png";
 	theme-color: #B2DC32;
 }
 
@@ -59,7 +59,7 @@ s|Application
 	backgroundImage: Embed(source="AeonGraphical.swf",symbol="mx.skins.application.ApplicationBackground");
 }
 #mainCont{
-	backgroundImage: Embed("bg.png");
+	backgroundImage: Embed("assets/bg.png");
 	
 }
 

@@ -8,6 +8,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.UserEvent;
 			import com.module.renderer.CustomerRenderer;
+			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -183,7 +184,7 @@
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:borderStroke> 
 				<mx:SolidColorStroke 
-					color="0xCCCCCC" 
+					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
 			<s:HGroup  width="100%" height="100%">
@@ -272,10 +273,10 @@
 		<s:Button id="btnClear" label="Clear"/>
 	</s:HGroup>
 	<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold">
-		<s:Label text="Full Name" width="20%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Business Name" width="35%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Contact Info" width="25%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Controls" width="20%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
+		<s:Label text="Full Name" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Business Name" width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Contact Info" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Controls" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 	</s:HGroup>
 	<s:Group width="100%" height="100%">
 		<s:Scroller width="100%" height="100%">

@@ -29,8 +29,13 @@ package com.module.business
 		
 		private function logIn_onResult(evt:ResultEvent):void{
 			var logXML:XML = XML(evt.result);
+			//trace(logXML.toXMLString())
 			if (logXML.children().length() > 0){
-				switch(logXML.item.@userType){
+				var logList:XMLList = logXML.children();
+			
+				var strUserTypeID:String = String(logList.@userTypeID);
+				//trace(strUserTypeID);
+				switch(strUserTypeID){
 					case "1":
 						SecurityType.setAccessMode(SecurityType.ADMIN);
 						break;
