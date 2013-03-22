@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" title="Profile" initialize="initHandler(event)"
 		 xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="creationCompleteHandler(event)"
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="450" mouseDown="{startDrag()}" mouseUp="{stopDrag()}">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="450">
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
@@ -204,7 +204,7 @@
 				<s:VGroup  width="100%">
 					<s:HGroup width="100%">
 						<s:Label text="User Type:" width="90"/>
-						<s:DropDownList id="cmbUserType" width="100%" labelField="label" cornerRadius="5" />
+						<s:DropDownList id="cmbUserType" width="100%" labelField="label" cornerRadius="5" enabled="false"/>
 						<s:Label text="*" color="red"/>
 					</s:HGroup>
 					<s:HGroup width="100%">

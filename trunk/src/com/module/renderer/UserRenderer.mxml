@@ -10,6 +10,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.UserEvent;
 			import com.module.views.UserPanel;
+			import com.variables.AccessVars;
 			
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
@@ -55,10 +56,10 @@
 		]]>
 	</fx:Script>
 	<s:Rect width="100%" height="100%">
-		<s:fill><s:SolidColor color="0xCCCCCC" alpha="0.5" id="sFill"/></s:fill>
+		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = 0xFFFFFF}" mouseOut="{sFill.color=0xCCCCCC}"
-			  useHandCursor="true" buttonMode="true">
+	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
+			  useHandCursor="true" buttonMode="true" doubleClickEnabled="true" doubleClick="editClickHandler(event)">
 		<s:Label id="txtName" width="200" textAlign="center"/>
 		<s:Label id="txtUser" width="150" textAlign="center"/>
 		<s:Label id="txtUserType" width="150" textAlign="center"/>

@@ -8,6 +8,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.ItemsTransEvent;
 			import com.module.renderer.ProductRenderer;
+			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -163,7 +164,7 @@
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:borderStroke> 
 				<mx:SolidColorStroke 
-					color="0xCCCCCC" 
+					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
 			<s:HGroup  width="100%" height="100%">
@@ -217,15 +218,15 @@
 		<s:Button id="btnClear" label="Clear"/>
 	</s:HGroup>
 	<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold">
-		<s:Label text="Item Code" width="15%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Product Name /Description" width="40%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Unit Price" width="15%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Stock" width="10%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
-		<s:Label text="Controls" width="20%" backgroundColor="0xAAAAAA" textAlign="center" paddingTop="5" paddingBottom="5"/>
+		<s:Label text="Item Code" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Product Name /Description" width="40%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Unit Price" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Stock" width="10%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+		<s:Label text="Controls" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
 	</s:HGroup>
 	<s:Group width="100%" height="100%">
 		<s:Scroller width="100%" height="100%">
-			<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0xCCCCCC" clipAndEnableScrolling="true"/>
+			<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
 		</s:Scroller>
 	</s:Group>
 	<mx:HRule width="100%" height="3"/>
