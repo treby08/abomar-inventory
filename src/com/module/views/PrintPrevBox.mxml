@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+				   creationComplete="creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:HGroup width="100%" height="100%">
+		<!--<s:VGroup width="30%" height="100%">
+			
+		</s:VGroup>-->
+		<s:VGroup width="100%" height="100%">
+			<mx:Canvas id="parentCanvas" width="100%" height="100%" backgroundColor="0xCCCCCC">
+				<s:HGroup width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+					<mx:Canvas width="100%" height="100%" >
+						<mx:Canvas id="childCanvas" x="200" width="850" height="1100" backgroundColor="0xFFFFFF" borderStyle="outset" borderAlpha="1">
+							<s:Image x="14" y="10" source="assets/logo2.png"/>
+							<s:Label x="443" y="46" fontSize="18" fontStyle="italic" color="0x000000"
+									 fontWeight="bold" text="Purchase Order / Sales"/>
+							
+							<s:DataGrid id="dg" x="17" y="301" width="822" height="495" fontSize="12"
+										mouseEnabled="false" mouseChildren="false" sortableColumns="false"
+										textAlign="center">
+								<s:columns >
+									<s:ArrayList>
+										<s:GridColumn width="100" dataField="prodID" headerText="Product ID"/>
+										<s:GridColumn dataField="prodName" headerText="Product Name" headerRenderer="com.module.renderer.PrintableHeaderRenderer">
+											<s:itemRenderer>
+												<fx:Component>
+													<s:DefaultGridItemRenderer textAlign="left"/>
+												</fx:Component>
+											</s:itemRenderer>
+										</s:GridColumn>
+										<s:GridColumn dataField="qty" headerText="Quantity" width="100"/>
+										<s:GridColumn dataField="price" headerText="Net Price" width="180">
+											<s:itemRenderer>
+												<fx:Component>
+													<s:DefaultGridItemRenderer textAlign="right"/>
+												</fx:Component>
+											</s:itemRenderer>
+										</s:GridColumn>
+										<s:GridColumn dataField="total" headerText="Total">
+											<s:itemRenderer>
+												<fx:Component>
+													<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
+												</fx:Component>
+											</s:itemRenderer>
+										</s:GridColumn>
+									</s:ArrayList>
+								</s:columns>
+							</s:DataGrid>
+						</mx:Canvas>
+					</mx:Canvas>
+					
+				</s:HGroup>
+			</mx:Canvas>
+			<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+				<s:Label text="Zoom: "/>
+				<s:HGroup width="200" horizontalAlign="center" horizontalCenter="0">
+					<s:Label text="o"/>
+					<s:HSlider id="zoomSlider" width="100%" maximum="150" minimum="25" value="100" dataTipFormatFunction="dataTipFormat" change="zoomHandler(event)"/>
+					<s:Label text="O"/>
+				</s:HGroup>
+				<s:Button label="Close" click="closeHandler(event)"/>
+			</s:HGroup>
+		</s:VGroup>
+		
+	</s:HGroup>
+	<fx:Script>
+		<![CDATA[
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			private var parentCanvasWidth:Number;
+			private var parentCanvasHeight:Number;
+			private var childCanvasWidth:Number;
+			private var childCanvasHeight:Number;
+			private var _salesBox:SalesBox;
+			
+			public function set salesBox(value:SalesBox):void{
+				_salesBox = value;
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				childCanvas.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+				childCanvas.addEventListener(MouseEvent.MOUSE_UP,mouseUpHandler);
+				
+				var rect:Rectangle = parentCanvas.getBounds(this);
+				parentCanvasWidth = rect.width;
+				parentCanvasHeight = rect.height;
+				
+				rect = childCanvas.getBounds(parentCanvas);
+				childCanvasWidth = rect.width;
+				childCanvasHeight = rect.height;
+				
+				childCanvas.x = parentCanvasWidth/2 - childCanvasWidth/2;
+				//childCanvas.y = parentCanvasHeight/2 - childCanvasHeight/2;
+				
+				setData();
+			}
+			
+			private function zoomHandler(event:Event):void {
+				childCanvas.scaleX = event.target.value/100;
+				childCanvas.scaleY = event.target.value/100;
+				
+				/*var parentCanvasCenter:Point = new Point(parentCanvas.width/2,parentCanvas.height/2);
+				
+				var childCanvasCenter:Point = new Point(childCanvas.width/2, childCanvas.height/2);
+				
+				var center:Point = parentCanvasCenter.subtract(childCanvasCenter);
+				trace(center.x + ", " + center.y);
+				childCanvas.x = center.x;
+				childCanvas.y = center.y;	*/
+			}
+			
+			
+			private function mouseDownHandler(event:MouseEvent):void {	
+				childCanvas.startDrag();	
+			}
+			
+			private function mouseUpHandler(event:MouseEvent):void {
+				childCanvas.stopDrag();	
+				childCanvas.localToContent(new Point(event.localX,event.localY));
+				//childCanvas.y = event.localY;
+			}
+			
+			protected function closeHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			
+			protected function dataTipFormat(value:Number):Object
+			{
+				return value+"%";
+			}
+			
+			private function setData():void
+			{
+				dg.dataProvider = _salesBox.dg.dataProvider as ArrayCollection;
+			}
+			
+		]]>
+	</fx:Script>
+</s:BorderContainer>

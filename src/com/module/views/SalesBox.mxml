@@ -11,12 +11,13 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
-			import mx.core.mx_internal;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			import mx.printing.FlexPrintJob;
 			import mx.printing.FlexPrintJobScaleType;
 			
+			import spark.components.Application;
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			private var _totalQty:int = 0;
@@ -138,16 +139,21 @@
 				obj.salesDetails = strItem.join("||");
 				//var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
 				//CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				
-				btnPrint.visible = btnPrint.includeInLayout = true;
+				printPrevPO()
+				//btnPrint.enabled = true;
 			}
 			
-			protected function printPrevPO(event:MouseEvent):void
+			protected function printPrevPO():void
 			{
-				var printJob:FlexPrintJob = new FlexPrintJob();
+				/*var printJob:FlexPrintJob = new FlexPrintJob();
 				if (printJob.start() != true) return;
 				printJob.addObject(cont, FlexPrintJobScaleType.SHOW_ALL); 
-				printJob.send();
+				printJob.send();*/
+				var _printBox:PrintPrevBox = new PrintPrevBox();
+				_printBox.salesBox = this;
+				_printBox.width = AccessVars.instance().mainApp.width-5;
+				_printBox.height = AccessVars.instance().mainApp.height-5;
+				PopUpManager.addPopUp(_printBox,this,true);
 			}
 			
 			public function clearFields(event:MouseEvent):void{
@@ -176,14 +182,14 @@
 					Alert.show("Are you sure to create a new transaction?","Transaction not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
 				}else{
 					clearFields(null);
-					btnPrint.visible = btnPrint.includeInLayout = false;
+					//btnPrint.enabled = false;
 				}
 			}
 			
 			private function newSalesHandler(event:CloseEvent):void{
 				if (event.detail == Alert.YES){
 					clearFields(null);
-					btnPrint.visible = btnPrint.includeInLayout = false;
+					//btnPrint.enabled = false;
 				}
 			}
 			
@@ -192,7 +198,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="Sales" fontWeight="bold" fontSize="18" fontStyle="italic"/>
+	<s:Label text="Purchase Order / Sales" fontWeight="bold" fontSize="18" fontStyle="italic"/>
 	
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
@@ -262,8 +268,7 @@
 						<s:Spacer width="100%"/>
 						<s:Button id="btnNew" label="New PO" tabIndex="4" click="btnNewclickHandler(event)"/>
 						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
-						<s:Button id="btnCheckOut" label="Check Out" click="CheckOutclickHandler(event)"/>
-						<s:Button id="btnPrint" label="Print PO" click="printPrevPO(event)" visible="false" includeInLayout="false"/>
+						<s:Button id="btnCheckOut" label="Check Out &amp; Print PO" click="CheckOutclickHandler(event)"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
