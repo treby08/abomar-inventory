@@ -278,16 +278,17 @@
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer"/>
-					<s:GridColumn width="100" dataField="prodID" headerText="Product ID"/>
-					<s:GridColumn dataField="prodName" headerText="Product Name">
+					<s:GridColumn width="90" dataField="prodID" headerText="Prod ID"/>
+					<s:GridColumn dataField="qty" headerText="Qty" width="80"/>
+					<s:GridColumn dataField="prodName" headerText="Description">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="left"/>
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="qty" headerText="Quantity" width="100"/>
-					<s:GridColumn dataField="price" headerText="Net Price" width="180">
+					
+					<s:GridColumn dataField="price" headerText="Price" width="180">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="right"/>
