@@ -105,7 +105,7 @@
 				if (mainCont.numElements > 1)
 					mainCont.removeElementAt(0);
 				
-				switch (SecurityType.accessMode()){
+				/* switch (SecurityType.accessMode()){
 					case SecurityType.MODERATOR:
 						forMod.visible = forMod.includeInLayout = true;
 						forUser.visible = forUser.includeInLayout = false;
@@ -118,7 +118,7 @@
 						forMod.visible = forMod.includeInLayout = true;
 						forUser.visible = forUser.includeInLayout = true;
 						break;
-				}
+				} */
 			}
 			
 		]]>
@@ -130,14 +130,14 @@
 	<s:VGroup width="100%" height="100%">
 		<views:MenuNav width="100%" id="menNav"/>
 		<s:BorderContainer id="mainCont" width="100%" height="100%" >
-			<s:BorderContainer id="floatMenu" borderAlpha="0" visible="false" includeInLayout="false" horizontalCenter="0" verticalCenter="0"
-							   >
+			<s:BorderContainer id="floatMenu" height="100%" borderAlpha="0" visible="false" includeInLayout="false">
 				<!--<s:borderStroke> 
 					<mx:SolidColorStroke 
 						color="0xAAAAAA" 
 						weight="2"/> 
 				</s:borderStroke>-->
-				<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="25">
+				<views:NavigationBox width="200" height="100%"/>
+				<!--<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="25">
 					<s:HGroup gap="30" id="forMod">
 						<s:Button label="User" icon="assets/icons/icon_user.png" iconPlacement="top" width="120" height="100" click="appChange(event,0)"  useHandCursor="true" buttonMode="true"/>
 						<s:Button label="Customer" icon="assets/icons/icon_cust.png" iconPlacement="top" width="120" height="100" click="appChange(event,1)"  useHandCursor="true" buttonMode="true"/>
@@ -152,7 +152,7 @@
 								  click="appChange(event,5)" icon="assets/icons/icon_report.png"
 								  iconPlacement="top" useHandCursor="true"/>
 					</s:HGroup>
-				</s:VGroup>
+				</s:VGroup>-->
 			</s:BorderContainer>
 		</s:BorderContainer>
 		

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="200" height="100%" xmlns:customComponents="com.customComponents.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+	</fx:Declarations>
+	<customComponents:NavigationMenu mainMenu="true" width="100%" height="100%">
+		<customComponents:dataArr>
+			<s:ArrayCollection>
+				<fx:Array>
+					<fx:Object img="assets/icons/icon_inv.png" name="Inventory"/>
+					<fx:Object img="assets/icons/icon_inv.png" name="Purchasing"/>
+					<fx:Object img="assets/icons/icon_sales.png" name="Sales"/>
+					<fx:Object img="assets/icons/icon_report.png" name="Report"/>
+				</fx:Array>
+			</s:ArrayCollection>
+		</customComponents:dataArr>
+		<customComponents:dataXML>
+			<fx:XML id="menuNav">
+				<menu>
+					<main img="assets/icons/icon_inv.png" name="Inventory">
+						<sub name="New Product"/>
+						<sub name="New Product"/>
+						<sub name="New Product"/>
+						<sub name="New Product"/>
+						<sub name="New Product"/>
+						<sub name="New Product"/>
+					</main>
+					<main img="assets/icons/icon_inv.png" name="Purchasing">
+						<sub name="New Puchase Order"/>
+						<sub name="New Puchase Order"/>
+						<sub name="New Puchase Order"/>
+						<sub name="New Puchase Order"/>
+						<sub name="New Puchase Order"/>
+					</main>
+					<main img="assets/icons/icon_sales.png" name="Sales">
+						<sub name="New Sales Quote"/>
+						<sub name="New Sales Quote"/>
+						<sub name="New Sales Quote"/>
+						<sub name="New Sales Quote"/>
+						<sub name="New Sales Quote"/>
+					</main>
+					<main img="assets/icons/icon_report.png" name="Report">
+						<sub name="Inventory Reports">
+							<sub name="Inventory Summary"/>
+							<sub name="Inventory Summary"/>
+							<sub name="Inventory Summary"/>
+							<sub name="Inventory Summary"/>
+						</sub>
+						<sub name="Purchasing Reports">
+							<sub name="Purchase Order Summary"/>
+							<sub name="Purchase Order Summary"/>
+							<sub name="Purchase Order Summary"/>
+							<sub name="Purchase Order Summary"/>
+						</sub>
+						<sub name="Sales Reports">
+							<sub name="Sales Representative Report"/>
+							<sub name="Sales Representative Report"/>
+							<sub name="Sales Representative Report"/>
+						</sub>
+					</main>
+				</menu>
+			</fx:XML>
+		</customComponents:dataXML>
+	</customComponents:NavigationMenu>
+</s:Group>
