@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				   xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" backgroundAlpha="0.8" borderVisible="false"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
 				   xmlns:mx="library://ns.adobe.com/flex/mx"  creationComplete="creationCompleteHandler(event)">
 	<s:layout>
 		<s:VerticalLayout/>
@@ -10,6 +10,7 @@
 			import com.module.views.NavigationBox;
 			
 			import mx.collections.ArrayCollection;
+			import mx.controls.MenuBar;
 			import mx.events.FlexEvent;
 			
 			private var _dataArr:ArrayCollection;
@@ -61,7 +62,7 @@
 			}
 			
 			private function createSubMenu(objList:XML,pItem:NavigationItem):void{
-				var _navMen:NavigationMenu = new NavigationMenu();
+				/*var _navMen:NavigationMenu = new NavigationMenu();
 				_navMen._dataXML = objList;
 				_navMen.mainMenu = false;
 				_navMen.owner =pItem;
@@ -70,23 +71,24 @@
 				pItem.navMenu = _navMen;
 				(parent as NavigationBox).addElement(_navMen);
 				pItem.addEventListener(MouseEvent.MOUSE_OVER,navOverEvent);
-				pItem.addEventListener(MouseEvent.MOUSE_OUT,navOutEvent);
+				pItem.addEventListener(MouseEvent.MOUSE_OUT,navOutEvent);*/
+				
 				
 			}
 			
 			protected function navOverEvent(event:MouseEvent):void
 			{
-				NavigationItem(event.currentTarget).navMenu.y = NavigationItem(event.currentTarget).localToGlobal(new Point(NavigationItem(event.currentTarget).mouseX,NavigationItem(event.currentTarget).mouseY)).y;
+				/*NavigationItem(event.currentTarget).navMenu.y = NavigationItem(event.currentTarget).localToGlobal(new Point(NavigationItem(event.currentTarget).mouseX,NavigationItem(event.currentTarget).mouseY)).y;
 				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).visible = true;
-				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).includeInLayout = true;
+				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).includeInLayout = true;*/
 				
 			}
 			
 			protected function navOutEvent(event:MouseEvent):void
 			{	
 				//event.
-				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).visible = false;
-				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).includeInLayout = false;
+				/*(NavigationItem(event.currentTarget).navMenu as NavigationMenu).visible = false;
+				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).includeInLayout = false;*/
 			}
 			
 		]]>

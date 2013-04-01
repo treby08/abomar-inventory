@@ -136,7 +136,7 @@
 						color="0xAAAAAA" 
 						weight="2"/> 
 				</s:borderStroke>-->
-				<views:NavigationBox width="200" height="100%"/>
+				<views:NavigationBox id="navBox" width="200" height="100%"/>
 				<!--<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="25">
 					<s:HGroup gap="30" id="forMod">
 						<s:Button label="User" icon="assets/icons/icon_user.png" iconPlacement="top" width="120" height="100" click="appChange(event,0)"  useHandCursor="true" buttonMode="true"/>
