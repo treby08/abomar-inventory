@@ -62,6 +62,13 @@ s|Application
 	backgroundImage: Embed("assets/bg.png");
 	
 }
+#navBox{
+	borderSkin: ClassReference("mx.skins.halo.HaloBorder");
+	borderStyle: solid;
+	borderSides: "bottom right";
+	borderWeight: 1px;
+	borderColor: #000000;
+}
 
 /*
 //------------------------------
@@ -420,7 +427,7 @@ Loader
 //  Menu
 //------------------------------
 */
-Menu
+/*Menu
 {
 	branchIcon: Embed(source="AeonGraphical.swf",symbol="Menu_branchIcon");
 	branchDisabledIcon: Embed(source="AeonGraphical.swf",symbol="Menu_branchDisabledIcon");
@@ -444,14 +451,14 @@ Menu
 //  MenuBar
 //------------------------------
 */
-MenuBar
+/*MenuBar
 {
 
 	backgroundSkin: Embed(source="AeonGraphical.swf", symbol="MenuBar_backgroundSkin");
 	itemUpSkin: Embed(source="AeonGraphical.swf", symbol="MenuBar_itemUpSkin");
 	itemOverSkin: Embed(source="AeonGraphical.swf", symbol="MenuBar_itemOverSkin");
 	itemDownSkin: Embed(source="AeonGraphical.swf", symbol="MenuBar_itemDownSkin");
-	color: #494c54;	
+	color: #494c54;	7ebd5e
 }
 
 /*

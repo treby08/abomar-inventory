@@ -1,12 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="200" height="100%" xmlns:customComponents="com.customComponents.*">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="200" height="100%" 
+		 xmlns:customComponents="com.customComponents.*" xmlns:controls="com.customComponents.controls.*"
+		 creationComplete="creationCompleteHandler(event)" xmlns:menuClasses="com.customComponents.controls.menuClasses.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		
 	</fx:Declarations>
-	<customComponents:NavigationMenu mainMenu="true" width="100%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			[Bindable]
+			private var menuNav:XMLListCollection;
+			private var menuNavList:XMLList = 
+				<>
+				<main icon="assets/icons/icon_inv.png" name="Inventory">
+					<sub name="New Product"/>
+					<sub name="Product List"/>
+					<sub name="Product Categories"/>
+					<sub name="Product Pricing"/>
+					<sub name="Current Stock"/>
+					<sub name="Movement History"/>
+					<sub name="Adjust Stock"/>
+					<sub name="Count Sheet"/>
+					<sub name="Transfer Stock"/>
+					<sub name="Reorder Stock"/>
+					<sub name="Work Order"/>
+				</main>
+				<main icon="assets/icons/icon_inv.png" name="Purchasing">
+					<sub name="New Puchase Order"/>
+					<sub name="Purchase Order List"/>
+					<sub name="Sales Order List"/>
+					<sub name="New Vendor"/>
+					<sub name="Vendor List"/>
+				</main>
+				<main icon="assets/icons/icon_sales.png" name="Sales">
+					<sub name="New Sales Quote"/>
+					<sub name="New Sales Order"/>
+					<sub name="Sales Order List"/>
+					<sub name="New Customer"/>
+					<sub name="Customer List"/>
+				</main>
+				<main icon="assets/icons/icon_report.png" name="Report">
+					<sub name="Inventory Reports">
+						<sub name="Inventory Summary"/>
+						<sub name="Invetory Details Report"/>
+						<sub name="Inventory by Location"/>
+						<sub name="Inventory Movement Summary"/>
+						<sub name="Stock Reordering Report"/>
+						<sub name="Product Price List"/>
+					</sub>
+					<sub name="Purchasing Reports">
+						<sub name="Purchase Order Summary"/>
+						<sub name="Purchase Order Details"/>
+						<sub name="Purchase Order Status"/>
+						<sub name="Vendor Product List"/>
+						<sub name="Vendor List"/>
+					</sub>
+					<sub name="Sales Reports">
+						<sub name="Sales Representative Report"/>
+						<sub name="Sales by Product Summary"/>
+						<sub name="Customer Payment Summary"/>
+						<sub name="Customer Order History"/>
+						<sub name="Customer List"/>
+					</sub>
+				</main>
+			</>;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				menuNav = new XMLListCollection(menuNavList);
+			}
+			[Embed(source="assets/icons/icon_sales.png")]
+			public var iconTwo_App:Class;
+		]]>
+	</fx:Script>
+	<controls:VerticalMenuBar backgroundSkin="assets.skins.skin_menuBar" dataProvider="{menuNav}" iconField="iconTwo_App" direction="right" labelField="@name"  width="200" height="100%"
+							  fontSize="16" fontWeight="bold">
+	
+	</controls:VerticalMenuBar>
+	<!--<customComponents:NavigationMenu mainMenu="true" width="100%" height="100%">
 		<customComponents:dataArr>
 			<s:ArrayCollection>
 				<fx:Array>
@@ -64,5 +139,5 @@
 				</menu>
 			</fx:XML>
 		</customComponents:dataXML>
-	</customComponents:NavigationMenu>
+	</customComponents:NavigationMenu>-->
 </s:Group>
