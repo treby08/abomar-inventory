@@ -132,7 +132,7 @@ package com.module.business
 					(_params.cBox as CustomerBox).totCount.text = String(arrCol.length);
 					//_params.dg as .cmbUserType.dataProvider =AccessVars.instance().userType = arrCol;
 				}else if (_params.csBox){ 
-					(_params.csBox as SalesBox).setDataProvider(arrCol,1);
+					_params.csBox.setDataProvider(arrCol,1);
 					_params.csBox = null;
 					_params = null;
 				}

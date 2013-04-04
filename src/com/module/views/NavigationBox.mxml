@@ -144,6 +144,9 @@
 						AccessVars.instance().mainApp.appChange(null,2,event.item.@code as String);
 					break;
 					case "pur_npo":	
+						AccessVars.instance().mainApp.appChange(null,4,event.item.@code as String);
+					break;
+					case "sal_nso":	
 						AccessVars.instance().mainApp.appChange(null,3,event.item.@code as String);
 					break;
 					case "sal_nc":	

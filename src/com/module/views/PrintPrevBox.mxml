@@ -245,6 +245,7 @@
 			import flashx.textLayout.formats.WhiteSpaceCollapse;
 			
 			import mx.collections.ArrayCollection;
+			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.formatters.DateFormatter;
 			import mx.managers.PopUpManager;
@@ -258,13 +259,17 @@
 			private var parentCanvasHeight:Number;
 			private var childCanvasWidth:Number;
 			private var childCanvasHeight:Number;
-			private var _salesBox:SalesBox;
+			private var _orderTypeID:int = 0;
+			private var _salesBox:Object;
 			private var arrOrderType:ArrayCollection = new ArrayCollection(
 				[{name:"Purchase Order",type:1},{name:"Sales Order",type:2},
 				{name:"Sales Quote",type:3},{name:"Warehouse Transfer",type:4}])
 			
-			public function set salesBox(value:SalesBox):void{
+			public function set boxType(value:Object):void{
 				_salesBox = value;
+			}
+			public function set orderTypeID(value:int):void{
+				_orderTypeID = value;
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -282,7 +287,8 @@
 				
 				childCanvas.x = parentCanvasWidth/2 - childCanvasWidth/2;
 				//childCanvas.y = parentCanvasHeight/2 - childCanvasHeight/2;
-				
+				cmbOrderType.selectedIndex = _orderTypeID;
+				OrderTypechangeHandler(null);
 				setData();
 			}
 			

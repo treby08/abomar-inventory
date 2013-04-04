@@ -151,7 +151,7 @@
 				printJob.send();*/
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 1;
+				_printBox.orderTypeID = 0;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
@@ -199,7 +199,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="Sales Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>
+	<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>
 	
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
@@ -267,9 +267,9 @@
 					
 					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">
 						<s:Spacer width="100%"/>
-						<s:Button id="btnNew" label="New Sales Order" tabIndex="4" click="btnNewclickHandler(event)"/>
+						<s:Button id="btnNew" label="New Purchase Order" tabIndex="4" click="btnNewclickHandler(event)"/>
 						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
-						<s:Button id="btnCheckOut" label="Check Out &amp; Print Sales" click="CheckOutclickHandler(event)"/>
+						<s:Button id="btnCheckOut" label="Check Out &amp; Print Purchase Order" click="CheckOutclickHandler(event)"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
