@@ -2,6 +2,7 @@ package com.module.business
 {
 	
 	import com.module.views.ProductBox;
+	import com.module.views.PurchaseOrderBox;
 	import com.module.views.SalesBox;
 	import com.variables.AccessVars;
 	import com.variables.SecurityType;
@@ -79,7 +80,7 @@ package com.module.business
 					_params.pBox = null;
 					_params = null;
 				}else if (_params.sBox){
-					(_params.sBox as SalesBox).setDataProvider(arrCol,0);
+					_params.sBox.setDataProvider(arrCol,0);
 					_params.sBox = null;
 					_params = null;
 				}

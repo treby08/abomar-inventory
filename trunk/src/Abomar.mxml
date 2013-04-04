@@ -10,6 +10,7 @@
 			import com.module.views.InventoryBox;
 			import com.module.views.LoginPanel;
 			import com.module.views.ProductBox;
+			import com.module.views.PurchaseOrderBox;
 			import com.module.views.ReportBox;
 			import com.module.views.SalesBox;
 			import com.module.views.UserBox;
@@ -91,9 +92,12 @@
 						objBox = new SalesBox();
 					break;
 					case 4:
-						objBox = new InventoryBox();
+						objBox = new PurchaseOrderBox();
 					break;
 					case 5:
+						objBox = new InventoryBox();
+					break;
+					case 6:
 						objBox = new ReportBox();
 					break;
 				}
