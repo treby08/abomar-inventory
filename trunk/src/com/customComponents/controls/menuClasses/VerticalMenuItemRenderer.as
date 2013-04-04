@@ -34,10 +34,15 @@ package com.customComponents.controls.menuClasses
 			 * might think it would go, since now the x,y position of 0,0 is the
 			 * top-right corner, not the top-left.
 			 */
-			if (branchIcon)
+			/*if (branchIcon)
 			{
 				branchIcon.scaleX = -1;
 				branchIcon.x = leftMargin + branchIcon.width;
+			}*/
+			
+			if(branchIcon){
+				branchIcon.width = 50;
+				branchIcon.height = 50;
 			}
 		}
 	}

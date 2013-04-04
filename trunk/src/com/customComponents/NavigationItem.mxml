@@ -16,14 +16,14 @@
 			import mx.events.StateChangeEvent;
 			
 			private var _dataObj:Object;
-			private var _navMenu:NavigationMenu;
+			private var _navMenu:Object;
 			public function set dataObj(value:Object):void{
 				_dataObj = value;
 			}
-			public function set navMenu(value:NavigationMenu):void{
+			public function set navMenu(value:Object):void{
 				_navMenu = value;
 			}
-			public function get navMenu():NavigationMenu{
+			public function get navMenu():Object{
 				return _navMenu;
 			}
 			

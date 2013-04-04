@@ -7,10 +7,12 @@
 	</s:layout>
 	<fx:Script>
 		<![CDATA[
+			import com.customComponents.controls.VerticalMenuBar;
 			import com.module.views.NavigationBox;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.MenuBar;
+			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			
 			private var _dataArr:ArrayCollection;
@@ -47,8 +49,8 @@
 					trace(obj.toXMLString())
 					_navItem = new NavigationItem();
 					_tempObj={};
-					if (obj.hasOwnProperty('@img'))
-						_tempObj.img=String(obj.@img);
+					if (obj.hasOwnProperty('@icon'))
+						_tempObj.img=String(obj.@icon);
 					_tempObj.name = obj.@name;
 					_navItem.dataObj = _tempObj;
 					
@@ -62,13 +64,17 @@
 			}
 			
 			private function createSubMenu(objList:XML,pItem:NavigationItem):void{
-				/*var _navMen:NavigationMenu = new NavigationMenu();
-				_navMen._dataXML = objList;
-				_navMen.mainMenu = false;
+				var _navMen:VerticalMenuBar = new VerticalMenuBar();
+				_navMen.dataProvider = objList;
+				//_navMen.mainMenu = false;
 				_navMen.owner =pItem;
-				_navMen.x=202;
+				pItem.navMenu = _navMen
+				_navMen.visible = _navMen.includeInLayout = false
 				
-				pItem.navMenu = _navMen;
+				pItem.addEventListener(MouseEvent.CLICK,navOverEvent);
+				pItem.addEventListener(MouseEvent.MOUSE_OUT,navOutEvent);
+				addElement(_navMen);
+				/*pItem.navMenu = _navMen;
 				(parent as NavigationBox).addElement(_navMen);
 				pItem.addEventListener(MouseEvent.MOUSE_OVER,navOverEvent);
 				pItem.addEventListener(MouseEvent.MOUSE_OUT,navOutEvent);*/
@@ -78,6 +84,9 @@
 			
 			protected function navOverEvent(event:MouseEvent):void
 			{
+				UIComponent(NavigationItem(event.currentTarget).navMenu).visible = true;
+				UIComponent(NavigationItem(event.currentTarget).navMenu).includeInLayout = true;
+				UIComponent(NavigationItem(event.currentTarget).navMenu).y = NavigationItem(event.currentTarget).localToGlobal(new Point(NavigationItem(event.currentTarget).x,NavigationItem(event.currentTarget).y)).y
 				/*NavigationItem(event.currentTarget).navMenu.y = NavigationItem(event.currentTarget).localToGlobal(new Point(NavigationItem(event.currentTarget).mouseX,NavigationItem(event.currentTarget).mouseY)).y;
 				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).visible = true;
 				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).includeInLayout = true;*/
@@ -86,6 +95,8 @@
 			
 			protected function navOutEvent(event:MouseEvent):void
 			{	
+				UIComponent(NavigationItem(event.currentTarget).navMenu).visible = false;
+				UIComponent(NavigationItem(event.currentTarget).navMenu).includeInLayout = false;
 				//event.
 				/*(NavigationItem(event.currentTarget).navMenu as NavigationMenu).visible = false;
 				(NavigationItem(event.currentTarget).navMenu as NavigationMenu).includeInLayout = false;*/

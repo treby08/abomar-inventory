@@ -10,61 +10,119 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.variables.AccessVars;
+			
 			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.events.MenuEvent;
 			[Bindable]
 			private var menuNav:XMLListCollection;
+			[Bindable]
+			private var menuNav2:XML = new XML('<root>' +
+				'<main icon="assets/icons/icon_inv.png" name="Inventory">' +
+				'	<sub name="New Product" code="inv_np" icon="assets/icons/icon_inv.png"/>' +
+				'	<sub name="Product List" code="inv_pl"/>' +
+				'	<sub name="Product Categories" code="inv_pc" icon="assets/icons/icon_inv.png"/>' +
+				'	<sub name="Product Pricing" code="inv_pp"/>' +
+				'	<sub name="Current Stock" code="inv_np"/>' +
+				'	<sub name="Movement History" code="inv_mh"/>' +
+				'	<sub name="Adjust Stock" code="inv_as"/>' +
+				'	<sub name="Count Sheet" code="inv_cs"/>' +
+				'	<sub name="Transfer Stock" code="inv_ts"/>' +
+				'	<sub name="Reorder Stock" code="inv_rs"/>' +
+				'	<sub name="Work Order" code="inv_wo"/>' +
+				'</main>' +
+				'<main icon="assets/icons/icon_inv.png" name="Purchasing">' +
+				'	<sub name="New Puchase Order" code="pur_npo"/>' +
+				'	<sub name="Purchase Order List" code="pur_pol"/>' +
+				'	<sub name="Sales Order List" code="pur_sol"/>' +
+				'	<sub name="New Vendor" code="pur_nv"/>' +
+				'	<sub name="Vendor List" code="pur_vl"/>' +
+				'</main>' +
+				'<main icon="assets/icons/icon_sales.png" name="Sales">' +
+				'	<sub name="New Sales Quote" code="sal_nsq"/>' +
+				'	<sub name="New Sales Order" code="sal_nso"/>' +
+				'	<sub name="Sales Order List" code="sal_sol"/>' +
+				'	<sub name="New Customer" code="sal_nc"/>' +
+				'	<sub name="Customer List" code="sal_cl"/>' +
+				'</main>' +
+				'<main icon="assets/icons/icon_report.png" name="Report">' +
+				'	<sub name="Inventory Reports">' +
+				'		<sub name="Inventory Summary" code="rep_inv_is"/>' +
+				'		<sub name="Invetory Details Report" code="rep_inv_idr"/>' +
+				'		<sub name="Inventory by Location" code="rep_inv_ibl"/>' +
+				'		<sub name="Inventory Movement Summary" code="rep_inv_ims"/>' +
+				'		<sub name="Stock Reordering Report" code="rep_inv_srr"/>' +
+				'		<sub name="Product Price List" code="rep_inv_ppl"/>' +
+				'	</sub>' +
+				'	<sub name="Purchasing Reports">' +
+				'		<sub name="Purchase Order Summary" code="rep_pur_pos"/>' +
+				'		<sub name="Purchase Order Details" code="rep_pur_pod"/>' +
+				'		<sub name="Purchase Order Status" code="rep_pur_postat"/>' +
+				'		<sub name="Vendor Product List" code="rep_pur_vpl"/>' +
+				'		<sub name="Vendor List" code="rep_pur_vl"/>' +
+				'	</sub>' +
+				'	<sub name="Sales Reports">' +
+				'		<sub name="Sales Representative Report" code="rep_sal_srr"/>' +
+				'		<sub name="Sales by Product Summary" code="rep_sal_sbps"/>' +
+				'		<sub name="Customer Payment Summary" code="rep_sal_cps"/>' +
+				'		<sub name="Customer Order History" code="rep_sal_coh"/>' +
+				'		<sub name="Customer List" code="rep_sal_cl"/>' +
+				'	</sub>' +
+				'</main>' +
+			'</root>');
 			private var menuNavList:XMLList = 
 				<>
 				<main icon="assets/icons/icon_inv.png" name="Inventory">
-					<sub name="New Product"/>
-					<sub name="Product List"/>
-					<sub name="Product Categories"/>
-					<sub name="Product Pricing"/>
-					<sub name="Current Stock"/>
-					<sub name="Movement History"/>
-					<sub name="Adjust Stock"/>
-					<sub name="Count Sheet"/>
-					<sub name="Transfer Stock"/>
-					<sub name="Reorder Stock"/>
-					<sub name="Work Order"/>
+					<sub name="New Product" code="inv_np" icon="assets/icons/icon_inv.png"/>
+					<sub name="Product List" code="inv_pl"/>
+					<sub name="Product Categories" code="inv_pc" icon="assets/icons/icon_inv.png"/>
+					<sub name="Product Pricing" code="inv_pp"/>
+					<sub name="Current Stock" code="inv_np"/>
+					<sub name="Movement History" code="inv_mh"/>
+					<sub name="Adjust Stock" code="inv_as"/>
+					<sub name="Count Sheet" code="inv_cs"/>
+					<sub name="Transfer Stock" code="inv_ts"/>
+					<sub name="Reorder Stock" code="inv_rs"/>
+					<sub name="Work Order" code="inv_wo"/>
 				</main>
 				<main icon="assets/icons/icon_inv.png" name="Purchasing">
-					<sub name="New Puchase Order"/>
-					<sub name="Purchase Order List"/>
-					<sub name="Sales Order List"/>
-					<sub name="New Vendor"/>
-					<sub name="Vendor List"/>
+					<sub name="New Puchase Order" code="pur_npo"/>
+					<sub name="Purchase Order List" code="pur_pol"/>
+					<sub name="Sales Order List" code="pur_sol"/>
+					<sub name="New Vendor" code="pur_nv"/>
+					<sub name="Vendor List" code="pur_vl"/>
 				</main>
 				<main icon="assets/icons/icon_sales.png" name="Sales">
-					<sub name="New Sales Quote"/>
-					<sub name="New Sales Order"/>
-					<sub name="Sales Order List"/>
-					<sub name="New Customer"/>
-					<sub name="Customer List"/>
+					<sub name="New Sales Quote" code="sal_nsq"/>
+					<sub name="New Sales Order" code="sal_nso"/>
+					<sub name="Sales Order List" code="sal_sol"/>
+					<sub name="New Customer" code="sal_nc"/>
+					<sub name="Customer List" code="sal_cl"/>
 				</main>
 				<main icon="assets/icons/icon_report.png" name="Report">
 					<sub name="Inventory Reports">
-						<sub name="Inventory Summary"/>
-						<sub name="Invetory Details Report"/>
-						<sub name="Inventory by Location"/>
-						<sub name="Inventory Movement Summary"/>
-						<sub name="Stock Reordering Report"/>
-						<sub name="Product Price List"/>
+						<sub name="Inventory Summary" code="rep_inv_is"/>
+						<sub name="Invetory Details Report" code="rep_inv_idr"/>
+						<sub name="Inventory by Location" code="rep_inv_ibl"/>
+						<sub name="Inventory Movement Summary" code="rep_inv_ims"/>
+						<sub name="Stock Reordering Report" code="rep_inv_srr"/>
+						<sub name="Product Price List" code="rep_inv_ppl"/>
 					</sub>
 					<sub name="Purchasing Reports">
-						<sub name="Purchase Order Summary"/>
-						<sub name="Purchase Order Details"/>
-						<sub name="Purchase Order Status"/>
-						<sub name="Vendor Product List"/>
-						<sub name="Vendor List"/>
+						<sub name="Purchase Order Summary" code="rep_pur_pos"/>
+						<sub name="Purchase Order Details" code="rep_pur_pod"/>
+						<sub name="Purchase Order Status" code="rep_pur_postat"/>
+						<sub name="Vendor Product List" code="rep_pur_vpl"/>
+						<sub name="Vendor List" code="rep_pur_vl"/>
 					</sub>
 					<sub name="Sales Reports">
-						<sub name="Sales Representative Report"/>
-						<sub name="Sales by Product Summary"/>
-						<sub name="Customer Payment Summary"/>
-						<sub name="Customer Order History"/>
-						<sub name="Customer List"/>
+						<sub name="Sales Representative Report" code="rep_sal_srr"/>
+						<sub name="Sales by Product Summary" code="rep_sal_sbps"/>
+						<sub name="Customer Payment Summary" code="rep_sal_cps"/>
+						<sub name="Customer Order History" code="rep_sal_coh"/>
+						<sub name="Customer List" code="rep_sal_cl"/>
 					</sub>
 				</main>
 			</>;
@@ -72,15 +130,36 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				menuNav = new XMLListCollection(menuNavList);
+				
 			}
 			[Embed(source="assets/icons/icon_sales.png")]
 			public var iconTwo_App:Class;
+			
+			protected function itemClickHandler(event:MenuEvent):void
+			{
+			
+				switch(String(event.item.@code)){
+					case "inv_np":
+					case "inv_pl":		
+						AccessVars.instance().mainApp.appChange(null,2,event.item.@code as String);
+					break;
+					case "pur_npo":	
+						AccessVars.instance().mainApp.appChange(null,3,event.item.@code as String);
+					break;
+					case "sal_nc":	
+					case "sal_cl":	
+						AccessVars.instance().mainApp.appChange(null,1,event.item.@code as String);
+					break;
+				}
+			}
+			
 		]]>
 	</fx:Script>
-	<controls:VerticalMenuBar backgroundSkin="assets.skins.skin_menuBar" dataProvider="{menuNav}" iconField="iconTwo_App" direction="right" labelField="@name"  width="200" height="100%"
-							  fontSize="16" fontWeight="bold">
+	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="@icon" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
+							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" itemSkin="assets.skins.skin_menuBar" buttonMode="true">
 	
 	</controls:VerticalMenuBar>
+	<!--<customComponents:NavigationMenu dataXML="{menuNav2}"  fontSize="16" fontWeight="bold" mainMenu="true" width="100%" height="100%"/>-->
 	<!--<customComponents:NavigationMenu mainMenu="true" width="100%" height="100%">
 		<customComponents:dataArr>
 			<s:ArrayCollection>

@@ -34,13 +34,17 @@
 					<mx:Canvas width="100%" height="100%" mouseOver="{Mouse.cursor = MouseCursor.HAND}" mouseOut="{Mouse.cursor = MouseCursor.ARROW}">
 						<mx:Canvas id="childCanvas" x="200" width="850" height="1100" backgroundColor="0xFFFFFF" borderStyle="outset" borderAlpha="1">
 							<s:Image x="14" y="17" source="assets/logo2.png"/>
-							<s:Label x="327" y="109" color="0x000000" fontSize="18"
-									 fontStyle="normal" fontWeight="bold" text="PURCHASE ORDER"
-									 verticalAlign="middle"/>
+							<s:VGroup y="89" width="100%" horizontalAlign="center" verticalAlign="middle">
+								<s:Label color="0x000000" fontSize="12"
+										 fontStyle="normal" fontWeight="bold" text="TIN: 411-846-093-000"
+										 verticalAlign="middle"/>
+								<s:Label color="0x000000" fontSize="18"
+										 fontStyle="normal" fontWeight="bold" text="PURCHASE ORDER"
+										 verticalAlign="middle" id="orderType"/>
+							</s:VGroup>
 							
-							<s:Label x="352" y="89" color="0x000000" fontSize="12"
-									 fontStyle="normal" fontWeight="bold" text="TIN: 411-846-093-000"
-									 verticalAlign="middle"/>
+							
+							
 							<s:Label x="584" y="41" color="0x000000" fontSize="14"
 									 fontStyle="normal" fontWeight="bold" text="PO No. "
 									 verticalAlign="middle"/>
@@ -130,42 +134,46 @@
 								</s:BorderContainer>
 							</s:BorderContainer>
 							<s:VGroup x="16" y="340" width="{childCanvas.width-28}" height="100%" paddingBottom="20">
-								<s:DataGrid id="dg" width="100%" minHeight="360" fontSize="12"
-											mouseChildren="false" mouseEnabled="false"
-											sortableColumns="false" textAlign="center" borderVisible="false">
-									<s:columns >
-										<s:ArrayList>
-											<s:GridColumn width="100" dataField="prodID" headerText="ID"/>
-											<s:GridColumn dataField="qty" headerText="Qty" width="80"/>
-											<s:GridColumn dataField="prodName" headerText="Description">
-												<s:itemRenderer>
-													<fx:Component>
-														<s:DefaultGridItemRenderer textAlign="left"/>
-													</fx:Component>
-												</s:itemRenderer>
-											</s:GridColumn>
-											<s:GridColumn dataField="price" headerText="Price" width="180">
-												<s:itemRenderer>
-													<fx:Component>
-														<s:DefaultGridItemRenderer textAlign="right"/>
-													</fx:Component>
-												</s:itemRenderer>
-											</s:GridColumn>
-											<s:GridColumn dataField="total" headerText="Total" width="220">
-												<s:itemRenderer>
-													<fx:Component>
-														<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
-													</fx:Component>
-												</s:itemRenderer>
-											</s:GridColumn>
-										</s:ArrayList>
-									</s:columns>
-								</s:DataGrid>
-								<s:Spacer height="100%"/>
-								<s:VGroup width="100%" paddingLeft="30" paddingRight="5" gap="2">
-									<s:HGroup width="100%" horizontalAlign="center" >
+								<mx:Canvas width="100%">
+									<s:HGroup y="540" id="notFol" width="100%" horizontalAlign="center">
 										<s:Label text="-- NOTHING FOLLOWS --" fontSize="11" fontFamily="Arial" fontWeight="bold" trackingLeft="5"/>
 									</s:HGroup>
+									<s:DataGrid id="dg" width="100%" minHeight="360" fontSize="12"
+												mouseChildren="false" mouseEnabled="false"
+												sortableColumns="false" textAlign="center" borderVisible="false">
+										<s:columns >
+											<s:ArrayList>
+												<s:GridColumn width="100" dataField="prodID" headerText="ID"/>
+												<s:GridColumn dataField="qty" headerText="Qty" width="80"/>
+												<s:GridColumn dataField="prodName" headerText="Description">
+													<s:itemRenderer>
+														<fx:Component>
+															<s:DefaultGridItemRenderer textAlign="left"/>
+														</fx:Component>
+													</s:itemRenderer>
+												</s:GridColumn>
+												<s:GridColumn dataField="price" headerText="Price" width="180">
+													<s:itemRenderer>
+														<fx:Component>
+															<s:DefaultGridItemRenderer textAlign="right"/>
+														</fx:Component>
+													</s:itemRenderer>
+												</s:GridColumn>
+												<s:GridColumn dataField="total" headerText="Total" width="220">
+													<s:itemRenderer>
+														<fx:Component>
+															<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
+														</fx:Component>
+													</s:itemRenderer>
+												</s:GridColumn>
+											</s:ArrayList>
+										</s:columns>
+									</s:DataGrid>
+								</mx:Canvas>
+								
+								<s:Spacer height="100%"/>
+								<s:VGroup width="100%" paddingLeft="30" paddingRight="5" gap="2">
+									
 									<s:Spacer height="100"/>
 									<s:HGroup width="100%" horizontalAlign="right" fontSize="13">
 										<s:Label text="Subtotal :" width="100" textAlign="right"/>
@@ -199,7 +207,7 @@
 										<s:VGroup paddingLeft="0" paddingTop="3" width="100%" height="12" gap="2">
 											<s:Label text="ABOMAR EQUIPMENT SALES CORP." textAlign="center" width="100%" trackingLeft="2"/>
 											<s:Spacer height="45"/>
-											<s:Label text="MARIO C. OCHON" textAlign="center" width="100%"/>
+											<s:Label text="MARIO C. OCHON" textAlign="center" width="100%" trackingLeft="1"/>
 											<mx:Canvas width="100%" height="20" styleName="topBorder">
 												<s:Label y="2" text="Authorized Signature" textAlign="center" width="100%" verticalAlign="middle"/>											
 											</mx:Canvas>
@@ -214,7 +222,11 @@
 					
 				</s:HGroup>
 			</mx:Canvas>
-			<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+			<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" height="40">
+				<s:Label text="Order Type: "/>
+				<s:DropDownList id="cmbOrderType" change="OrderTypechangeHandler(event)" dataProvider="{arrOrderType}" labelField="name"
+								selectedIndex="0" width="150"/>
+				<s:Spacer width="10"/>
 				<s:Label text="Zoom: "/>
 				<s:HGroup width="200" horizontalAlign="center" horizontalCenter="0">
 					<s:Label text="o"/>
@@ -239,6 +251,7 @@
 			import mx.printing.FlexPrintJob;
 			import mx.printing.FlexPrintJobScaleType;
 			
+			import spark.events.IndexChangeEvent;
 			import spark.utils.TextFlowUtil;
 			
 			private var parentCanvasWidth:Number;
@@ -246,6 +259,9 @@
 			private var childCanvasWidth:Number;
 			private var childCanvasHeight:Number;
 			private var _salesBox:SalesBox;
+			private var arrOrderType:ArrayCollection = new ArrayCollection(
+				[{name:"Purchase Order",type:1},{name:"Sales Order",type:2},
+				{name:"Sales Quote",type:3},{name:"Warehouse Transfer",type:4}])
 			
 			public function set salesBox(value:SalesBox):void{
 				_salesBox = value;
@@ -320,6 +336,7 @@
 				transDate.text = CurrentDateTimeString()
 				
 				dg.dataProvider = _salesBox.dg.dataProvider as ArrayCollection;
+				notFol.y = (_salesBox.dg.dataProvider as ArrayCollection).length;
 				var arrCus:Array = new Array();
 				arrCus.push(_salesBox.cmbCustomer.textInput.text.split(" - ")[0]);
 				arrCus.push(_salesBox.txtBname.text);
@@ -361,6 +378,11 @@
 				printJob.printAsBitmap = true;
 				printJob.addObject(childCanvas, FlexPrintJobScaleType.SHOW_ALL); 
 				printJob.send();
+			}
+			
+			protected function OrderTypechangeHandler(event:IndexChangeEvent):void
+			{
+				orderType.text = cmbOrderType.selectedItem.name.toUpperCase();
 			}
 			
 		]]>
