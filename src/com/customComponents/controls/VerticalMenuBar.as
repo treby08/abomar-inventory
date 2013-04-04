@@ -1,19 +1,21 @@
 package com.customComponents.controls
 {
+	import com.customComponents.controls.menuClasses.VerticalMenuItemRenderer;
+	
+	import flash.display.DisplayObject;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	
+	import mx.containers.ApplicationControlBar;
+	import mx.controls.Menu;
 	import mx.controls.MenuBar;
 	import mx.controls.menuClasses.IMenuBarItemRenderer;
-	import flash.geom.Rectangle;
-	import mx.containers.ApplicationControlBar;
-	import mx.core.IFlexDisplayObject;
-	import flash.display.DisplayObject;
-	import mx.styles.ISimpleStyleClient;
-	import mx.controls.Menu;
-	import com.customComponents.controls.menuClasses.VerticalMenuItemRenderer;
-	import mx.events.MenuEvent;
-	import mx.core.ClassFactory;
 	import mx.controls.menuClasses.MenuItemRenderer;
-	import flash.geom.Point;
+	import mx.core.ClassFactory;
+	import mx.core.IFlexDisplayObject;
+	import mx.events.MenuEvent;
 	import mx.managers.ISystemManager;
+	import mx.styles.ISimpleStyleClient;
 
 	public class VerticalMenuBar extends MenuBar
 	{
@@ -165,13 +167,15 @@ package com.customComponents.controls
 	    	var wasNull:Boolean = (menu == null);
 	    	
 	    	menu = super.getMenuAt(index);
-	       	
 	       
 	       	if(this.direction == VerticalMenuBar.LEFT) {
 	        	menu.itemRenderer = new ClassFactory(VerticalMenuItemRenderer);
 	        }
 	        else {
-	        	menu.itemRenderer = new ClassFactory(MenuItemRenderer);
+				var mir:MenuItemRenderer = new MenuItemRenderer();
+				mir.height = 45;
+			
+	        	menu.itemRenderer = new ClassFactory(VerticalMenuItemRenderer);
 	        }
 	        /* Now here's a sneaky part. First, we elminate the openDuration
 	         * because that screws the whole thing up. If openDuration is not 1, then

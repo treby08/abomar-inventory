@@ -71,7 +71,7 @@
 				floatMenuVisible(false);
 			}
 			
-			protected function appChange(event:MouseEvent,type:int):void
+			public function appChange(event:MouseEvent,type:int,code:String=""):void
 			{
 				floatMenuVisible(false);
 				if (mainCont.numElements > 1)
@@ -85,7 +85,7 @@
 						objBox = new CustomerBox();
 					break;
 					case 2:
-						objBox = new ProductBox();
+						objBox = new ProductBox();						
 					break;
 					case 3:
 						objBox = new SalesBox();

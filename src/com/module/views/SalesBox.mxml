@@ -254,7 +254,7 @@
 					<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
 						<s:HGroup verticalAlign="middle" paddingLeft="10">
 							<s:Label text="Stock:" backgroundColor="0xFCFCFC" fontWeight="bold"/>
-							<mx:Text id="txtStock" text="0" textAlign="right" width="30" fontWeight="bold"/>
+							<mx:Text id="txtStock" text="0" textAlign="right" width="100" fontWeight="bold"/>
 						</s:HGroup>
 						<s:Spacer width="35%"/>
 						<s:HGroup width="50%" fontSize="16" verticalAlign="middle">
