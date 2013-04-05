@@ -2,7 +2,9 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" fontSize="12" fontFamily="Arial" color="black"
 			   xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="appcreationCompleteHandler(event)"
 			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="800" minHeight="600" preinitialize="preInit(event)" 
-			   xmlns:views="com.module.views.*" xmlns:business="com.module.business.*" xmlns:control="com.module.control.*">
+			   xmlns:views="com.module.views.*" xmlns:business="com.module.business.*" xmlns:control="com.module.control.*" 
+			   xmlns:ns="http://code.google.com/p/flexlib/" 
+			   >
 	<fx:Style source="AeonGraphical.css"/>
 	<fx:Script>
 		<![CDATA[
@@ -19,9 +21,13 @@
 			
 			import flashx.textLayout.formats.Float;
 			
+			import flexlib.controls.tabBarClasses.SuperTab;
+			
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
+			[Embed(source="assets/icons/home.png")]
+			private var home_icon:Class;
 			private var logPanel:LoginPanel;
 			
 			protected function preInit(event:FlexEvent):void
@@ -46,6 +52,15 @@
 			{
 				AccessVars.instance().mainApp = this;
 				showLoginPanel();
+				callLater(initNonClosableTab);
+			}
+			
+			private function initNonClosableTab():void
+			{
+				trace("tn.numChildren",tn.numChildren);
+				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
+				tn.setStyle("tabCloseButton","tabCloseButtonStyleName")
+				tn.setStyle("tabCloseButtonStyleName","tabCloseButtonStyleName")
 			}
 			
 			public function showLoginPanel():void{
@@ -61,6 +76,7 @@
 			public function loginUser():void{
 				menNav.cntrl.visible = true;
 				floatMenuVisible(true);
+				initNonClosableTab()
 				//PopUpManager.removePopUp(logPanel);				
 				//logPanel = null;
 				
@@ -74,34 +90,52 @@
 			
 			public function appChange(event:MouseEvent,type:int,code:String=""):void
 			{
-				floatMenuVisible(false);
+				/* floatMenuVisible(false);
 				if (mainCont.numElements > 1)
-					mainCont.removeElementAt(0);
+					mainCont.removeElementAt(0); */
 				var objBox:VGroup;
+				var _cnv:Canvas = new Canvas();
 				switch(type){
 					case 0:
 						objBox = new UserBox();
+						_cnv.label = "User";
 					break;
 					case 1:
 						objBox = new CustomerBox();
+						_cnv.label = "Customer";
 					break;
 					case 2:
-						objBox = new ProductBox();						
+						objBox = new ProductBox();	
+						_cnv.label = "Product";
 					break;
 					case 3:
 						objBox = new SalesBox();
+						_cnv.label = "Sales";
 					break;
 					case 4:
 						objBox = new PurchaseOrderBox();
+						_cnv.label = "Purchase Order";
 					break;
 					case 5:
 						objBox = new InventoryBox();
+						_cnv.label = "Inventory";
 					break;
 					case 6:
 						objBox = new ReportBox();
+						_cnv.label = "Report";
 					break;
 				}
-				mainCont.addElementAt(objBox,0);
+				_cnv.percentWidth = 100;
+				_cnv.percentHeight = 100;
+				_cnv.addElement(objBox);
+				_cnv.setStyle("closable",true);
+				_cnv.setStyle("fontFamily","Arial");
+				_cnv.setStyle("fontWeight","normal");
+				_cnv.setStyle("fontSize",12);
+				tn.addItem(_cnv);
+				/* if(tn.numChildren > 5)
+					tn.setStyle("tabWidth",tn.width/tn.numChildren); */
+				//mainCont.addElementAt(objBox,0);
 			}
 			
 			public function floatMenuVisible(value:Boolean):void{
@@ -133,14 +167,20 @@
 	</fx:Declarations>
 	<s:VGroup width="100%" height="100%">
 		<views:MenuNav width="100%" id="menNav"/>
-		<s:BorderContainer id="mainCont" width="100%" height="100%" >
-			<s:BorderContainer id="floatMenu" height="100%" borderAlpha="0" visible="false" includeInLayout="false">
+		<s:BorderContainer id="mainCont" width="100%" height="100%" styleName="mainCont">
+			<s:BorderContainer id="floatMenu" width="100%" height="100%" borderAlpha="0" visible="false" includeInLayout="false">
 				<!--<s:borderStroke> 
 					<mx:SolidColorStroke 
 						color="0xAAAAAA" 
 						weight="2"/> 
 				</s:borderStroke>-->
-				<views:NavigationBox id="navBox" width="200" height="100%"/>
+				<ns:SuperTabNavigator id="tn" width="100%" height="100%" styleName="mainCont" horizontalGap="2"  fontFamily="Helvetica, san-serif"
+									  allowTabSqueezing="true" fontSize="16" cornerRadius="5" tabHeight="43" minTabWidth="200" fontWeight="bold">
+					<mx:Canvas label="Home" width="100%" styleName="tabCloseButtonStyleName" backgroundAlpha="0" icon="{home_icon}">
+						<views:NavigationBox id="navBox" width="200" height="100%"/>
+					</mx:Canvas>
+				</ns:SuperTabNavigator>
+				
 				<!--<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="25">
 					<s:HGroup gap="30" id="forMod">
 						<s:Button label="User" icon="assets/icons/icon_user.png" iconPlacement="top" width="120" height="100" click="appChange(event,0)"  useHandCursor="true" buttonMode="true"/>
