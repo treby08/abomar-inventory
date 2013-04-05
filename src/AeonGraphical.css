@@ -58,7 +58,7 @@ s|Application
 #menNav{
 	backgroundImage: Embed(source="AeonGraphical.swf",symbol="mx.skins.application.ApplicationBackground");
 }
-#mainCont{
+.mainCont{
 	backgroundImage: Embed("assets/bg.png");
 	
 }
@@ -696,7 +696,26 @@ Tab
 //  TabBar
 //------------------------------
 */
-
+.tabCloseButtonStyleName{
+	disabledSkin: Embed(source="assets/assets.swf", symbol="firefox_close_disabled");
+	downSkin: Embed(source="assets/assets.swf", symbol="firefox_close_down");
+	overSkin: Embed(source="assets/assets.swf", symbol="firefox_close_over");
+	selectedDisabledSkin: Embed(source="assets/assets.swf", symbol="firefox_close_disabled");
+	selectedDownSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+	selectedOverSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+	selectedUpSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+	upSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+}
+.tabCloseButton{
+	disabledSkin: Embed(source="assets/assets.swf", symbol="firefox_close_disabled");
+	downSkin: Embed(source="assets/assets.swf", symbol="firefox_close_down");
+	overSkin: Embed(source="assets/assets.swf", symbol="firefox_close_over");
+	selectedDisabledSkin: Embed(source="assets/assets.swf", symbol="firefox_close_disabled");
+	selectedDownSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+	selectedOverSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+	selectedUpSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+	upSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
+}
 TabBar {
    tabStyleName: "myTabs";
    firstTabStyleName: "myTabs";
@@ -710,7 +729,7 @@ TabBar {
 //  TabNavigator
 //------------------------------
 */
-TabNavigator {
+mx|TabNavigator {
    backgroundColor: #ffffff;
    borderColor: #788d70;
    tabStyleName: "myTabs";

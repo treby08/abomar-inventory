@@ -158,7 +158,7 @@
 			
 		]]>
 	</fx:Script>
-	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="@icon" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
+	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="{iconTwo_App}" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
 							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" itemSkin="assets.skins.skin_menuBar" buttonMode="true">
 	
 	</controls:VerticalMenuBar>
