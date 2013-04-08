@@ -9,6 +9,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.core.UIComponent;
 			import mx.events.CloseEvent;
 			
 			import spark.components.DataGrid;
@@ -27,7 +28,7 @@
 				if (evt.detail == Alert.YES){
 					var dg:DataGrid = (parent.parent.parent.parent.parent.parent.parent.parent.parent as DataGrid);
 					var obj:Object = (dg.dataProvider as ArrayCollection).removeItemAt(dg.selectedIndex);
-					SalesBox(dg.parent.parent).removeItemHandler(obj);
+					Object(dg.parent.parent).removeItemHandler(obj);
 				}
 			}
 			

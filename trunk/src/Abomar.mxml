@@ -8,6 +8,7 @@
 	<fx:Style source="AeonGraphical.css"/>
 	<fx:Script>
 		<![CDATA[
+			import com.flexlib.controls.tabBarClasses.SuperTab;
 			import com.module.views.CustomerBox;
 			import com.module.views.InventoryBox;
 			import com.module.views.LoginPanel;
@@ -15,13 +16,12 @@
 			import com.module.views.PurchaseOrderBox;
 			import com.module.views.ReportBox;
 			import com.module.views.SalesBox;
+			import com.module.views.SalesQuoteBox;
 			import com.module.views.UserBox;
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
 			
 			import flashx.textLayout.formats.Float;
-			
-			import com.flexlib.controls.tabBarClasses.SuperTab;
 			
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
@@ -107,21 +107,28 @@
 						_cnv.label = "Products";
 					break;
 					case 3:
-						objBox = new SalesBox();
-						_cnv.label = "Sales";
+						if (code == "sal_nsq"){
+							objBox = new SalesQuoteBox();
+							_cnv.label = "Sales Quote";
+						}else{
+							objBox = new SalesBox();
+							_cnv.label = "Sales";
+						}
+						
 					break;
+					
 					case 4:
 						objBox = new PurchaseOrderBox();
 						_cnv.label = "Purchase Order";
 					break;
-					case 5:
+					/* case 5:
 						objBox = new InventoryBox();
 						_cnv.label = "Inventory";
 					break;
 					case 6:
 						objBox = new ReportBox();
 						_cnv.label = "Report";
-					break;
+					break; */
 				}
 				_cnv.percentWidth = 100;
 				_cnv.percentHeight = 100;

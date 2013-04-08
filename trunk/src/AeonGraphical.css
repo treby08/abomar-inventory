@@ -605,7 +605,7 @@ RadioButton
 //  ScrollBar
 //------------------------------
 */
-ScrollBar
+mx|ScrollBar
 {
 
 	downArrowDisabledSkin: Embed(source="AeonGraphical.swf", symbol="ScrollArrowDown_disabledSkin");
