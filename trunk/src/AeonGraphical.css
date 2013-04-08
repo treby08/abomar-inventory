@@ -706,23 +706,13 @@ Tab
 	selectedUpSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
 	upSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
 }
-.tabCloseButton{
-	disabledSkin: Embed(source="assets/assets.swf", symbol="firefox_close_disabled");
-	downSkin: Embed(source="assets/assets.swf", symbol="firefox_close_down");
-	overSkin: Embed(source="assets/assets.swf", symbol="firefox_close_over");
-	selectedDisabledSkin: Embed(source="assets/assets.swf", symbol="firefox_close_disabled");
-	selectedDownSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
-	selectedOverSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
-	selectedUpSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
-	upSkin: Embed(source="assets/assets.swf", symbol="firefox_close_up");
-}
-TabBar {
+/*TabBar {
    tabStyleName: "myTabs";
    firstTabStyleName: "myTabs";
    lastTabStyleName: "myTabs";
    selectedTabTextStyleName: "mySelectedTabs";
 
-}
+}*/
 
 /*
 //------------------------------
@@ -736,6 +726,7 @@ mx|TabNavigator {
    firstTabStyleName: "myTabs";
    lastTabStyleName: "myTabs";
    selectedTabTextStyleName: "mySelectedTabs";
+   closeBtnStyleName:"tabCloseButtonStyleName";
 
 }
 

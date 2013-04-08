@@ -180,7 +180,7 @@ package com.flexlib.controls.tabBarClasses
 			closeButton.enabled = this.enabled;
 
 			// This allows someone to specify a CSS style for the close button
-			closeButton.styleName = getStyle("tabCloseButtonStyleName");
+			closeButton.styleName = "tabCloseButtonStyleName";//getStyle("tabCloseButtonStyleName");
 			
 			this.textField.addEventListener(Event.CHANGE, captureTextChange); 	
 		}

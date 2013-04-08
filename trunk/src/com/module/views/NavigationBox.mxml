@@ -159,7 +159,7 @@
 		]]>
 	</fx:Script>
 	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="@icon" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
-							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" buttonMode="true">
+							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" buttonMode="true" itemSkin="assets.skins.skin_menuBar">
 	
 	</controls:VerticalMenuBar>
 	<!--<customComponents:NavigationMenu dataXML="{menuNav2}"  fontSize="16" fontWeight="bold" mainMenu="true" width="100%" height="100%"/>-->

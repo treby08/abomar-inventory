@@ -121,7 +121,6 @@ package com.flexlib.controls
 		 */
 		public function VerticalMenuBar() {
 			super();
-			height=45
 		}
 		
 		/**
@@ -148,11 +147,11 @@ package com.flexlib.controls
 	
 	            item.setActualSize(unscaledWidth, item.getExplicitOrMeasuredHeight());
 	            item.visible = !hideItems;
-	
+				item.height=55;
 				item.move(0, lastY + lastH);
 				
 	            lastY = item.y = lastY+lastH;
-	            lastH = item.height+20;
+	            lastH = item.height;
 	            
 	            if (!hideItems &&
 	                (item.getExplicitOrMeasuredWidth() > unscaledWidth ||

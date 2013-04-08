@@ -42,7 +42,7 @@ package com.flexlib.controls
 	import mx.managers.PopUpManager;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
-	import flexlib.controls.ScrollableMenu;
+	import com.flexlib.controls.ScrollableMenu;
 	
 	use namespace mx_internal;
 	

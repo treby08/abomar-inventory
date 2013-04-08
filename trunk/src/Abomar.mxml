@@ -2,8 +2,8 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" fontSize="12" fontFamily="Arial" color="black"
 			   xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="appcreationCompleteHandler(event)"
 			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="800" minHeight="600" preinitialize="preInit(event)" 
-			   xmlns:views="com.module.views.*" xmlns:business="com.module.business.*" xmlns:control="com.module.control.*" 
-			   xmlns:ns="http://code.google.com/p/flexlib/" 
+			   xmlns:views="com.module.views.*" xmlns:business="com.module.business.*" xmlns:control="com.module.control.*" xmlns:containers="com.flexlib.containers.*" 
+			    
 			   >
 	<fx:Style source="AeonGraphical.css"/>
 	<fx:Script>
@@ -21,7 +21,7 @@
 			
 			import flashx.textLayout.formats.Float;
 			
-			import flexlib.controls.tabBarClasses.SuperTab;
+			import com.flexlib.controls.tabBarClasses.SuperTab;
 			
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
@@ -59,8 +59,6 @@
 			{
 				trace("tn.numChildren",tn.numChildren);
 				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
-				tn.setStyle("tabCloseButton","tabCloseButtonStyleName")
-				tn.setStyle("tabCloseButtonStyleName","tabCloseButtonStyleName")
 			}
 			
 			public function showLoginPanel():void{
@@ -106,7 +104,7 @@
 					break;
 					case 2:
 						objBox = new ProductBox();	
-						_cnv.label = "Product";
+						_cnv.label = "Products";
 					break;
 					case 3:
 						objBox = new SalesBox();
@@ -133,16 +131,19 @@
 				_cnv.setStyle("fontWeight","normal");
 				_cnv.setStyle("fontSize",12);
 				tn.addItem(_cnv);
+				tn.selectedIndex = tn.numChildren-1;
 				/* if(tn.numChildren > 5)
 					tn.setStyle("tabWidth",tn.width/tn.numChildren); */
 				//mainCont.addElementAt(objBox,0);
 			}
 			
 			public function floatMenuVisible(value:Boolean):void{
+				
 				floatMenu.visible = floatMenu.includeInLayout = value;
 				if (mainCont.numElements > 1)
 					mainCont.removeElementAt(0);
-				
+				if (tn && tn.numChildren > 0)
+					tn.selectedIndex = 0;
 				/* switch (SecurityType.accessMode()){
 					case SecurityType.MODERATOR:
 						forMod.visible = forMod.includeInLayout = true;
@@ -174,12 +175,13 @@
 						color="0xAAAAAA" 
 						weight="2"/> 
 				</s:borderStroke>-->
-				<ns:SuperTabNavigator id="tn" width="100%" height="100%" styleName="mainCont" horizontalGap="2"  fontFamily="Helvetica, san-serif"
-									  allowTabSqueezing="true" fontSize="16" cornerRadius="5" tabHeight="43" minTabWidth="200" fontWeight="bold">
+				<containers:SuperTabNavigator id="tn" width="100%" height="100%" styleName="mainCont" horizontalGap="2"  fontFamily="Helvetica, san-serif"
+									  allowTabSqueezing="true" fontSize="16" cornerRadius="5" tabHeight="43" minTabWidth="200" fontWeight="bold"
+									  useHandCursor="true" buttonMode="true">
 					<mx:Canvas label="Home" width="100%" styleName="tabCloseButtonStyleName" backgroundAlpha="0" icon="{home_icon}">
 						<views:NavigationBox id="navBox" width="200" height="100%"/>
 					</mx:Canvas>
-				</ns:SuperTabNavigator>
+				</containers:SuperTabNavigator>
 				
 				<!--<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="25">
 					<s:HGroup gap="30" id="forMod">
