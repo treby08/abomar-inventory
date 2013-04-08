@@ -107,19 +107,19 @@ package com.flexlib.controls {
 		
 		use namespace mx_internal;
 		
-		[Embed (source="../assets/assets.swf", symbol="firefox_close_up")]
+		[Embed (source="assets/assets.swf", symbol="firefox_close_up")]
 		private static var DEFAULT_CLOSE_UP:Class;
 		
-		[Embed (source="../assets/assets.swf", symbol="firefox_close_over")]
+		[Embed (source="assets/assets.swf", symbol="firefox_close_over")]
 		private static var DEFAULT_CLOSE_OVER:Class;
 		
-		[Embed (source="../assets/assets.swf", symbol="firefox_close_down")]
+		[Embed (source="assets/assets.swf", symbol="firefox_close_down")]
 		private static var DEFAULT_CLOSE_DOWN:Class;
 		
-		[Embed (source="../assets/assets.swf", symbol="firefox_close_disabled")]
+		[Embed (source="assets/assets.swf", symbol="firefox_close_disabled")]
 		private static var DEFAULT_CLOSE_DISABLED:Class;
 		
-		[Embed (source="../assets/assets.swf", symbol="indicator")]
+		[Embed (source="assets/assets.swf", symbol="indicator")]
 		private static var DEFAULT_INDICATOR:Class;
 		
 		/**
