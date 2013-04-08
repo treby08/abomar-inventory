@@ -33,6 +33,7 @@
 				<s:HGroup width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
 					<mx:Canvas width="100%" height="100%" mouseOver="{Mouse.cursor = MouseCursor.HAND}" mouseOut="{Mouse.cursor = MouseCursor.ARROW}">
 						<mx:Canvas id="childCanvas" x="200" width="850" height="1100" backgroundColor="0xFFFFFF" borderStyle="outset" borderAlpha="1">
+							
 							<s:Image x="14" y="17" source="assets/logo2.png"/>
 							<s:VGroup y="89" width="100%" horizontalAlign="center" verticalAlign="middle">
 								<s:Label color="0x000000" fontSize="12"
@@ -48,10 +49,10 @@
 							<s:Label x="584" y="41" color="0x000000" fontSize="14"
 									 fontStyle="normal" fontWeight="bold" text="PO No. "
 									 verticalAlign="middle"/>
-							<s:Label id="poID" x="643" y="41" width="114" color="0x000000"
+							<s:TextInput id="poID" x="643" y="37" width="114" color="0x000000"
 									 fontSize="14" fontStyle="normal" fontWeight="bold"
 									 text="13-001A" textAlign="center" typographicCase="uppercase"
-									 verticalAlign="middle"/>
+									 borderVisible="false"/>
 							<s:BorderContainer x="16" y="139" width="{childCanvas.width-28}" height="190"
 											   backgroundAlpha="0.0" borderVisible="false"
 											   borderWeight="0" contentBackgroundAlpha="0.0"
@@ -135,10 +136,8 @@
 							</s:BorderContainer>
 							<s:VGroup x="16" y="340" width="{childCanvas.width-28}" height="100%" paddingBottom="20">
 								<mx:Canvas width="100%">
-									<s:HGroup y="540" id="notFol" width="100%" horizontalAlign="center">
-										<s:Label text="-- NOTHING FOLLOWS --" fontSize="11" fontFamily="Arial" fontWeight="bold" trackingLeft="5"/>
-									</s:HGroup>
-									<s:DataGrid id="dg" width="100%" minHeight="360" fontSize="12"
+									
+									<s:DataGrid id="dg" width="100%" minHeight="385" fontSize="12"
 												mouseChildren="false" mouseEnabled="false"
 												sortableColumns="false" textAlign="center" borderVisible="false">
 										<s:columns >
@@ -216,16 +215,18 @@
 									</mx:Canvas>
 								</s:BorderContainer>
 							</s:VGroup>
-							
+							<s:HGroup y="370" id="notFol" width="100%" horizontalAlign="center">
+								<s:Label text="-- NOTHING FOLLOWS --" fontSize="11" fontFamily="Arial" fontWeight="bold" trackingLeft="5"/>
+							</s:HGroup>
 						</mx:Canvas>
 					</mx:Canvas>
 					
 				</s:HGroup>
 			</mx:Canvas>
 			<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" height="40">
-				<s:Label text="Order Type: "/>
+				<s:Label text="Order Type: " visible="false" includeInLayout="false"/>
 				<s:DropDownList id="cmbOrderType" change="OrderTypechangeHandler(event)" dataProvider="{arrOrderType}" labelField="name"
-								selectedIndex="0" width="150"/>
+								selectedIndex="0" width="150" visible="false" includeInLayout="false"/>
 				<s:Spacer width="10"/>
 				<s:Label text="Zoom: "/>
 				<s:HGroup width="200" horizontalAlign="center" horizontalCenter="0">
@@ -342,9 +343,10 @@
 				transDate.text = CurrentDateTimeString()
 				
 				dg.dataProvider = _salesBox.dg.dataProvider as ArrayCollection;
-				notFol.y = (_salesBox.dg.dataProvider as ArrayCollection).length;
+				notFol.y = notFol.y + (28 * (_salesBox.dg.dataProvider as ArrayCollection).length);
 				var arrCus:Array = new Array();
-				arrCus.push(_salesBox.cmbCustomer.textInput.text.split(" - ")[0]);
+				if (_salesBox.hasOwnProperty("cmbCustomer"))
+					arrCus.push(_salesBox.cmbCustomer.textInput.text.split(" - ")[0]);
 				arrCus.push(_salesBox.txtBname.text);
 				arrCus.push(_salesBox.txtBAdd.text);
 				if (_salesBox.txtBPhone.text != "")
@@ -369,6 +371,8 @@
 				txtTotal.text = _salesBox.txtGT.text;
 				txtSub.text = _salesBox.txtSubtot.text;
 				txtVat.text = _salesBox.txtVat.text;
+				
+				
 			}
 			
 			protected function printPrevPO():void

@@ -137,89 +137,33 @@
 			
 			protected function itemClickHandler(event:MenuEvent):void
 			{
-			
+				/* trace("itemClickHandler::::event.item:",(event.item as XML).toXMLString())
+				trace(String(event.item.@code)); */
 				switch(String(event.item.@code)){
 					case "inv_np":
 					case "inv_pl":		
-						AccessVars.instance().mainApp.appChange(null,2,event.item.@code as String);
+						AccessVars.instance().mainApp.appChange(null,2,String(event.item.@code));
 					break;
 					case "pur_npo":	
-						AccessVars.instance().mainApp.appChange(null,4,event.item.@code as String);
+						AccessVars.instance().mainApp.appChange(null,4,String(event.item.@code));
 					break;
 					case "sal_nso":	
-						AccessVars.instance().mainApp.appChange(null,3,event.item.@code as String);
+						AccessVars.instance().mainApp.appChange(null,3,String(event.item.@code));
+					break;
+					case "sal_nsq":	
+						AccessVars.instance().mainApp.appChange(null,3,String(event.item.@code));
 					break;
 					case "sal_nc":	
 					case "sal_cl":	
-						AccessVars.instance().mainApp.appChange(null,1,event.item.@code as String);
+						AccessVars.instance().mainApp.appChange(null,1,String(event.item.@code));
 					break;
 				}
 			}
 			
 		]]>
 	</fx:Script>
-	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="@icon" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
+	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="{iconTwo_App}" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
 							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" buttonMode="true" itemSkin="assets.skins.skin_menuBar">
 	
-	</controls:VerticalMenuBar>
-	<!--<customComponents:NavigationMenu dataXML="{menuNav2}"  fontSize="16" fontWeight="bold" mainMenu="true" width="100%" height="100%"/>-->
-	<!--<customComponents:NavigationMenu mainMenu="true" width="100%" height="100%">
-		<customComponents:dataArr>
-			<s:ArrayCollection>
-				<fx:Array>
-					<fx:Object img="assets/icons/icon_inv.png" name="Inventory"/>
-					<fx:Object img="assets/icons/icon_inv.png" name="Purchasing"/>
-					<fx:Object img="assets/icons/icon_sales.png" name="Sales"/>
-					<fx:Object img="assets/icons/icon_report.png" name="Report"/>
-				</fx:Array>
-			</s:ArrayCollection>
-		</customComponents:dataArr>
-		<customComponents:dataXML>
-			<fx:XML id="menuNav">
-				<menu>
-					<main img="assets/icons/icon_inv.png" name="Inventory">
-						<sub name="New Product"/>
-						<sub name="New Product"/>
-						<sub name="New Product"/>
-						<sub name="New Product"/>
-						<sub name="New Product"/>
-						<sub name="New Product"/>
-					</main>
-					<main img="assets/icons/icon_inv.png" name="Purchasing">
-						<sub name="New Puchase Order"/>
-						<sub name="New Puchase Order"/>
-						<sub name="New Puchase Order"/>
-						<sub name="New Puchase Order"/>
-						<sub name="New Puchase Order"/>
-					</main>
-					<main img="assets/icons/icon_sales.png" name="Sales">
-						<sub name="New Sales Quote"/>
-						<sub name="New Sales Quote"/>
-						<sub name="New Sales Quote"/>
-						<sub name="New Sales Quote"/>
-						<sub name="New Sales Quote"/>
-					</main>
-					<main img="assets/icons/icon_report.png" name="Report">
-						<sub name="Inventory Reports">
-							<sub name="Inventory Summary"/>
-							<sub name="Inventory Summary"/>
-							<sub name="Inventory Summary"/>
-							<sub name="Inventory Summary"/>
-						</sub>
-						<sub name="Purchasing Reports">
-							<sub name="Purchase Order Summary"/>
-							<sub name="Purchase Order Summary"/>
-							<sub name="Purchase Order Summary"/>
-							<sub name="Purchase Order Summary"/>
-						</sub>
-						<sub name="Sales Reports">
-							<sub name="Sales Representative Report"/>
-							<sub name="Sales Representative Report"/>
-							<sub name="Sales Representative Report"/>
-						</sub>
-					</main>
-				</menu>
-			</fx:XML>
-		</customComponents:dataXML>
-	</customComponents:NavigationMenu>-->
+	</controls:VerticalMenuBar>	
 </s:Group>
