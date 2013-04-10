@@ -118,7 +118,7 @@
 			{
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 3;
+				_printBox.orderTypeID = 2;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
