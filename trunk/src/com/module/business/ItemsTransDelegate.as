@@ -129,6 +129,31 @@ package com.module.business
 					}
 					_params = null;
 				});
+			}else{
+				var listXML:XML = XML(evt.result);
+				var arrCol:ArrayCollection = new ArrayCollection()
+				var arrObj:Object = {}
+				for each (var obj:XML in listXML.children()){
+					arrObj = {}
+					arrObj.qouteID = obj.@qouteID;
+					arrObj.fname = obj.@fname;
+					arrObj.mname = obj.@mname;
+					arrObj.lname = obj.@lname;
+					arrObj.businame = obj.@businame;
+					arrObj.baddress = obj.@baddress;
+					arrObj.bPhoneNum = obj.@bPhoneNum;
+					arrObj.bMobileNum = obj.@bMobileNum;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){
+					_params.qBox.setDataProvider(arrCol,1);
+					_params.qBox = null;
+					_params = null;
+				}else if (_params.sBox){
+					_params.sBox.setDataProvider(arrCol,0);
+					_params.sBox = null;
+					_params = null;
+				}
 			}
 		}
 		

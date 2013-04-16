@@ -27,7 +27,7 @@
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
-				var log2:UserEvent = new UserEvent(UserEvent.SEARCH_CUSTOMER,{searchstr:"",csBox:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_SALES,{searchstr:"",qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				/* var styleName:String = "." + dg.getStyle("headerStyleName");
@@ -41,8 +41,8 @@
 					cmbProd.dataProvider = arr;
 					cmbProd.labelFunction = mycmbProdLabelFunction;
 				}else if (type == 1){
-					cmbCustomer.dataProvider = arr;
-					cmbCustomer.labelFunction = mycmbCusLabelFunction;
+					cmbQuote.dataProvider = arr;
+					cmbQuote.labelFunction = mycmbQuoteLabelFunction;
 				}
 			}
 			
@@ -59,6 +59,9 @@
 			}
 			private function mycmbCusLabelFunction(item:Object):String{
 				return (item)?item.fname +" "+item.lname+" - "+item.businame:"";
+			}
+			private function mycmbQuoteLabelFunction(item:Object):String{
+				return (item)?item.qouteID +" - "+item.fname +" "+item.lname:"";
 			}
 			
 			protected function cmbProdchangeHandler(event:IndexChangeEvent):void
@@ -87,14 +90,15 @@
 				return nRetVal;
 			}
 			
-			protected function cmbCustomerchangingHandler(event:IndexChangeEvent):void
+			protected function cmbQuotechangingHandler(event:IndexChangeEvent):void
 			{
-				if (cmbCustomer.selectedItem == null) return;
-				var obj:Object = cmbCustomer.selectedItem;
+				if (cmbQuote.selectedItem == null) return;
+				var obj:Object = cmbQuote.selectedItem;
 				txtBname.text = obj.businame;
 				txtBAdd.text = obj.baddress;
 				txtBPhone.text = obj.bPhoneNum;
 				txtBMobile.text = obj.bMobileNum;
+				txtBranch.text = obj.branchName;
 			}
 			
 			protected function btnAddclickHandler(event:MouseEvent):void
@@ -128,7 +132,7 @@
 			{
 				if (dg.dataProviderLength == 0 )return;
 				var obj:Object = {}
-				obj.sales_custID = cmbCustomer.selectedItem.custID;
+				obj.sales_custID = cmbQuote.selectedItem.custID;
 				obj.sales_branchID = 1;//cmbCustomer.selectedItem.custID;
 				obj.totalAmt = txtGT.text;
 				obj.vat = txtVat.text;
@@ -137,9 +141,9 @@
 					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total);
 				}
 				obj.salesDetails = strItem.join("||");
-				//var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
-				//CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				printPrevPO()
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				//printPrevPO()
 				//btnPrint.enabled = true;
 			}
 			
@@ -158,8 +162,8 @@
 			}
 			
 			public function clearFields(event:MouseEvent):void{
-				cmbCustomer.selectedIndex = -1;
-				cmbCustomer.textInput.text = "";
+				cmbQuote.selectedIndex = -1;
+				cmbQuote.textInput.text = "";
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";
 				txtBname.text = "";
@@ -213,9 +217,12 @@
 					<s:Label text="Sales Information"/>
 					<mx:HRule width="100%" height="2"/>
 					<s:HGroup  width="100%">
-						<s:Label text="Customer:" width="90"/>
-						<s:ComboBox id="cmbCustomer" width="100%" tabIndex="1" changing="cmbCustomerchangingHandler(event)"/>
+						<s:Label text="Qoute:" width="90"/>
+						<s:ComboBox id="cmbQuote" width="100%" tabIndex="1" changing="cmbQuotechangingHandler(event)"/>
 						<s:Label text="*" color="red"/>
+						<s:Spacer width="20"/> 
+						<s:Label text="Branch:" width="90"/>
+						<s:TextInput id="txtBranch" width="150" editable="false"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
 						<s:Label text="Business Name:" width="90"/>
@@ -269,7 +276,8 @@
 						<s:Spacer width="100%"/>
 						<s:Button id="btnNew" label="New Purchase Order" tabIndex="4" click="btnNewclickHandler(event)"/>
 						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
-						<s:Button id="btnCheckOut" label="Check Out &amp; Print Purchase Order" click="CheckOutclickHandler(event)"/>
+						<s:Button id="btnCheckOut" label="Save Purchase Order" click="CheckOutclickHandler(event)"/>
+						<s:Button id="btnPrint" label="Print Purchase Order" click="printPrevPO()"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>

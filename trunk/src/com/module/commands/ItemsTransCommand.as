@@ -45,6 +45,11 @@ package com.module.commands
 					ItemsTransDelegate.instance().sales_AED(obj);
 				break;
 				
+				case ItemsTransEvent.SEARCH_SALES:
+					obj.type = "search";
+					ItemsTransDelegate.instance().sales_AED(obj);
+					break;
+				
 			}
 		}
 	}

@@ -229,7 +229,7 @@
 						<s:Spacer width="100%"/>
 						<s:Button id="btnNew" label="New Sales Quote" tabIndex="4" click="btnNewclickHandler(event)"/>
 						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
-						<s:Button id="btnCheckOut" label="Print Quote" click="CheckOutclickHandler(event)"/>
+						<s:Button id="btnCheckOut" label="Submit Quote" click="CheckOutclickHandler(event)"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
