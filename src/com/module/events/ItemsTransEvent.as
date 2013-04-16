@@ -12,6 +12,7 @@ package com.module.events
 		public static var ADD_SALES:String = "add_sales";
 		public static var EDIT_SALES:String = "edit_sales";
 		public static var DELETE_SALES:String = "delete_sales";
+		public static var SEARCH_SALES:String = "search_sales";
 		
 		public var params:Object;
 		
