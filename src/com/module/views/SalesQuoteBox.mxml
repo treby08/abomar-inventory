@@ -27,8 +27,8 @@
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
-				/* var log2:UserEvent = new UserEvent(UserEvent.SEARCH_CUSTOMER,{searchstr:"",csBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2); */
+				var log2:UserEvent = new UserEvent(UserEvent.SEARCH_CUSTOMER,{searchstr:"",csBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 							
 			}
 			
@@ -36,6 +36,9 @@
 				if (type == 0){
 					cmbProd.dataProvider = arr;
 					cmbProd.labelFunction = mycmbProdLabelFunction;
+				}else if (type == 1){
+					cmbCustomer.dataProvider = arr;
+					cmbCustomer.labelFunction = mycmbCusLabelFunction;
 				}
 			}
 			
@@ -72,12 +75,25 @@
 				
 				
 				txtSub.text = roundDec(Number(txtPrice.text)*int(txtQty.value)).toFixed(2);
+				btnAdd.setFocus();
+				/* if ()
+				btnAdd.addEventListener(KeyboardEvent.KEY_UP,btnAdd_keyUpHandler); */
 			}
 			
 			private function roundDec(numIn:Number, decimalPlaces:int = 2):Number {
 				var nExp:int = Math.pow(10,decimalPlaces) ; 
 				var nRetVal:Number = Math.round(numIn * nExp) / nExp
 				return nRetVal;
+			}
+			
+			protected function cmbCustomerchangingHandler(event:IndexChangeEvent):void
+			{
+				if (cmbCustomer.selectedItem == null) return;
+				var obj:Object = cmbCustomer.selectedItem;
+				txtBname.text = obj.businame;
+				txtBAdd.text = obj.baddress;
+				txtBPhone.text = obj.bPhoneNum;
+				txtBMobile.text = obj.bMobileNum;
 			}
 						
 			protected function btnAddclickHandler(event:MouseEvent):void
@@ -109,9 +125,29 @@
 			
 			protected function CheckOutclickHandler(event:MouseEvent):void
 			{
-				if (dg.dataProviderLength == 0 )return;
+				if (dg.dataProviderLength == 0){
+					Alert.show("Item List is Empty","Submit Qoute Error");
+					return;
+				}
+				if (cmbCustomer.selectedIndex == -1){
+					Alert.show("No Customer Selected","Submit Qoute Error");
+					return;
+				}
 				
-				printPrevPO()
+				var obj:Object = {}
+				obj.quote_custID = cmbCustomer.selectedItem.custID;
+				obj.quote_branchID = 1;
+				obj.totalAmt = txtGT.text;
+				obj.vat = txtVat.text;
+				var strItem:Array = new Array();
+				for each (var item:Object in dg.dataProvider){
+					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total);
+				}
+				obj.quoteDetails = strItem.join("||");
+				
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				//printPrevPO()
 			}
 			
 			protected function printPrevPO():void
@@ -159,6 +195,13 @@
 				}
 			}
 			
+
+			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER)
+					(event.target as Button).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -177,8 +220,13 @@
 				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 					<s:Label text="Quote Information"/>
 					<mx:HRule width="100%" height="2"/>
+					<s:HGroup  width="100%">
+						<s:Label text="Customer:" width="90"/>
+						<s:ComboBox id="cmbCustomer" width="100%" tabIndex="1" changing="cmbCustomerchangingHandler(event)"/>
+						<s:Label text="*" color="red"/>
+					</s:HGroup>
 					<s:HGroup width="100%">
-						<s:Label text="Customer Name:" width="90"/>
+						<s:Label text="Business Name:" width="90"/>
 						<s:TextInput id="txtBname" width="100%"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
@@ -228,7 +276,7 @@
 					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">
 						<s:Spacer width="100%"/>
 						<s:Button id="btnNew" label="New Sales Quote" tabIndex="4" click="btnNewclickHandler(event)"/>
-						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
+						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
 						<s:Button id="btnCheckOut" label="Submit Quote" click="CheckOutclickHandler(event)"/>
 					</s:HGroup>
 				</s:VGroup>

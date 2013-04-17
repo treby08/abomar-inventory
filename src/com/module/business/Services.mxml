@@ -11,6 +11,7 @@
 		    public static var  CUSTOMER_SERVICE:String = "customer_service";
 		    public static var  PRODUCT_SERVICE:String = "product_service";
 		    public static var  SALES_SERVICE:String = "sales_service";
+		    public static var  QOUTE_SERVICE:String = "qoute_service";
 		
 		    
 			public function getHTTPService( name : String ) : HTTPService
@@ -43,6 +44,10 @@
 		showBusyCursor="true" />
 	<mx:HTTPService id="sales_service"
 		url="{SecurityType.HTTP_HOST+'/salesAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="qoute_service"
+		url="{SecurityType.HTTP_HOST+'/quoteAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 						

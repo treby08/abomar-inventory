@@ -32,6 +32,7 @@ package com.module.commands
 					obj.type = "search";
 					ItemsTransDelegate.instance().Items_AED(obj);
 				break;
+				/* PURCHASE ORDER*/
 				case ItemsTransEvent.ADD_SALES:
 					obj.type = "add";
 					ItemsTransDelegate.instance().sales_AED(obj);
@@ -48,7 +49,26 @@ package com.module.commands
 				case ItemsTransEvent.SEARCH_SALES:
 					obj.type = "search";
 					ItemsTransDelegate.instance().sales_AED(obj);
+				break;
+				/*QOUTATION*/
+				case ItemsTransEvent.ADD_QUOTE:
+					obj.type = "add";
+					ItemsTransDelegate.instance().qoute_AED(obj);
 					break;
+				case ItemsTransEvent.EDIT_QUOTE:
+					obj.type = "edit";
+					ItemsTransDelegate.instance().qoute_AED(obj);
+					break;
+				case ItemsTransEvent.DELETE_QUOTE:
+					obj.type = "delete";
+					ItemsTransDelegate.instance().qoute_AED(obj);
+					break;
+				
+				case ItemsTransEvent.SEARCH_QUOTE:
+					obj.type = "search";
+					ItemsTransDelegate.instance().qoute_AED(obj);
+					break;
+				
 				
 			}
 		}

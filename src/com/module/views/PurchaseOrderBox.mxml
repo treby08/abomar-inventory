@@ -27,7 +27,7 @@
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_SALES,{searchstr:"",qBox:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:"",qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				/* var styleName:String = "." + dg.getStyle("headerStyleName");
@@ -61,7 +61,7 @@
 				return (item)?item.fname +" "+item.lname+" - "+item.businame:"";
 			}
 			private function mycmbQuoteLabelFunction(item:Object):String{
-				return (item)?item.qouteID +" - "+item.fname +" "+item.lname:"";
+				return (item)?"Q#"+item.quoteLabel +" - "+item.customer +" - "+item.branchName:"";
 			}
 			
 			protected function cmbProdchangeHandler(event:IndexChangeEvent):void
