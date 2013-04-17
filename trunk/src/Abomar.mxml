@@ -109,10 +109,10 @@
 						if (code == "sal_nsq"){
 							objBox = new SalesQuoteBox();
 							_cnv.label = "Sales Quote";
-						}else{
+						}/*else{
 							objBox = new SalesBox();
 							_cnv.label = "Sales";
-						}
+						}*/
 						
 					break;
 					

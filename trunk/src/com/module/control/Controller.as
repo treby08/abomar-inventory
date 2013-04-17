@@ -34,9 +34,16 @@ package com.module.control
 			addCommand( ItemsTransEvent.EDIT_PRODUCT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.DELETE_PRODUCT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.SEARCH_PRODUCT, ItemsTransCommand );
+			
 			addCommand( ItemsTransEvent.ADD_SALES, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_SALES, ItemsTransCommand );
 			addCommand( ItemsTransEvent.DELETE_SALES, ItemsTransCommand );
+			addCommand( ItemsTransEvent.SEARCH_SALES, ItemsTransCommand );
+			
+			addCommand( ItemsTransEvent.ADD_QUOTE, ItemsTransCommand );
+			addCommand( ItemsTransEvent.EDIT_QUOTE, ItemsTransCommand );
+			addCommand( ItemsTransEvent.DELETE_QUOTE, ItemsTransCommand );
+			addCommand( ItemsTransEvent.SEARCH_QUOTE, ItemsTransCommand );
 		}
 	}
 }

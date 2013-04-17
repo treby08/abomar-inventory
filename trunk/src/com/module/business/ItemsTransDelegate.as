@@ -119,7 +119,7 @@ package com.module.business
 			}
 			
 			if (str){
-				Alert.show(str+" Sales Complete.", str+" Product",4,null,function():void{
+				Alert.show(str+" Sales Complete.", str+" Sales",4,null,function():void{
 					if (_params.pBox){
 						_params.pBox.clearFields(null);
 						_params.pBox = null;
@@ -139,6 +139,75 @@ package com.module.business
 					arrObj.fname = obj.@fname;
 					arrObj.mname = obj.@mname;
 					arrObj.lname = obj.@lname;
+					arrObj.businame = obj.@businame;
+					arrObj.baddress = obj.@baddress;
+					arrObj.bPhoneNum = obj.@bPhoneNum;
+					arrObj.bMobileNum = obj.@bMobileNum;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){
+					_params.qBox.setDataProvider(arrCol,1);
+					_params.qBox = null;
+					_params = null;
+				}else if (_params.sBox){
+					_params.sBox.setDataProvider(arrCol,0);
+					_params.sBox = null;
+					_params = null;
+				}
+			}
+		}
+		
+		public function qoute_AED(params:Object):void{
+			_params = params;
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.QOUTE_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(Qoute_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function Qoute_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("Qoute_AED_onResult",strResult);
+			
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+				case "edit":
+					str="Updating";
+					break;
+				case "delete":
+					str="Deleting";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Qoute Error: "+strResult,"Error");
+				return;
+			}
+			
+			if (str){
+				Alert.show(str+" Qoute Complete.", str+" Qoute",4,null,function():void{
+					if (_params.pBox){
+						_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}else if (_params.ppnl){
+						_params.ppnl.parent.removeElement(_params.ppnl);
+						_params.ppnl = null;
+					}
+					_params = null;
+				});
+			}else{
+				var listXML:XML = XML(evt.result);
+				var arrCol:ArrayCollection = new ArrayCollection()
+				var arrObj:Object = {}
+				for each (var obj:XML in listXML.children()){
+					arrObj = {}
+					arrObj.quoteID = obj.@qouteID;
+					arrObj.quoteLabel = obj.@quoteLabel;
+					arrObj.branchName = obj.@branchName;
+					arrObj.customer = obj.@customer;
 					arrObj.businame = obj.@businame;
 					arrObj.baddress = obj.@baddress;
 					arrObj.bPhoneNum = obj.@bPhoneNum;
