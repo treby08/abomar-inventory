@@ -15,7 +15,7 @@
 	}else if ($type == "delete")
 		$prodID = $_REQUEST['prodID'];
 	else if ($type == "search")
-		$searchSTR = $_REQUEST['searchstr'];
+		$searchSTR = $_REQUEST['searchstr']==-1?"":$_REQUEST['searchstr'];
 	
 	if ($type == "add"){
 		$query = mysql_query("SELECT prodCode FROM products WHERE prodCode='$pCode'",$conn);
@@ -30,10 +30,12 @@
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM products WHERE prodID = '$prodID'",$conn);
 	}else if ($type == "search"){
-		$query = mysql_query("SELECT * from products WHERE prodCode LIKE '%$searchSTR%' OR prodName LIKE '%$searchSTR%'",$conn);
+		$query = mysql_query("SELECT p.*,branchName FROM products p
+							INNER JOIN branches b ON p.prod_branchID=b.branchID 
+							WHERE prodCode LIKE '%$searchSTR%' OR prodName LIKE '%$searchSTR%'",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item prodID=\"".$row['prodID']."\" pCode=\"".$row['prodCode']."\" pName=\"".$row['prodName']."\" pDesc=\"".$row['prodDesc']."\" stockCnt=\"".$row['stockCount']."\" price=\"".$row['unitprice']."\" imgPath=\"".$row['imgPath']."\" />";
+				$xml .= "<item prodID=\"".$row['prodID']."\" pCode=\"".$row['prodCode']."\" pName=\"".$row['prodName']."\" pDesc=\"".$row['prodDesc']."\" stockCnt=\"".$row['stockCount']."\" price=\"".$row['unitprice']."\" imgPath=\"".$row['imgPath']."\" branchName=\"".$row['branchName']."\" />";
 			}
 		$xml .= "</root>";
 		echo $xml;

@@ -44,6 +44,7 @@ package com.module.control
 			addCommand( ItemsTransEvent.EDIT_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.DELETE_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.SEARCH_QUOTE, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_QUOTE_DETAILS, ItemsTransCommand );
 		}
 	}
 }

@@ -25,10 +25,12 @@ package com.module.business
 			return _inst;
 		}
 		
-		private var _params:Object
+		private var _params:Object;
+		private var _paramsItems:Object;
+		private var _paramsQuote:Object;
 				
 		public function Items_AED(params:Object):void{
-			_params = params;
+			_paramsItems = params;
 			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PRODUCT_SERVICE);
 			var token:AsyncToken = service.send(params);
 			var responder:mx.rpc.Responder = new mx.rpc.Responder(Items_AED_onResult, Main_onFault);
@@ -40,7 +42,7 @@ package com.module.business
 			trace("Items_AED_onResult",strResult);
 			
 			var str:String;
-			switch(_params.type){
+			switch(_paramsItems.type){
 				case "Adding":
 					str="Add";
 					break;
@@ -59,30 +61,31 @@ package com.module.business
 			
 			if (str){
 				Alert.show(str+" Product Complete.", str+" Product",4,null,function():void{
-					if (_params.pBox){
-						_params.pBox.clearFields(null);
-						_params.pBox = null;
-					}else if (_params.ppnl){
-						_params.ppnl.parent.removeElement(_params.ppnl);
-						_params.ppnl = null;
+					if (_paramsItems.pBox){
+						_paramsItems.pBox.clearFields(null);
+						_paramsItems.pBox = null;
+					}else if (_paramsItems.ppnl){
+						_paramsItems.ppnl.parent.removeElement(_paramsItems.ppnl);
+						_paramsItems.ppnl = null;
 					}
-					_params = null;
+					_paramsItems = null;
 				});
 			}else{
 				var listXML:XML = XML(evt.result);
-				var arrCol:ArrayCollection = new ArrayCollection()
+				var arrCol:ArrayCollection = new ArrayCollection();
+				trace("search",XML(evt.result).toXMLString())
 				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,pName:obj.@pName,pDesc:obj.@pDesc,stockCnt:obj.@stockCnt,price:obj.@price,imgPath:obj.@imgPath})
+					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,pName:obj.@pName,pDesc:obj.@pDesc,stockCnt:obj.@stockCnt,price:obj.@price,imgPath:obj.@imgPath,branchName:obj.@branchName})
 				}
-				if (_params.pBox){
-					(_params.pBox as ProductBox).dataCollection = arrCol;
-					(_params.pBox as ProductBox).totCount.text = String(arrCol.length);
-					_params.pBox = null;
-					_params = null;
-				}else if (_params.sBox){
-					_params.sBox.setDataProvider(arrCol,0);
-					_params.sBox = null;
-					_params = null;
+				if (_paramsItems.pBox){
+					(_paramsItems.pBox as ProductBox).dataCollection = arrCol;
+					(_paramsItems.pBox as ProductBox).totCount.text = String(arrCol.length);
+					_paramsItems.pBox = null;
+					_paramsItems = null;
+				}else if (_paramsItems.sBox){
+					_paramsItems.sBox.setDataProvider(arrCol,0);
+					_paramsItems.sBox = null;
+					_paramsItems = null;
 				}
 			}
 			
@@ -157,20 +160,21 @@ package com.module.business
 			}
 		}
 		
-		public function qoute_AED(params:Object):void{
-			_params = params;
+		public function quote_AED(params:Object):void{
+			_paramsQuote = params;
+			trace("quote_AED",_paramsQuote.type,_paramsQuote.quoteID);
 			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.QOUTE_SERVICE);
 			var token:AsyncToken = service.send(params);
-			var responder:mx.rpc.Responder = new mx.rpc.Responder(Qoute_AED_onResult, Main_onFault);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(quote_AED_onResult, Main_onFault);
 			token.addResponder(responder);
 		}
 		
-		private function Qoute_AED_onResult(evt:ResultEvent):void{
+		private function quote_AED_onResult(evt:ResultEvent):void{
 			var strResult:String = String(evt.result);
-			trace("Qoute_AED_onResult",strResult);
+			trace("quote_AED_onResult",strResult);
 			
 			var str:String;
-			switch(_params.type){
+			switch(_paramsQuote.type){
 				case "add":
 					str="Adding";
 					break;
@@ -183,28 +187,58 @@ package com.module.business
 			}
 			
 			if (strResult != "" && str != null){
-				Alert.show(str+" Qoute Error: "+strResult,"Error");
+				Alert.show(str+" Quote Error: "+strResult,"Error");
 				return;
 			}
-			
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrObj:Object = {}
+			var obj:XML;
 			if (str){
-				Alert.show(str+" Qoute Complete.", str+" Qoute",4,null,function():void{
-					if (_params.pBox){
-						_params.pBox.clearFields(null);
-						_params.pBox = null;
-					}else if (_params.ppnl){
-						_params.ppnl.parent.removeElement(_params.ppnl);
-						_params.ppnl = null;
+				Alert.show(str+" Quote Complete.", str+" Quote",4,null,function():void{
+					if (_paramsQuote.pBox){
+						_paramsQuote.pBox.clearFields(null);
+						_paramsQuote.pBox = null;
+					}else if (_paramsQuote.ppnl){
+						_paramsQuote.ppnl.parent.removeElement(_paramsQuote.ppnl);
+						_paramsQuote.ppnl = null;
 					}
-					_params = null;
+					_paramsQuote = null;
 				});
-			}else{
-				var listXML:XML = XML(evt.result);
-				var arrCol:ArrayCollection = new ArrayCollection()
-				var arrObj:Object = {}
-				for each (var obj:XML in listXML.children()){
+			}else if (_paramsQuote.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				arrObj = {};
+					
+				trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
 					arrObj = {}
-					arrObj.quoteID = obj.@qouteID;
+					//qdID,qd_quoteID,qd_prodID,quantity,totalPurchase,prodCode,prodName,prodDesc,stockCount,unitprice,branchName
+					arrObj.qdID = obj.@qdID;
+					arrObj.qd_quoteID = obj.@qd_quoteID;
+					arrObj.branchName = obj.@branchName;
+					arrObj.qd_prodID = obj.@qd_prodID;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.prodName = obj.@prodName;
+					arrObj.prodDesc = obj.@prodDesc;
+					arrObj.stockCount = obj.@stockCount;
+					arrObj.price = obj.@unitprice;
+					arrCol.addItem(arrObj);
+				}
+				if (_paramsQuote.qBox){
+					_paramsQuote.qBox.setDataProvider(arrCol,3);
+					_paramsQuote.qBox = null;
+					_paramsQuote = null;
+				}
+			}else{
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = {}
+					arrObj.quoteID = obj.@quoteID;
 					arrObj.quoteLabel = obj.@quoteLabel;
 					arrObj.branchName = obj.@branchName;
 					arrObj.customer = obj.@customer;
@@ -214,14 +248,14 @@ package com.module.business
 					arrObj.bMobileNum = obj.@bMobileNum;
 					arrCol.addItem(arrObj);
 				}
-				if (_params.qBox){
-					_params.qBox.setDataProvider(arrCol,1);
-					_params.qBox = null;
-					_params = null;
+				if (_paramsQuote.qBox){
+					_paramsQuote.qBox.setDataProvider(arrCol,1);
+					_paramsQuote.qBox = null;
+					_paramsQuote = null;
 				}else if (_params.sBox){
-					_params.sBox.setDataProvider(arrCol,0);
-					_params.sBox = null;
-					_params = null;
+					_paramsQuote.sBox.setDataProvider(arrCol,0);
+					_paramsQuote.sBox = null;
+					_paramsQuote = null;
 				}
 			}
 		}

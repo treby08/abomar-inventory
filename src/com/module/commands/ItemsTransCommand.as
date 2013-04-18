@@ -53,21 +53,25 @@ package com.module.commands
 				/*QOUTATION*/
 				case ItemsTransEvent.ADD_QUOTE:
 					obj.type = "add";
-					ItemsTransDelegate.instance().qoute_AED(obj);
+					ItemsTransDelegate.instance().quote_AED(obj);
 					break;
 				case ItemsTransEvent.EDIT_QUOTE:
 					obj.type = "edit";
-					ItemsTransDelegate.instance().qoute_AED(obj);
+					ItemsTransDelegate.instance().quote_AED(obj);
 					break;
 				case ItemsTransEvent.DELETE_QUOTE:
 					obj.type = "delete";
-					ItemsTransDelegate.instance().qoute_AED(obj);
+					ItemsTransDelegate.instance().quote_AED(obj);
 					break;
 				
 				case ItemsTransEvent.SEARCH_QUOTE:
 					obj.type = "search";
-					ItemsTransDelegate.instance().qoute_AED(obj);
+					ItemsTransDelegate.instance().quote_AED(obj);
 					break;
+				case ItemsTransEvent.GET_QUOTE_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().quote_AED(obj);
+				break;
 				
 				
 			}
