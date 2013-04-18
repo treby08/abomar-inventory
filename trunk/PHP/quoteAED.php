@@ -15,6 +15,8 @@
 		$quoteID = $_REQUEST['quoteID'];
 	else if ($type == "search")
 		$searchSTR = $_REQUEST['searchstr'];
+	else if ($type == "get_details")
+		$quoteID = $_REQUEST['quoteID'];
 	
 		
 	if ($type == "add"){
@@ -47,6 +49,18 @@
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item quoteID=\"".$row['quoteID']."\" quoteLabel=\"".number_pad($row['quoteID'])."\" customer=\"".$row['customer']."\" branchName=\"".$row['branchName']."\" businame=\"".$row['businame']."\" baddress=\"".$row['baddress']."\" bPhoneNum=\"".$row['bPhoneNum']."\" bMobileNum=\"".$row['bMobileNum']."\"/>";
+			}
+		$xml .= "</root>";
+		echo $xml;
+	}else if ($type == "get_details"){		
+		$query = mysql_query("SELECT qdID,qd_quoteID,qd_prodID,quantity,totalPurchase,prodCode,prodName,prodDesc,stockCount,unitprice,branchName FROM quotedetails qd 
+							INNER JOIN products p ON qd.qd_prodID=p.prodID
+							INNER JOIN branches b ON p.prod_branchID=b.branchID
+							WHERE qd_quoteID = $quoteID",$conn);
+		$xml = "<root>";
+			while($row = mysql_fetch_assoc($query)){
+				$xml .= "<item qdID=\"".$row['qdID']."\" qd_quoteID=\"".$row['qd_quoteID']."\" qd_prodID=\"".$row['qd_prodID']."\" branchName=\"".$row['branchName']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodName=\"".$row['prodName']."\"
+				 prodDesc=\"".$row['prodDesc']."\" stockCount=\"".$row['stockCount']."\" unitprice=\"".$row['unitprice']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;

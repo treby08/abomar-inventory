@@ -43,6 +43,22 @@
 				}else if (type == 1){
 					cmbQuote.dataProvider = arr;
 					cmbQuote.labelFunction = mycmbQuoteLabelFunction;
+				}else if (type == 3){
+					dg.dataProvider = arr;
+					numItems.text = "0";
+					var vat:Number = 0;			
+					var _subTot:Number = 0;				
+					for each (var item:Object in arr){						
+						_subTot += Number(item.total);
+						vat += roundDec(Number(item.total)*0.12);
+						_totalQty+=Number(item.qty);
+						
+					}
+					txtSubtot.text = roundDec(_subTot).toFixed(2);
+					txtVat.text = roundDec(_subTot*0.12).toFixed(2);
+					txtGT.text = Number(_subTot+vat).toFixed(2);
+					
+					numItems.text = String(_totalQty);
 				}
 			}
 			
@@ -55,7 +71,7 @@
 			}
 			
 			private function mycmbProdLabelFunction(item:Object):String{
-				return (item)?item.pCode +" - "+item.pName:"";
+				return (item)?item.pCode +" - "+item.pName+" @ "+item.branchName:"";
 			}
 			private function mycmbCusLabelFunction(item:Object):String{
 				return (item)?item.fname +" "+item.lname+" - "+item.businame:"";
@@ -99,6 +115,9 @@
 				txtBPhone.text = obj.bPhoneNum;
 				txtBMobile.text = obj.bMobileNum;
 				txtBranch.text = obj.branchName;
+				trace("cmbQuotechangingHandler",obj.quoteID)
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{quoteID:obj.quoteID,qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 			
 			protected function btnAddclickHandler(event:MouseEvent):void
@@ -112,7 +131,7 @@
 				
 				var obj:Object = cmbProd.selectedItem;
 				_totalQty +=txtQty.value;
-				arrCol.addItem({prodDBID:obj.prodID,prodID:obj.pCode,prodName:obj.pName,qty:txtQty.value,price:obj.price,vat:txtVat.text,total:txtSub.text});
+				arrCol.addItem({prodDBID:obj.prodID,prodID:obj.pCode,prodName:obj.pName,qty:txtQty.value,price:obj.price,vat:txtVat.text,total:txtSub.text,branchName:obj.branchName});
 				dg.dataProvider = arrCol;
 				
 				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
@@ -265,7 +284,7 @@
 							<mx:Text id="txtStock" text="0" textAlign="right" width="100" fontWeight="bold"/>
 						</s:HGroup>
 						<s:Spacer width="35%"/>
-						<s:HGroup width="50%" fontSize="16" verticalAlign="middle">
+						<s:HGroup width="65%" fontSize="16" verticalAlign="middle">
 							<s:Label text="Extend:" width="90"/>
 							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
 						</s:HGroup>
@@ -288,7 +307,7 @@
 				<s:ArrayList>
 					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer"/>
 					<s:GridColumn width="90" dataField="prodID" headerText="Prod ID"/>
-					<s:GridColumn dataField="qty" headerText="Qty" width="80"/>
+					<s:GridColumn dataField="qty" headerText="Qty" width="50"/>
 					<s:GridColumn dataField="prodName" headerText="Description">
 						<s:itemRenderer>
 							<fx:Component>
@@ -296,7 +315,20 @@
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					
+					<!--<s:GridColumn dataField="stockCount" headerText="Stock" width="70">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:DefaultGridItemRenderer textAlign="left"/>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>-->
+					<s:GridColumn dataField="branchName" headerText="Branch" width="180">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:DefaultGridItemRenderer textAlign="left"/>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
 					<s:GridColumn dataField="price" headerText="Price" width="180">
 						<s:itemRenderer>
 							<fx:Component>
