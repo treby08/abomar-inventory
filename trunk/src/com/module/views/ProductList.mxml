@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingLeft="10" paddingRight="10" paddingTop="10"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	
 	<fx:Script>
@@ -12,14 +12,25 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.effects.Tween;
 			import mx.events.CloseEvent;
+			import mx.events.EffectEvent;
 			import mx.events.FlexEvent;
+			
+			import spark.effects.animation.Animation;
 			
 			public var _data:Object;
 			/** 0=add 1=edit**/
 			public var _type:int = 0; 
 			public var isSearch:Boolean = false;
 			private var _fromUpdate:Boolean = false;
+			private var _isOpen:Boolean = false;
+			
+			[Embed (source="com/flexlib/assets/assets.swf", symbol="up_arrow")]
+			private static var DEFAULT_UP_BUTTON:Class;
+			
+			[Embed (source="com/flexlib/assets/assets.swf", symbol="down_arrow")]
+			private static var DEFAULT_DOWN_BUTTON:Class;
 			
 			protected function browseclickHandler(event:MouseEvent):void
 			{
@@ -27,11 +38,16 @@
 				
 			}
 			
-			/* protected function SearchClickHandler(event:MouseEvent):void
+			protected function SearchClickHandler(event:MouseEvent):void
 			{
+				btnSave.visible = false;
+				if (_isOpen){
+					_isOpen = false;
+					anim.play(null,true);
+				}
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:txtSearchStr.text,pBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-			} */
+			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
@@ -43,7 +59,7 @@
 			public function set dataCollection(arrCol:ArrayCollection):void{
 				_arrCol = arrCol
 				
-				/* if (dgSearch.numElements > 0){
+				if (dgSearch.numElements > 0){
 					dgSearch.removeAllElements();
 				}
 				
@@ -55,14 +71,14 @@
 						itemUser.theBox = this
 						dgSearch.addElement(itemUser);
 					}
-				} */
+				}
 			}
 			
 			protected function newProdClickHandler(event:MouseEvent):void
 			{
 				_type = 0;
 				clearFields(null);
-				btnNewProd.visible = false;
+				//btnNewProd.visible = false;
 				_data = {};
 				btnSave.label = "Add Product";
 				btnClear.label = "Clear"
@@ -147,7 +163,7 @@
 				}
 				
 				var obj:Object = {}
-					
+				
 				obj.pCode = txtProdCode.text;
 				obj.pName = txtProdName.text;
 				obj.pDesc = txtDesc.text;
@@ -166,7 +182,7 @@
 					var addUser:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_PRODUCT,obj);
 					CairngormEventDispatcher.getInstance().dispatchEvent(addUser);
 				}else{
-					obj.custID = _data.custID;
+					obj.prodID = _data.prodID;
 					obj.pBox = this;
 					_fromUpdate = true;
 					var editUser:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.EDIT_PRODUCT,obj);
@@ -174,25 +190,86 @@
 				}
 			}
 			
+			protected function showHideclickHandler(event:MouseEvent):void
+			{
+				if (_isOpen){
+					_isOpen = false;	
+					showHide();
+				}else{
+					_isOpen = true;
+					showHide();
+				}
+			}
+			
+			protected function anim_effectEndHandler(event:EffectEvent):void
+			{
+				if (!_isOpen){
+					btnShowHide.setStyle("icon",DEFAULT_UP_BUTTON);
+				}else{
+					btnShowHide.setStyle("icon",DEFAULT_DOWN_BUTTON);
+				}
+			}
+			
+			public function showHide(force:Boolean = false):void{
+				if (force && !_isOpen)
+					_isOpen = true;
+				else if (force && _isOpen)
+					return;
+					
+				if (!_isOpen){
+					anim.play(null,true);
+				}else{
+					anim.play();
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:Animate id="anim" targets="{[newProd]}" duration="300" disableLayout="true" effectEnd="anim_effectEndHandler(event)">
+			<s:SimpleMotionPath property="height" valueFrom="0" valueTo="undefined" />
+			<!--<s:SimpleMotionPath property="y" valueFrom="{newProd.stage.y}" valueTo="10000" />-->
+			<s:SimpleMotionPath property="alpha" valueFrom="0" valueTo="1" />
+			<s:SimpleMotionPath property="visible" valueFrom="false" valueTo="true" />
+		</s:Animate>
 	</fx:Declarations>
 	<!--<s:Label text="Products" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:HGroup id="newProd" width="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+	
+	<s:VGroup id="searchProd" width="100%" height="100%">
+		<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
+			<s:Label text="Search Product:"/>
+			<s:TextInput prompt="[Enter Product Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
+			<s:Button label="Search" click="SearchClickHandler(event)"/>
+			<s:Spacer width="100%"/>
+			<s:Label text="Total Products: "/>
+			<s:Label id="totCount" text="0" width="50" textAlign="right" paddingRight="10"/>
+		</s:HGroup>
+		<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold">
+			<s:Label text="Item Code" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+			<s:Label text="Product Name /Description" width="40%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+			<s:Label text="Unit Price" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+			<s:Label text="Stock" width="10%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+			<s:Label text="Controls" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+		</s:HGroup>
+		<s:Group width="100%" height="100%">
+			<s:Scroller width="100%" height="100%">
+				<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
+			</s:Scroller>
+		</s:Group>
+	</s:VGroup>
+	<s:HGroup width="100%" horizontalAlign="center">
+		<mx:Button id="btnShowHide" icon="{DEFAULT_UP_BUTTON}" click="showHideclickHandler(event)" width="50" height="10"/>
+	</s:HGroup>
+	<s:HGroup id="newProd" width="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" height="0" visible="false">
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
-			<s:layout>
-				<s:VerticalLayout/>
-			</s:layout>
 			<s:borderStroke> 
 				<mx:SolidColorStroke 
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
 			<s:HGroup  width="100%" height="100%">
-				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" gap="10">
+				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 					<s:Label text="Product Information"/>
 					<mx:HRule width="100%" height="2"/>
 					<s:HGroup  width="100%">
@@ -244,38 +321,13 @@
 					<s:HGroup width="100%"  height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" horizontalAlign="center">
 						<s:Image id="imgProd" width="260" height="180"/>
 					</s:HGroup>
+					<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
+						<s:Spacer width="100%"/>
+						<s:Button id="btnSave" label="Add Product" visible="false"/>
+						<s:Button id="btnClear" label="Clear"/>
+					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
 		</s:BorderContainer>	
 	</s:HGroup>
-	<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-		<!--<s:Label text="Search Product:"/>
-		<s:TextInput prompt="[Enter Product Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
-		<s:Button label="Search" click="SearchClickHandler(event)"/>-->
-		<s:Spacer width="100%"/>
-		<s:Button id="btnNewProd" label="New Product" visible="false" click="newProdClickHandler(event)"/>
-		<s:Button id="btnSave" label="Add Product"/>
-		<s:Button id="btnClear" label="Clear"/>
-	</s:HGroup>
-	<!--<s:VGroup id="searchProd" width="100%" height="100%">
-		
-		<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold">
-			<s:Label text="Item Code" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Product Name /Description" width="40%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Unit Price" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Stock" width="10%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Controls" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-		</s:HGroup>
-		<s:Group width="100%" height="100%">
-			<s:Scroller width="100%" height="100%">
-				<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
-			</s:Scroller>
-		</s:Group>
-		<mx:HRule width="100%" height="3"/>
-		<s:HGroup width="100%" gap="5" verticalAlign="middle" fontSize="14" >
-			<s:Label text="Total Products: "/>
-			<s:Label id="totCount" text="0"/>
-		</s:HGroup>
-	</s:VGroup>-->
-	
 </s:VGroup>
