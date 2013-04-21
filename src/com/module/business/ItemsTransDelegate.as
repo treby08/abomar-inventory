@@ -43,11 +43,11 @@ package com.module.business
 			
 			var str:String;
 			switch(_paramsItems.type){
-				case "Adding":
-					str="Add";
+				case "add":
+					str="Adding";
 					break;
-				case "Updating":
-					str="Edit";
+				case "edit":
+					str="Updating";
 					break;
 				case "delete":
 					str="Deleting";
@@ -75,11 +75,12 @@ package com.module.business
 				var arrCol:ArrayCollection = new ArrayCollection();
 				trace("search",XML(evt.result).toXMLString())
 				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,pName:obj.@pName,pDesc:obj.@pDesc,stockCnt:obj.@stockCnt,price:obj.@price,imgPath:obj.@imgPath,branchName:obj.@branchName})
+					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,pName:obj.@pName,pDesc:obj.@pDesc,stockCnt:obj.@stockCnt,price:obj.@price,imgPath:obj.@imgPath,branchName:obj.@branchName
+					,supplier:obj.@supplier,weight:obj.@weight,size:obj.@size,subNum:obj.@subNum,comModUse:obj.@comModUse})
 				}
 				if (_paramsItems.pBox){
-					(_paramsItems.pBox as ProductBox).dataCollection = arrCol;
-					(_paramsItems.pBox as ProductBox).totCount.text = String(arrCol.length);
+					(_paramsItems.pBox).dataCollection = arrCol;
+					(_paramsItems.pBox).totCount.text = String(arrCol.length);
 					_paramsItems.pBox = null;
 					_paramsItems = null;
 				}else if (_paramsItems.sBox){

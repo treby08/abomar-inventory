@@ -12,6 +12,7 @@
 			import com.module.views.InventoryBox;
 			import com.module.views.LoginPanel;
 			import com.module.views.ProductBox;
+			import com.module.views.ProductList;
 			import com.module.views.PurchaseOrderBox;
 			import com.module.views.ReportBox;
 			import com.module.views.SalesBox;
@@ -102,8 +103,13 @@
 						_cnv.label = "Customer";
 					break;
 					case 2:
-						objBox = new ProductBox();	
-						_cnv.label = "Products";
+						if (code == "inv_np"){
+							objBox = new ProductBox();	
+							_cnv.label = "New Product";
+						}else if (code == "inv_pl"){
+							objBox = new ProductList();	
+							_cnv.label = "Product List";
+						}
 					break;
 					case 3:
 						if (code == "sal_nsq"){
