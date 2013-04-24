@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" paddingLeft="10" paddingRight="10" paddingTop="10"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	
@@ -236,39 +236,52 @@
 	</fx:Declarations>
 	<!--<s:Label text="Products" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
 	
-	<s:VGroup id="searchProd" width="100%" height="100%">
-		<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-			<s:Label text="Search Product:"/>
-			<s:TextInput prompt="[Enter Product Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
-			<s:Button label="Search" click="SearchClickHandler(event)"/>
-			<s:Spacer width="100%"/>
-			<s:Label text="Total Products: "/>
-			<s:Label id="totCount" text="0" width="50" textAlign="right" paddingRight="10"/>
-		</s:HGroup>
-		<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold">
-			<s:Label text="Item Code" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Product Name /Description" width="40%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Unit Price" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Stock" width="10%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-			<s:Label text="Controls" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-		</s:HGroup>
-		<s:Group width="100%" height="100%">
-			<s:Scroller width="100%" height="100%">
-				<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
-			</s:Scroller>
-		</s:Group>
+	<s:VGroup id="searchProd" width="30%" height="100%" >
+		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
+			<s:layout>
+				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
+			</s:layout>
+			<s:borderStroke> 
+				<mx:SolidColorStroke 
+					color="{AccessVars.instance().borderStrokeColor}" 
+					weight="2"/> 
+			</s:borderStroke> 
+				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
+					<s:Label text="Search Product:"/>
+					<s:TextInput prompt="[Enter Product Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
+					<s:Button label="Search" click="SearchClickHandler(event)"/>
+					<s:Spacer width="100%"/>
+					
+				</s:HGroup>
+				<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold">
+					<s:Label text="Item Code" width="15%" height="40" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+					<s:Label text="Product Name /Description" height="40" width="68%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+					<!--<s:Label text="Unit Price" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
+					<s:Label text="Stock" width="10%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>-->
+					<s:Label text="Control" width="18%" height="40" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle" />
+				</s:HGroup>
+				<s:Group width="100%" height="100%">
+					<s:Scroller width="100%" height="100%">
+						<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
+					</s:Scroller>
+				</s:Group>
+				<mx:HRule width="100%"/>
+				<s:HGroup width="100%" horizontalAlign="left" paddingLeft="10" paddingBottom="5">
+					<mx:Button id="btnShowHide" icon="{DEFAULT_UP_BUTTON}" click="showHideclickHandler(event)" width="50" height="10" visible="false" includeInLayout="false"/>
+					<s:Label text="Total Products: "/>
+					<s:Label id="totCount" text="0" width="50" textAlign="right" paddingRight="10"/>
+				</s:HGroup>
+		</s:BorderContainer>
 	</s:VGroup>
-	<s:HGroup width="100%" horizontalAlign="center">
-		<mx:Button id="btnShowHide" icon="{DEFAULT_UP_BUTTON}" click="showHideclickHandler(event)" width="50" height="10"/>
-	</s:HGroup>
-	<s:HGroup id="newProd" width="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" height="0" visible="false">
+	
+	<s:HGroup id="newProd" width="70%"  height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:borderStroke> 
 				<mx:SolidColorStroke 
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup  width="100%" height="100%">
+			<s:VGroup  width="100%" height="100%">
 				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 					<s:Label text="Product Information"/>
 					<mx:HRule width="100%" height="2"/>
@@ -305,7 +318,7 @@
 					<s:HGroup  width="100%">
 						<s:Label text="Sub Number:" width="90"/>
 						<s:TextInput id="txtSubNum" width="100%"/>
-						<s:Label text="Common model use:" width="90"/>
+						<s:Label text="Common model use:" width="120"/>
 						<s:TextInput id="txtComModUse" width="100%"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
@@ -327,7 +340,7 @@
 						<s:Button id="btnClear" label="Clear"/>
 					</s:HGroup>
 				</s:VGroup>
-			</s:HGroup>
+			</s:VGroup>
 		</s:BorderContainer>	
 	</s:HGroup>
-</s:VGroup>
+</s:HGroup>

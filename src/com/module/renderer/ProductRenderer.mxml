@@ -19,6 +19,9 @@
 			
 			private var _data:Object;
 			private var _theBox:Object;
+			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
+			private static var DEFAULT_CLOSE_UP:Class;
+			
 			public function set data(value:Object):void{
 				_data = value
 			}
@@ -60,7 +63,7 @@
 				_theBox.btnSave.visible = true;
 				_theBox.btnClear.label = "Reset to Default";
 				_theBox.owner = this;
-				_theBox.showHide(true);
+				//_theBox.showHide(true);
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void
@@ -84,12 +87,12 @@
 	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 		<s:Label id="txtItemCode" width="15%" textAlign="left" paddingLeft="15"/>
-		<mx:Text id="txtProduct" width="40%" paddingLeft="15" selectable="false"/>
-		<s:Label id="txtUnitPrice" width="15%" textAlign="right" paddingRight="10"/>
-		<s:Label id="txtStock" width="10%" textAlign="center"/>
-		<s:HGroup width="20%" horizontalAlign="center">
+		<mx:Text id="txtProduct" width="68%" paddingLeft="15" selectable="false"/>
+		<s:Label id="txtUnitPrice" width="15%" textAlign="right" paddingRight="10" visible="false" includeInLayout="false"/>
+		<s:Label id="txtStock" width="10%" textAlign="center" visible="false" includeInLayout="false"/>
+		<s:HGroup width="18%" horizontalAlign="center">
 			<!--<s:Button label="Edit" click="editClickHandler(event)"  useHandCursor="true" buttonMode="true"/>-->
-			<s:Button label="Delete" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
+			<s:Button width="65" label="Del" icon="{DEFAULT_CLOSE_UP}" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>
 	
