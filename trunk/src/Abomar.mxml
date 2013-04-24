@@ -26,6 +26,8 @@
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
+			import spark.components.Group;
+			
 			[Embed(source="assets/icons/home.png")]
 			private var home_icon:Class;
 			private var logPanel:LoginPanel;
@@ -91,7 +93,7 @@
 				/* floatMenuVisible(false);
 				if (mainCont.numElements > 1)
 					mainCont.removeElementAt(0); */
-				var objBox:VGroup;
+				var objBox:Group;
 				var _cnv:Canvas = new Canvas();
 				switch(type){
 					case 0:

@@ -74,7 +74,7 @@
 				return (item)?item.pCode +" - "+item.pName+" @ "+item.branchName:"";
 			}
 			private function mycmbCusLabelFunction(item:Object):String{
-				return (item)?item.fname +" "+item.lname+" - "+item.businame:"";
+				return (item)?item.fname +" "+item.lname+" ("+item.businame:")";
 			}
 			private function mycmbQuoteLabelFunction(item:Object):String{
 				return (item)?"Q#"+item.quoteLabel +" - "+item.customer +" - "+item.branchName:"";
@@ -147,6 +147,15 @@
 				cmbProd.setFocus();
 			}
 			
+			private function updateTotal():void{
+				if (txtVat.text.indexOf(".")==-1)
+					txtVat.text +=".00";
+				
+				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
+				//txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
+				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
+			}
+			
 			protected function CheckOutclickHandler(event:MouseEvent):void
 			{
 				if (dg.dataProviderLength == 0 )return;
@@ -214,6 +223,13 @@
 				if (event.detail == Alert.YES){
 					clearFields(null);
 					//btnPrint.enabled = false;
+				}
+			}
+			
+			protected function txtVat_keyUpHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER){
+					txtGT.setFocus();
 				}
 			}
 			
@@ -293,7 +309,7 @@
 					
 					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">
 						<s:Spacer width="100%"/>
-						<s:Button id="btnNew" label="New Purchase Order" tabIndex="4" click="btnNewclickHandler(event)"/>
+						<s:Button id="btnNew" label="New Purchase Order" tabIndex="4" click="btnNewclickHandler(event)" visible="false" includeInLayout="false"/>
 						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
 						<s:Button id="btnCheckOut" label="Save Purchase Order" click="CheckOutclickHandler(event)"/>
 						<s:Button id="btnPrint" label="Print Purchase Order" click="printPrevPO()"/>
@@ -302,13 +318,13 @@
 			</s:HGroup>
 		</s:BorderContainer>
 		<s:Spacer height="5"/>
-		<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" >
+		<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" editable="true">
 			<s:columns>
 				<s:ArrayList>
-					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer"/>
-					<s:GridColumn width="90" dataField="prodID" headerText="Prod ID"/>
-					<s:GridColumn dataField="qty" headerText="Qty" width="50"/>
-					<s:GridColumn dataField="prodName" headerText="Description">
+					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
+					<s:GridColumn width="90" dataField="prodID" headerText="Prod ID" editable="false"/>
+					<s:GridColumn dataField="qty" headerText="Qty" width="50" editable="true"/>
+					<s:GridColumn dataField="prodName" headerText="Description" editable="false">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="left"/>
@@ -322,21 +338,21 @@
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>-->
-					<s:GridColumn dataField="branchName" headerText="Branch" width="180">
+					<s:GridColumn dataField="branchName" headerText="Branch" width="180" editable="false">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="left"/>
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="price" headerText="Price" width="180">
+					<s:GridColumn dataField="price" headerText="Price" width="180" editable="true">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="right"/>
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="total" headerText="Total">
+					<s:GridColumn dataField="total" headerText="Total" editable="false">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
@@ -357,7 +373,7 @@
 				</s:HGroup>
 				<s:HGroup width="100%">
 					<s:Label text="VAT:" width="90"/>
-					<mx:Text id="txtVat" width="100%" text="0.00" textAlign="right"/>
+					<s:TextInput id="txtVat" width="100%" text="0.00" textAlign="right" borderVisible="false" restrict="0-9." focusOut="{updateTotal()}" keyUp="txtVat_keyUpHandler(event)"/>
 				</s:HGroup>
 				<s:HGroup width="100%">
 					<s:Label text="Grand Total:" fontSize="16"/>
