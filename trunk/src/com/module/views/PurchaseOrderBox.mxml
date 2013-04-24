@@ -238,7 +238,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>
+	<!--<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
 	
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
