@@ -1,6 +1,7 @@
 package com.module.business
 {
 	import com.module.views.CustomerBox;
+	import com.module.views.CustomerListBox;
 	import com.module.views.ProfilePanel;
 	import com.module.views.SalesBox;
 	import com.module.views.UserBox;
@@ -128,8 +129,8 @@ package com.module.business
 					arrCol.addItem({custID:obj.@custID,fname:obj.@fname,mname:obj.@mname,lname:obj.@lname,address:obj.@address,pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, businame:obj.@businame,baddress:obj.@baddress,bPhoneNum:obj.@bPhoneNum,bMobileNum:obj.@bMobileNum,email:obj.@email,sex:obj.@sex})
 				}
 				if (_params.cBox){
-					(_params.cBox as CustomerBox).dataCollection = arrCol;
-					(_params.cBox as CustomerBox).totCount.text = String(arrCol.length);
+					(_params.cBox as CustomerListBox).dataCollection = arrCol;
+					(_params.cBox as CustomerListBox).totCount.text = String(arrCol.length);
 					//_params.dg as .cmbUserType.dataProvider =AccessVars.instance().userType = arrCol;
 				}else if (_params.csBox){ 
 					_params.csBox.setDataProvider(arrCol,1);
