@@ -195,11 +195,11 @@
 				<s:TextInput prompt="[Enter Customer Name Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
 				<s:Button label="Search" click="SearchClickHandler(event)"/>
 			</s:HGroup>
-			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" paddingRight="15" gap="2">
+			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
 				<s:Label text="Full Name" width="30%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 				<!--<s:Label text="Business Name" width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>-->
-				<s:Label text="Contact Info" width="45%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Control" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Contact Info" width="50%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Control" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
