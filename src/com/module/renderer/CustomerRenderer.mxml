@@ -10,6 +10,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.UserEvent;
 			import com.module.views.CustomerBox;
+			import com.module.views.CustomerListBox;
 			import com.module.views.UserPanel;
 			import com.variables.AccessVars;
 			
@@ -19,12 +20,15 @@
 			import mx.managers.PopUpManager;
 			
 			private var _data:Object;
-			private var _theBox:CustomerBox;
+			private var _theBox:CustomerListBox;
+			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
+			private static var DEFAULT_CLOSE_UP:Class;
+			
 			public function set data(value:Object):void{
 				_data = value
 			}
 			
-			public function set theBox(value:CustomerBox):void{
+			public function set theBox(value:CustomerListBox):void{
 				_theBox = value
 			}
 			
@@ -59,8 +63,9 @@
 				_theBox.rbFemale.selected = (_data.sex == "Female")
 				_theBox._type = 1;
 				_theBox._data = _data;
-				_theBox.btnNewUser.visible = true;
+				//_theBox.btnNewUser.visible = true;
 				_theBox.btnSave.label = "Update";
+				_theBox.btnSave.visible = true;
 				_theBox.btnClear.label = "Reset to Default";
 				_theBox.owner = this;
 			}
@@ -84,13 +89,13 @@
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
 	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
-			  useHandCursor="true" buttonMode="true" doubleClickEnabled="true" doubleClick="editClickHandler(event)">
-		<s:Label id="txtName" width="20%" textAlign="center"/>
-		<s:Label id="txtBname" width="35%" textAlign="center"/>
-		<mx:Text id="txtContInfo" width="25%" />
-		<s:HGroup width="20%" horizontalAlign="center">
-			<s:Button label="Edit" click="editClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
-			<s:Button label="Delete" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
+			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
+		<s:Label id="txtName" width="30%" textAlign="center"/>
+		<s:Label id="txtBname" width="35%" textAlign="center" visible="false" includeInLayout="false"/>
+		<mx:Text id="txtContInfo" width="55%" />
+		<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
+			<!--<s:Button label="Edit" click="editClickHandler(event)"  useHandCursor="true" buttonMode="true"/>-->
+			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Del" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>
 	

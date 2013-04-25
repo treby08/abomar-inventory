@@ -9,6 +9,7 @@
 		<![CDATA[
 			import com.flexlib.controls.tabBarClasses.SuperTab;
 			import com.module.views.CustomerBox;
+			import com.module.views.CustomerListBox;
 			import com.module.views.InventoryBox;
 			import com.module.views.LoginPanel;
 			import com.module.views.ProductBox;
@@ -101,7 +102,11 @@
 						_cnv.label = "User";
 					break;
 					case 1:
-						objBox = new CustomerBox();
+						if (code == "sal_nc")
+							objBox = new CustomerBox();
+						else if (code == "sal_cl")
+							objBox = new CustomerListBox();
+						
 						_cnv.label = "Customer";
 					break;
 					case 2:
