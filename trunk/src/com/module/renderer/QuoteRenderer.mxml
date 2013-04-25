@@ -8,9 +8,9 @@
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.views.CustomerBox;
-			import com.module.views.CustomerListBox;
+			import com.module.views.PurchaseOrderBox;
 			import com.module.views.UserPanel;
 			import com.variables.AccessVars;
 			
@@ -20,7 +20,7 @@
 			import mx.managers.PopUpManager;
 			
 			private var _data:Object;
-			private var _theBox:CustomerListBox;
+			private var _theBox:PurchaseOrderBox;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
 			
@@ -28,26 +28,20 @@
 				_data = value
 			}
 			
-			public function set theBox(value:CustomerListBox):void{
+			public function set theBox(value:PurchaseOrderBox):void{
 				_theBox = value
 			}
 			
 			public function creationCompleteHandler(event:FlexEvent):void
 			{
-				txtName.text = _data.fname +" "+_data.mname +" "+_data.lname;
-				txtBname.text = _data.businame;
-				var contList:String = "";
-				contList = (_data.pNum != "")?"Tel No. "+_data.pNum+"\r":"";
-				contList += (_data.mNum != "")?"Cell No. "+_data.mNum+"\r":"";
-				contList += (_data.bPhoneNum != "")?"Busi Tel No. "+_data.bPhoneNum+"\r":"";
-				contList += (_data.bMobileNum != "")?"Busi Cell No. "+_data.bMobileNum+"\r":"";
-				contList += (_data.email != "")?"Email Address: "+_data.email:"";
-				txtContInfo.text = contList;
+				txtQuoteId.text = "Q#"+_data.quoteLabel; //_data.fname +" "+_data.mname +" "+_data.lname;
+				txtCustName.text = _data.customer +"\n@ "+_data.branchName;
+				
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				_theBox.txtfname.text = _data.fname;
+				/* _theBox.txtfname.text = _data.fname;
 				_theBox.txtmname.text = _data.mname;
 				_theBox.txtlname.text = _data.lname;
 				_theBox.txtAdd.text = _data.address;
@@ -66,13 +60,24 @@
 				//_theBox.btnNewUser.visible = true;
 				_theBox.btnSave.label = "Update";
 				_theBox.btnSave.visible = true;
-				_theBox.btnClear.label = "Reset to Default";
+				_theBox.btnClear.label = "Reset to Default"; */
 				_theBox.owner = this;
+				_theBox.clearFields(null);
+				
+				var obj:Object = _data;
+				_theBox.txtBname.text = obj.businame;
+				_theBox.txtBAdd.text = obj.baddress;
+				_theBox.txtBPhone.text = obj.bPhoneNum;
+				_theBox.txtBMobile.text = obj.bMobileNum;
+				_theBox.txtBranch.text = obj.branchName;
+				trace("cmbQuotechangingHandler",obj.quoteID)
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{quoteID:obj.quoteID,qBox:_theBox})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void
 			{
-				Alert.show("Are you sure to delete \""+_data.fname +" "+_data.mname +" "+_data.lname+"\" as Customer?","Delete Customer",Alert.YES|Alert.NO,null,closeHandler);
+				Alert.show("Are you sure to cancel \""+_data.fname +" "+_data.mname +" "+_data.lname+"\"?","Cancel Quote",Alert.YES|Alert.NO,null,closeHandler);
 			}
 			
 			private function closeHandler(evt:CloseEvent):void
@@ -90,12 +95,11 @@
 	</s:Rect>
 	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtName" width="30%" textAlign="center"/>
-		<s:Label id="txtBname" width="35%" textAlign="center" visible="false" includeInLayout="false"/>
-		<mx:Text id="txtContInfo" width="55%" selectable="false"/>
+		<s:Label id="txtQuoteId" width="30%" textAlign="center"/>
+		<mx:Text id="txtCustName" width="55%" selectable="false"/>
 		<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<!--<s:Button label="Edit" click="editClickHandler(event)"  useHandCursor="true" buttonMode="true"/>-->
-			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Del" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
+			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>
 	

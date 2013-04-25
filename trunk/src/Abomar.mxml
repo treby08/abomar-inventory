@@ -102,12 +102,13 @@
 						_cnv.label = "User";
 					break;
 					case 1:
-						if (code == "sal_nc")
+						if (code == "sal_nc"){
 							objBox = new CustomerBox();
-						else if (code == "sal_cl")
+							_cnv.label = "Customer";
+						}else if (code == "sal_cl"){
 							objBox = new CustomerListBox();
-						
-						_cnv.label = "Customer";
+							_cnv.label = "Customer List";
+						}
 					break;
 					case 2:
 						if (code == "inv_np"){
