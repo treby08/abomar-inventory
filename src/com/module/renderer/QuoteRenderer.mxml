@@ -21,6 +21,7 @@
 			
 			private var _data:Object;
 			private var _theBox:PurchaseOrderBox;
+			public var isDispatch:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
 			
@@ -61,6 +62,7 @@
 				_theBox.btnSave.label = "Update";
 				_theBox.btnSave.visible = true;
 				_theBox.btnClear.label = "Reset to Default"; */
+				isDispatch = true;
 				_theBox.owner = this;
 				_theBox.clearFields(null);
 				
@@ -71,7 +73,7 @@
 				_theBox.txtBMobile.text = obj.bMobileNum;
 				_theBox.txtBranch.text = obj.branchName;
 				trace("cmbQuotechangingHandler",obj.quoteID)
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{quoteID:obj.quoteID,qBox:_theBox})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{quoteID:obj.quoteID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 			

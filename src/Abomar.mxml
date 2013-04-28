@@ -15,6 +15,7 @@
 			import com.module.views.ProductBox;
 			import com.module.views.ProductList;
 			import com.module.views.PurchaseOrderBox;
+			import com.module.views.PurchaseReqBox;
 			import com.module.views.ReportBox;
 			import com.module.views.SalesBox;
 			import com.module.views.SalesQuoteBox;
@@ -102,10 +103,10 @@
 						_cnv.label = "User";
 					break;
 					case 1:
-						if (code == "sal_nc"){
+						if (code == "cus_new"){
 							objBox = new CustomerBox();
 							_cnv.label = "Customer";
-						}else if (code == "sal_cl"){
+						}else if (code == "cus_lst"){
 							objBox = new CustomerListBox();
 							_cnv.label = "Customer List";
 						}
@@ -131,8 +132,13 @@
 					break;
 					
 					case 4:
-						objBox = new PurchaseOrderBox();
-						_cnv.label = "Purchase Order";
+						if (code == "pur_pr"){
+							objBox = new PurchaseReqBox();
+							_cnv.label = "Purchase Requisition";
+						}else if (code == "pur_po"){
+							objBox = new PurchaseOrderBox();
+							_cnv.label = "Purchase Order";
+						}
 					break;
 					/* case 5:
 						objBox = new InventoryBox();
@@ -142,7 +148,13 @@
 						objBox = new ReportBox();
 						_cnv.label = "Report";
 					break; */
+					default:
+						return;
+					break;
 				}
+				if (objBox == null)
+					return;
+				
 				_cnv.percentWidth = 100;
 				_cnv.percentHeight = 100;
 				_cnv.addElement(objBox);
