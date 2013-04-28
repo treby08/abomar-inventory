@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
@@ -7,14 +7,12 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.renderer.QuoteRenderer;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
-			import mx.events.PropertyChangeEvent;
 			import mx.managers.PopUpManager;
 			import mx.printing.FlexPrintJob;
 			import mx.printing.FlexPrintJobScaleType;
@@ -25,18 +23,15 @@
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			private var _totalQty:int = 0;
-			public var custID:String = "";
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				
+				var log2:UserEvent = new UserEvent(UserEvent.SEARCH_CUSTOMER,{searchstr:"",csBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 							
-				
-				/* var styleName:String = "." + dg.getStyle("headerStyleName");
-				var cssDecl:CSSStyleDeclaration = StyleManager.getStyleDeclaration(styleName);
-				cssDecl.setStyle("textAlign", 'center'); */
-				
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -44,44 +39,8 @@
 					cmbProd.dataProvider = arr;
 					cmbProd.labelFunction = mycmbProdLabelFunction;
 				}else if (type == 1){
-					dataCollection = arr
-					//cmbQuote.dataProvider = arr;
-					//cmbQuote.labelFunction = mycmbQuoteLabelFunction;
-				}else if (type == 3){
-					dg.dataProvider = arr;
-					numItems.text = "0";
-					var vat:Number = 0;			
-					var _subTot:Number = 0;				
-					for each (var item:Object in arr){						
-						_subTot += Number(item.total);
-						vat += roundDec(Number(item.total)*0.12);
-						_totalQty+=Number(item.qty);
-						
-					}
-					txtSubtot.text = roundDec(_subTot).toFixed(2);
-					txtVat.text = roundDec(_subTot*0.12).toFixed(2);
-					txtGT.text = Number(_subTot+vat).toFixed(2);
-					
-					numItems.text = String(_totalQty);
-				}
-			}
-			
-			private var _arrCol:ArrayCollection;
-			public function set dataCollection(arrCol:ArrayCollection):void{
-				_arrCol = arrCol
-				
-				if (dgSearch.numElements > 0){
-					dgSearch.removeAllElements();
-				}
-				
-				if (arrCol.length > 0){
-					var itemUser:QuoteRenderer;
-					for each (var obj:Object in arrCol){
-						itemUser = new QuoteRenderer()
-						itemUser.data = obj;
-						itemUser.theBox = this
-						dgSearch.addElement(itemUser);
-					}
+					cmbCustomer.dataProvider = arr;
+					cmbCustomer.labelFunction = mycmbCusLabelFunction;
 				}
 			}
 			
@@ -94,13 +53,10 @@
 			}
 			
 			private function mycmbProdLabelFunction(item:Object):String{
-				return (item)?item.pCode +" - "+item.pName+" @ "+item.branchName:"";
+				return (item)?item.pCode +" - "+item.pName:"";
 			}
 			private function mycmbCusLabelFunction(item:Object):String{
-				return (item)?item.fname +" "+item.lname+" ("+item.businame:")";
-			}
-			private function mycmbQuoteLabelFunction(item:Object):String{
-				return (item)?"Q#"+item.quoteLabel +" - "+item.customer +" - "+item.branchName:"";
+				return (item)?item.fname +" "+item.lname+" - "+item.businame:"";
 			}
 			
 			protected function cmbProdchangeHandler(event:IndexChangeEvent):void
@@ -121,6 +77,9 @@
 				
 				
 				txtSub.text = roundDec(Number(txtPrice.text)*int(txtQty.value)).toFixed(2);
+				btnAdd.setFocus();
+				/* if ()
+				btnAdd.addEventListener(KeyboardEvent.KEY_UP,btnAdd_keyUpHandler); */
 			}
 			
 			private function roundDec(numIn:Number, decimalPlaces:int = 2):Number {
@@ -129,20 +88,16 @@
 				return nRetVal;
 			}
 			
-			/* protected function cmbQuotechangingHandler(event:IndexChangeEvent):void
+			protected function cmbCustomerchangingHandler(event:IndexChangeEvent):void
 			{
-				if (cmbQuote.selectedItem == null) return;
-				var obj:Object = cmbQuote.selectedItem;
+				if (cmbCustomer.selectedItem == null) return;
+				var obj:Object = cmbCustomer.selectedItem;
 				txtBname.text = obj.businame;
 				txtBAdd.text = obj.baddress;
 				txtBPhone.text = obj.bPhoneNum;
 				txtBMobile.text = obj.bMobileNum;
-				txtBranch.text = obj.branchName;
-				trace("cmbQuotechangingHandler",obj.quoteID)
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{quoteID:obj.quoteID,qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-			} */
-			
+			}
+						
 			protected function btnAddclickHandler(event:MouseEvent):void
 			{	
 				if (cmbProd.selectedItem == null || txtQty.value == 0) return;
@@ -154,7 +109,7 @@
 				
 				var obj:Object = cmbProd.selectedItem;
 				_totalQty +=txtQty.value;
-				arrCol.addItem({prodDBID:obj.prodID,prodID:obj.pCode,prodName:obj.pName,qty:txtQty.value,price:obj.price,vat:txtVat.text,total:txtSub.text,branchName:obj.branchName});
+				arrCol.addItem({prodDBID:obj.prodID,prodID:obj.pCode,prodName:obj.pName,qty:txtQty.value,price:obj.price,vat:txtVat.text,total:txtSub.text});
 				dg.dataProvider = arrCol;
 				
 				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
@@ -170,52 +125,44 @@
 				cmbProd.setFocus();
 			}
 			
-			private function updateTotal(editVat:Boolean =true):void{
-				if (txtVat.text.indexOf(".")==-1)
-					txtVat.text +=".00";
-				
-				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
-				if(editVat)
-					txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
-				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
-			}
-			
 			protected function CheckOutclickHandler(event:MouseEvent):void
 			{
-				if (dg.dataProviderLength == 0 )return;
+				if (dg.dataProviderLength == 0){
+					Alert.show("Item List is Empty","Submit Qoute Error");
+					return;
+				}
+				if (cmbCustomer.selectedIndex == -1){
+					Alert.show("No Customer Selected","Submit Qoute Error");
+					return;
+				}
+				
 				var obj:Object = {}
-				obj.sales_custID = custID;//cmbQuote.selectedItem.custID;
-				obj.sales_branchID = 1;//cmbCustomer.selectedItem.custID;
+				obj.quote_custID = cmbCustomer.selectedItem.custID;
+				obj.quote_branchID = 1;
 				obj.totalAmt = txtGT.text;
 				obj.vat = txtVat.text;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total);
 				}
-				obj.salesDetails = strItem.join("||");
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
+				obj.quoteDetails = strItem.join("||");
+				
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				//printPrevPO()
-				//btnPrint.enabled = true;
 			}
 			
 			protected function printPrevPO():void
 			{
-				/*var printJob:FlexPrintJob = new FlexPrintJob();
-				if (printJob.start() != true) return;
-				printJob.addObject(cont, FlexPrintJobScaleType.SHOW_ALL); 
-				printJob.send();*/
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 0;
+				_printBox.orderTypeID = 2;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
 			}
 			
 			public function clearFields(event:MouseEvent):void{
-				/* cmbQuote.selectedIndex = -1;
-				cmbQuote.textInput.text = ""; */
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";
 				txtBname.text = "";
@@ -231,13 +178,12 @@
 				txtVat.text = "0.00";
 				numItems.text = "0";
 				dg.dataProvider = null;
-				_totalQty = 0;
 			}
 			
 			protected function btnNewclickHandler(event:MouseEvent):void
 			{
 				if (dg.dataProvider != null){
-					Alert.show("Are you sure to create a new transaction?","Transaction not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
+					Alert.show("Are you sure to create a new quote?","Quote not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
 				}else{
 					clearFields(null);
 					//btnPrint.enabled = false;
@@ -251,19 +197,13 @@
 				}
 			}
 			
-			protected function txtVat_keyUpHandler(event:KeyboardEvent):void
+
+			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
 			{
-				if (event.keyCode == Keyboard.ENTER){
-					txtGT.setFocus();
-				}
+				if(event.keyCode == Keyboard.ENTER)
+					(event.target as Button).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			}
 			
-			protected function SearchClickHandler(event:MouseEvent):void
-			{				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:txtSearchStr.text,qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-			}
-						
 			
 			protected function dg_gridDoubleClickHandler(event:GridEvent):void
 			{
@@ -285,44 +225,30 @@
 				updateTotal();
 			}
 			
+			private function updateTotal(editVat:Boolean =true):void{
+				if (txtVat.text.indexOf(".")==-1)
+					txtVat.text +=".00";
+				
+				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
+				if(editVat)
+					txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
+				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
+			}
+			
+			protected function txtVat_keyUpHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER){
+					txtGT.setFocus();
+				}
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<!--<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:HGroup width="35%" height="100%">
-		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
-			<s:layout>
-				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
-			</s:layout>
-			<s:borderStroke> 
-				<mx:SolidColorStroke 
-					color="{AccessVars.instance().borderStrokeColor}" 
-					weight="2"/> 
-			</s:borderStroke> 
-			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-				<s:Label text="Search Quote:"/>
-				<s:TextInput prompt="[Enter Quote Name Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
-				<s:Button label="Search" click="SearchClickHandler(event)"/>
-			</s:HGroup>
-			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
-				<s:Label text="Quote ID" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Quote Decription" width="55%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Control" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-			</s:HGroup>
-			<s:Group width="100%" height="100%">
-				<s:Scroller width="100%" height="100%">
-					<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0xCCCCCC" clipAndEnableScrolling="true"/>
-				</s:Scroller>
-			</s:Group>
-			<mx:HRule width="100%" height="3"/>
-			<s:HGroup width="100%" gap="5" verticalAlign="middle" fontSize="14" >
-				<s:Label text="Total Quote: "/>
-				<s:Label id="totCount" text="0"/>
-			</s:HGroup>
-		</s:BorderContainer>
-	</s:HGroup>
+	<!--<s:Label text="Sales Quote" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
+	
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
 			<s:borderStroke> 
@@ -332,31 +258,28 @@
 			</s:borderStroke> 
 			<s:HGroup  width="100%" height="100%">
 				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-					<s:Label text="Sales Information"/>
+					<s:Label text="Purchase Requisition Information"/>
 					<mx:HRule width="100%" height="2"/>
 					<s:HGroup  width="100%">
-						<!--<s:Label text="Qoute:" width="90"/>
-						<s:ComboBox id="cmbQuote" width="100%" tabIndex="1" changing="cmbQuotechangingHandler(event)"/>
+						<s:Label text="Customer:" width="90"/>
+						<s:ComboBox id="cmbCustomer" width="100%" tabIndex="1" changing="cmbCustomerchangingHandler(event)"/>
 						<s:Label text="*" color="red"/>
-						<s:Spacer width="20"/> -->
-						<s:Label text="Branch:" width="90"/>
-						<s:TextInput id="txtBranch" width="150" editable="false"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
 						<s:Label text="Business Name:" width="90"/>
-						<s:TextInput id="txtBname" width="100%" editable="false" />
+						<s:TextInput id="txtBname" width="100%"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
-						<s:Label text="Business Address:" width="90"/>
-						<s:TextArea id="txtBAdd" width="100%" height="50" editable="false"/>
+						<s:Label text="Customer Address:" width="90"/>
+						<s:TextArea id="txtBAdd" width="100%" height="50"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
-						<s:Label text="Business Phone Number:" width="90"/>
-						<s:TextInput id="txtBPhone" width="100%" restrict="0-9\-()" editable="false"/>
+						<s:Label text="Phone Number:" width="90"/>
+						<s:TextInput id="txtBPhone" width="100%" restrict="0-9\-()"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
-						<s:Label text="Business Mobile Number:" width="90"/>
-						<s:TextInput id="txtBMobile" width="100%" restrict="0-9\-" editable="false"/>
+						<s:Label text="Mobile Number:" width="90"/>
+						<s:TextInput id="txtBMobile" width="100%" restrict="0-9\-"/>
 					</s:HGroup>
 				</s:VGroup>
 				
@@ -383,19 +306,19 @@
 							<mx:Text id="txtStock" text="0" textAlign="right" width="100" fontWeight="bold"/>
 						</s:HGroup>
 						<s:Spacer width="35%"/>
-						<s:HGroup width="65%" fontSize="16" verticalAlign="middle">
+						<s:HGroup width="50%" fontSize="16" verticalAlign="middle">
 							<s:Label text="Extend:" width="90"/>
 							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
 						</s:HGroup>
 					</s:HGroup>
 					
 					
-					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">
+					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">						
+						<s:Button id="btnNew" label="New Purchase Request"
+								  click="btnNewclickHandler(event)" tabIndex="4"/>
+						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
 						<s:Spacer width="100%"/>
-						<s:Button id="btnNew" label="New Purchase Order" tabIndex="4" click="btnNewclickHandler(event)" visible="false" includeInLayout="false"/>
-						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
-						<s:Button id="btnCheckOut" label="Save To Warehouse Receipt" click="CheckOutclickHandler(event)"/>
-						<s:Button id="btnPrint" label="Print" click="printPrevPO()"/>
+						<s:Button id="btnCheckOut" label="Submit Requisition" click="CheckOutclickHandler(event)"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
@@ -407,36 +330,23 @@
 				<s:ArrayList>
 					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
 					<s:GridColumn width="90" dataField="prodID" headerText="Prod ID" editable="false"/>
-					<s:GridColumn dataField="qty" headerText="Qty" width="50" editable="true"/>
-					<s:GridColumn dataField="prodName" headerText="Description" editable="false">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="left" />
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-					<!--<s:GridColumn dataField="stockCount" headerText="Stock" width="70">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="left"/>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>-->
-					<s:GridColumn dataField="branchName" headerText="Branch" width="180" editable="false">
+					<s:GridColumn dataField="qty" headerText="Qty" width="80"  editable="true"/>
+					<s:GridColumn dataField="prodName" headerText="Description">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="left"/>
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="price" headerText="Price" width="180" editable="true">
+					
+					<s:GridColumn dataField="price" headerText="Price" width="180"  editable="false">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="right"/>
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="total" headerText="Total" editable="false" >
+					<s:GridColumn dataField="total" headerText="Total"  editable="false">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
@@ -466,4 +376,4 @@
 			</s:VGroup>
 		</s:HGroup>
 	</s:VGroup>
-</s:HGroup>
+</s:VGroup>

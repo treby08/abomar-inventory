@@ -173,7 +173,8 @@ package com.module.business
 		private function quote_AED_onResult(evt:ResultEvent):void{
 			var strResult:String = String(evt.result);
 			trace("quote_AED_onResult",strResult);
-			
+			if(_paramsQuote == null)
+				return;
 			var str:String;
 			switch(_paramsQuote.type){
 				case "add":
@@ -229,6 +230,7 @@ package com.module.business
 					arrCol.addItem(arrObj);
 				}
 				if (_paramsQuote.qBox){
+					_paramsQuote.itemRen.isDispatch = false;
 					_paramsQuote.qBox.setDataProvider(arrCol,3);
 					_paramsQuote.qBox = null;
 					_paramsQuote = null;
@@ -249,7 +251,7 @@ package com.module.business
 					arrObj.bMobileNum = obj.@bMobileNum;
 					arrCol.addItem(arrObj);
 				}
-				if (_paramsQuote.qBox){
+				if (_paramsQuote.qBox){					
 					_paramsQuote.qBox.setDataProvider(arrCol,1);
 					_paramsQuote.qBox = null;
 					_paramsQuote = null;
