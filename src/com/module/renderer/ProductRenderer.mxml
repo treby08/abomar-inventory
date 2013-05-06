@@ -59,9 +59,8 @@
 				_theBox._type = 1;
 				_theBox._data = _data;
 				//_theBox.btnNewProd.visible = true;
-				_theBox.btnSave.label = "Update";
-				_theBox.btnSave.visible = true;
-				_theBox.btnClear.label = "Reset to Default";
+				_theBox.hasSelectedItem = true;
+				
 				_theBox.owner = this;
 				//_theBox.showHide(true);
 			}
@@ -86,8 +85,8 @@
 	</s:Rect>
 	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtItemCode" width="15%" textAlign="left" paddingLeft="15"/>
-		<mx:Text id="txtProduct" width="68%" paddingLeft="15" selectable="false"/>
+		<s:Label id="txtItemCode" width="15%" textAlign="left" paddingLeft="15" useHandCursor="true" buttonMode="true"/>
+		<mx:Text id="txtProduct" width="68%" paddingLeft="15" selectable="false" useHandCursor="true" buttonMode="true"/>
 		<s:Label id="txtUnitPrice" width="15%" textAlign="right" paddingRight="10" visible="false" includeInLayout="false"/>
 		<s:Label id="txtStock" width="10%" textAlign="center" visible="false" includeInLayout="false"/>
 		<s:HGroup width="18%" horizontalAlign="center">

@@ -11,7 +11,6 @@ global{
 	color: #5a5c59;
 	themeColor: #B2DC32;
 	textRollOverColor: #3f940c;
-	
 }
 
 /*
@@ -54,6 +53,9 @@ s|Application
 	backgroundImage: "assets/bg.png";
 	theme-color: #B2DC32;
 }
+s|Label{
+	fontSize:13;	
+}
 
 #menNav{
 	backgroundImage: Embed(source="AeonGraphical.swf",symbol="mx.skins.application.ApplicationBackground");
@@ -79,6 +81,7 @@ s|Button
 {
 	skin-class: ClassReference("assets.skins.skin_Button");
 	buttonMode:"true";
+	useHandCursor:"true";
 }
 s|Panel
 {
