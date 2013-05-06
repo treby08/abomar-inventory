@@ -314,8 +314,9 @@
 					
 					
 					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">						
-						<s:Button id="btnNew" label="New Purchase Request"
-								  click="btnNewclickHandler(event)" tabIndex="4"/>
+						<s:Button id="btnNew" width="130" height="50"
+								  label="New Purchase Request" click="btnNewclickHandler(event)"
+								  tabIndex="4"/>
 						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
 						<s:Spacer width="100%"/>
 						<s:Button id="btnCheckOut" label="Submit Requisition" click="CheckOutclickHandler(event)"/>

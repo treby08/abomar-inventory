@@ -22,7 +22,7 @@
       @productversion Flex 4
 -->
 <s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
-      minWidth="30" minHeight="22"
+      minWidth="30" minHeight="25" fontWeight="bold" 
       alpha.disabled="0.5">
 
     <fx:Metadata>
@@ -42,7 +42,7 @@
     <!-- background -->
     <s:Rect left="0" right="0" top="0" bottom="0"
           width="69" height="20"
-          radiusX="8" radiusY="8">
+          radiusX="3" radiusY="3">
        <s:stroke>
             <s:SolidColorStroke color="#FFFFFF" color.over="#a8a800" color.down="#e2e615" weight="1"/>
         </s:stroke>
@@ -84,10 +84,10 @@
     <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
     <s:Label id="labelDisplay" color="#e2e615" color.up="#e2e615" color.over="#226303" color.down="#a8a800"
              horizontalCenter="0" verticalCenter="1" verticalCenter.down="2"
-             left="10" right="10" top="2" bottom="2"
+             left="10" right="10" top="2" bottom="2" 
              textAlign="center" fontFamily="Arial, Helvetica, '_sans'" fontSize="12"			 
-             verticalAlign="middle" 
-             maxDisplayedLines="1" buttonMode="true">
+             verticalAlign="middle" lineBreak="toFit"
+             maxDisplayedLines="-1" useHandCursor="true" buttonMode="true">
     </s:Label>
 	
 	

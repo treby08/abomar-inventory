@@ -6,6 +6,8 @@
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.customComponents.ProgBarforImage;
+			import com.flexlib.controls.Base64Image;
 			import com.module.events.ItemsTransEvent;
 			import com.module.renderer.ProductRenderer;
 			import com.variables.AccessVars;
@@ -23,8 +25,11 @@
 			/** 0=add 1=edit**/
 			public var _type:int = 0; 
 			public var isSearch:Boolean = false;
+			public var hasSelectedItem:Boolean = false;
 			private var _fromUpdate:Boolean = false;
 			private var _isOpen:Boolean = false;
+			private var progBar:ProgBarforImage;
+			private var fileRef:FileReference;
 			
 			[Embed (source="com/flexlib/assets/assets.swf", symbol="up_arrow")]
 			private static var DEFAULT_UP_BUTTON:Class;
@@ -34,13 +39,36 @@
 			
 			protected function browseclickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				
+				var fileFil:FileFilter = new FileFilter("Images", "*.jpg;*.gif;*.png"); 
+				fileRef = new FileReference();
+				fileRef.addEventListener(Event.SELECT,progressStart);
+				fileRef.addEventListener(Event.COMPLETE,uploadComplete);				
+				fileRef.browse([fileFil]);
+			}
+			
+			protected function progressStart(event:Event):void
+			{
+				fileRef.load();
+			}
+			
+			protected function uploadComplete(event:Event):void
+			{
+				var loader:Loader = new Loader();
+				loader.loadBytes(fileRef.data);
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);	
+			}
+			
+			private function loaderCompleteHandler(event:Event):void
+			{
+				var loader:Loader = (event.target as LoaderInfo).loader;
+				var bmp:Bitmap = Bitmap(loader.content);
+				imgProd.source = bmp;
 			}
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				btnSave.visible = false;
+				//btnSave.enabled = false;
+				hasSelectedItem = false;
 				if (_isOpen){
 					_isOpen = false;
 					anim.play(null,true);
@@ -86,6 +114,8 @@
 			
 			public function clearFields(event:MouseEvent):void
 			{
+				if (!hasSelectedItem)return;
+				
 				if (_fromUpdate){
 					_fromUpdate = false;
 					_data.pCode = txtProdCode.text;
@@ -156,6 +186,8 @@
 			
 			protected function saveClickHandler(event:MouseEvent):void
 			{
+				if (!hasSelectedItem)return;
+				
 				var strErr:String = UserErrorTrap();
 				if (strErr != ""){
 					Alert.show(strErr,"Error Summary:");
@@ -223,6 +255,11 @@
 				}
 			}
 			
+			protected function createProductTab(event:MouseEvent):void
+			{
+				AccessVars.instance().mainApp.appChange(null,2,"inv_np");
+			}			
+			
 		]]>
 	</fx:Script>
 	
@@ -247,15 +284,15 @@
 					weight="2"/> 
 			</s:borderStroke> 
 				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-					<s:Label text="Search Product:"/>
+					<s:Label text="Search: "/>
 					<s:TextInput prompt="[Enter Product Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
 					<s:Button label="Search" click="SearchClickHandler(event)"/>
 					<s:Spacer width="100%"/>
 					
 				</s:HGroup>
 				<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
-					<s:Label text="Item Code" width="15%" height="40" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
-					<s:Label text="Product Name /Description" height="40" width="67%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+					<s:Label text="Item #" width="15%" height="40" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+					<s:Label text="Product Name" height="40" width="67%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
 					<!--<s:Label text="Unit Price" width="15%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>
 					<s:Label text="Stock" width="10%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}"/>-->
 					<s:Label text="Control" width="18%" height="40" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle" />
@@ -282,64 +319,65 @@
 					weight="2"/> 
 			</s:borderStroke> 
 			<s:VGroup  width="100%" height="100%">
-				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-					<s:Label text="Product Information"/>
+				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+						   gap="7">
+					<s:Label text="Product Information" fontSize="16"/>
 					<mx:HRule width="100%" height="2"/>
-					<s:HGroup  width="100%">
-						<s:Label text="Item Number:" width="90"/>
-						<s:TextInput id="txtProdCode" width="90"/>
-						<s:Label text="*" color="red"/>
-						<s:Label text="Product Name:" width="90"/>
-						<s:TextInput id="txtProdName" width="100%"/>
-						<s:Label text="*" color="red"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Description:" width="90"/>
-						<s:TextArea id="txtDesc" width="100%" height="50"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Initial Stocks:" width="90"/>
-						<s:TextInput id="txtStock" width="100%" restrict="0-9." text="0" textAlign="right"/>
-						<s:Label text="*" color="red"/>
-						<s:Label text="Unit Price:" width="90"/>
-						<s:TextInput id="txtPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"/>
-						<s:Label text="*" color="red"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Supplier:" width="90"/>
-						<s:TextInput id="txtSupplier" width="100%"/>
-					</s:HGroup>
-					<s:HGroup  width="100%">
-						<s:Label text="Weight:" width="90"/>
-						<s:TextInput id="txtWeight" width="100%"/>
-						<s:Label text="Size:" width="90"/>
-						<s:TextInput id="txtSize" width="100%"/>
-					</s:HGroup>
-					<s:HGroup  width="100%">
-						<s:Label text="Sub Number:" width="90"/>
-						<s:TextInput id="txtSubNum" width="100%"/>
-						<s:Label text="Common model use:" width="120"/>
-						<s:TextInput id="txtComModUse" width="100%"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Product Image:" width="90"/>
-						<s:TextInput id="txtImagePath" width="100%" editable="false"/>
-						<s:Button label="Browse" click="browseclickHandler(event)"/>
-					</s:HGroup>
+					<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+						<s:HGroup  width="100%" verticalAlign="middle">
+							<s:Label text="Item Number:" width="90" textAlign="right"/>
+							<s:TextInput id="txtProdCode" width="90"/>
+							<s:Label text="Sub Number:" width="90" textAlign="right"/>
+							<s:TextInput id="txtSubNum" width="90"/>
+							<s:Label text="Name:" width="50" textAlign="right"/>
+							<s:TextInput id="txtProdName" width="100%"/>
+						</s:HGroup>
+						<s:HGroup width="100%" paddingTop="2">
+							<s:Label text="Description:" width="90" textAlign="right"/>
+							<s:TextArea id="txtDesc" width="100%" height="50"/>
+						</s:HGroup>
+						<s:HGroup width="100%">
+							<s:HGroup paddingTop="2">
+								<s:Label text="Picture:" width="90" textAlign="right"/>
+								<s:HGroup id="hgImage" width="100%"  height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" horizontalAlign="center">
+									<mx:Image id="imgProd" width="260" height="180" source="assets/icons/default_product.png" click="browseclickHandler(event)"/>
+									<s:Label id="txtImagePath" visible="false" includeInLayout="false" width="0"/>
+								</s:HGroup>
+							</s:HGroup>
+							<s:VGroup width="100%">
+								<s:HGroup  width="100%" verticalAlign="middle">
+									<s:Label text="Common model use:" width="130" textAlign="right"/>
+									<s:TextInput id="txtComModUse" width="100%"/>
+								</s:HGroup>
+								<s:HGroup width="100%" verticalAlign="middle">
+									<s:Label text="Quantity on Hand:" width="130" textAlign="right"/>
+									<s:TextInput id="txtStock" width="100%" restrict="0-9." text="0" textAlign="right"/>
+									<!--<s:Label text="*" color="red"/>-->
+									<s:Label text="Unit Price:" width="70" textAlign="right"/>
+									<s:TextInput id="txtPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"/>								
+								</s:HGroup>
+								<s:HGroup  width="100%" verticalAlign="middle">
+									<s:Label text="Weight:" width="130" textAlign="right"/>
+									<s:TextInput id="txtWeight" width="100%"/>
+									<s:Label text="Size:" width="70" textAlign="right"/>
+									<s:TextInput id="txtSize" width="100%"/>
+								</s:HGroup>
+								<s:HGroup width="100%" verticalAlign="middle">
+									<s:Label text="Supplier:" width="130" textAlign="right"/>
+									<s:TextInput id="txtSupplier" width="100%"/>
+								</s:HGroup>
+							</s:VGroup>
+						</s:HGroup>
+					</s:VGroup>
 				</s:VGroup>
-				
-				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-					<s:Label text="Product Image"/>
-					<mx:HRule width="100%" height="2"/>
-					<s:HGroup width="100%"  height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" horizontalAlign="center">
-						<s:Image id="imgProd" width="260" height="180"/>
-					</s:HGroup>
-					<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-						<s:Spacer width="100%"/>
-						<s:Button id="btnSave" label="Add Product" visible="false"/>
-						<s:Button id="btnClear" label="Clear"/>
-					</s:HGroup>
-				</s:VGroup>
+				<s:HGroup width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+							  horizontalAlign="left" verticalAlign="middle">
+					<s:Spacer width="100%"/>
+					<s:Button id="btnNewProd" label="New Product" click="createProductTab(event)"/>
+					<s:Button id="btnSave" label="Update Info"/>					
+					<s:Button id="btnClear" label="Reset"/>
+					<s:Button id="btnOrdHis" label="Order History"/>
+				</s:HGroup>
 			</s:VGroup>
 		</s:BorderContainer>	
 	</s:HGroup>
