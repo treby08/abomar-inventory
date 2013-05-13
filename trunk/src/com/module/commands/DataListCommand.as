@@ -19,6 +19,10 @@ package com.module.commands
 					DataListDelegate.instance().getUserlist((event as DataListEvent).params);
 				break;
 				
+				case DataListEvent.GET_BRANCH_LIST:
+					DataListDelegate.instance().getBranchlist((event as DataListEvent).params);
+				break;
+				
 			}
 		}
 	}

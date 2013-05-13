@@ -87,10 +87,10 @@ s|Panel
 {
 	skin-class: ClassReference("assets.skins.skin_Panel");
 }
-#labelDisplay
+/*#labelDisplays
 {
 	typographicCase: lowercaseToSmallCaps
-}
+}*/
 
 /* 
 //------------------------------ 

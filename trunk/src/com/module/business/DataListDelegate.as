@@ -41,6 +41,26 @@ package com.module.business
 			if (_profPanel is ProfilePanel)
 				_profPanel.showDefault();
 		}
+		
+		public function getBranchlist(params:Object):void{
+			_profPanel = params;
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.BRANCH_LIST);
+			var token:AsyncToken = service.send();
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(getBranchlist_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function getBranchlist_onResult(evt:ResultEvent):void{
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			for each (var obj:XML in listXML.children()){
+				arrCol.addItem({bCode:obj.@bCode,branchID:obj.@branchID,bLocation:obj.@bLocation,bAddress:obj.@bAddress,bConPerson:obj.@bConPerson,
+					bDesig:obj.@bDesig,bPhoneNum:obj.@bPhoneNum,bMobileNum:obj.@bMobileNum,bEmailAdd:obj.@bEmailAdd,bLocMap:obj.@bLocMap})
+			}
+			_profPanel.pBox.setDataProvider(arrCol,1);
+			_profPanel.pBox = null;
+			_profPanel = null;
+		}
 		private function Main_onFault(evt:FaultEvent):void{
 			trace(evt.message)
 		}

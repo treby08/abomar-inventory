@@ -72,8 +72,59 @@ package com.module.commands
 					obj.type = "get_details";
 					ItemsTransDelegate.instance().quote_AED(obj);
 				break;
+				/*PURCHASE REQUISITION*/
+				case ItemsTransEvent.ADD_REQUISITION:
+					obj.type = "add";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+					break;
+				case ItemsTransEvent.EDIT_REQUISITION:
+					obj.type = "edit";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+					break;
+				case ItemsTransEvent.DELETE_REQUISITION:
+					obj.type = "delete";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+					break;
 				
+				case ItemsTransEvent.SEARCH_REQUISITION:
+					obj.type = "search";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+					break;
+				case ItemsTransEvent.GET_REQUISITION_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+				break;
+				case ItemsTransEvent.GET_REQUISITION_NUMBER:
+					obj.type = "get_req_no";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+				break;
 				
+				/*PURCHASE Order*/
+				case ItemsTransEvent.ADD_PURORD:
+					obj.type = "add";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
+				case ItemsTransEvent.EDIT_PURORD:
+					obj.type = "edit";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
+				case ItemsTransEvent.DELETE_PURORD:
+					obj.type = "delete";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
+				
+				case ItemsTransEvent.SEARCH_PURORD:
+					obj.type = "search";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
+				case ItemsTransEvent.GET_PURORD_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
+				case ItemsTransEvent.GET_PURORD_NUMBER:
+					obj.type = "get_req_no";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
 			}
 		}
 	}

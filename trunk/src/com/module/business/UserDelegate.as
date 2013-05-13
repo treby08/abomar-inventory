@@ -115,6 +115,7 @@ package com.module.business
 				Alert.show(str+" Customer Complete.", str+" Customer",4,null,function():void{
 					if (_params.cpnl){
 						_params.cpnl.clearFields(null);
+						_params.cpnl.hgControl.enabled = true;
 						_params.cpnl = null;
 					}else if (_params.upnl){
 						_params.upnl.parent.removeElement(_params.upnl);
@@ -126,7 +127,9 @@ package com.module.business
 				var listXML:XML = XML(evt.result);
 				var arrCol:ArrayCollection = new ArrayCollection()
 				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({custID:obj.@custID,fname:obj.@fname,mname:obj.@mname,lname:obj.@lname,address:obj.@address,pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, businame:obj.@businame,baddress:obj.@baddress,bPhoneNum:obj.@bPhoneNum,bMobileNum:obj.@bMobileNum,email:obj.@email,sex:obj.@sex})
+					arrCol.addItem({custID:obj.@custID,acctno:obj.@acctno,branchId:obj.@branchId,creditLine:obj.@creditLine,address:obj.@address,
+						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
+						email:obj.@email,inactive:obj.@inactive})
 				}
 				if (_params.cBox){
 					(_params.cBox as CustomerListBox).dataCollection = arrCol;

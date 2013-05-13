@@ -63,6 +63,7 @@ package com.module.business
 				Alert.show(str+" Product Complete.", str+" Product",4,null,function():void{
 					if (_paramsItems.pBox){
 						_paramsItems.pBox.clearFields(null);
+						_paramsItems.pBox.hgControl.enabled = true;
 						_paramsItems.pBox = null;
 					}else if (_paramsItems.ppnl){
 						_paramsItems.ppnl.parent.removeElement(_paramsItems.ppnl);
@@ -75,8 +76,11 @@ package com.module.business
 				var arrCol:ArrayCollection = new ArrayCollection();
 				trace("search",XML(evt.result).toXMLString())
 				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,pName:obj.@pName,pDesc:obj.@pDesc,stockCnt:obj.@stockCnt,price:obj.@price,imgPath:obj.@imgPath,branchName:obj.@branchName
-					,supplier:obj.@supplier,weight:obj.@weight,size:obj.@size,subNum:obj.@subNum,comModUse:obj.@comModUse})
+					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,modelNo:obj.@modelNo,remarks:obj.@remarks,stockCnt:obj.@stockCnt,returnable:obj.@returnable,
+						imgPath:obj.@imgPath,supplier:obj.@supplier,weight:obj.@weight,size:obj.@size,subNum:obj.@subNum,
+						comModUse:obj.@comModUse,pDate:obj.@pDate,factor:obj.@factor,inactive:obj.@inactive,listPrice:obj.@listPrice,
+						dealPrice:obj.@dealPrice,srPrice:obj.@srPrice, priceCurr:obj.@priceCurr});
+					
 				}
 				if (_paramsItems.pBox){
 					(_paramsItems.pBox).dataCollection = arrCol;
@@ -259,6 +263,231 @@ package com.module.business
 					_paramsQuote.sBox.setDataProvider(arrCol,0);
 					_paramsQuote.sBox = null;
 					_paramsQuote = null;
+				}
+			}
+		}
+		
+		
+		public function purchaseReq_AED(params:Object):void{
+			_params = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("purchaseReq_AED",_params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PURCHASE_REQ_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(purchaseReq_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function purchaseReq_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("purchaseReq_AED_onResult",strResult);
+			if(_params == null)
+				return;
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+				case "edit":
+					str="Updating";
+					break;
+				case "delete":
+					str="Deleting";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Purchase Requisition Error: "+strResult,"Error");
+				return;
+			}
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrObj:Object = {}
+			var obj:XML;
+			if (str){
+				Alert.show(str+" Purchase Requisition Complete.", str+" Purchase Requisition",4,null,function():void{
+					if (_params.pBox){
+						_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}else if (_params.ppnl){
+						_params.ppnl.parent.removeElement(_params.ppnl);
+						_params.ppnl = null;
+					}
+					_params = null;
+				});
+			}else if (_params.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				arrObj = {};
+				var num:int = 1;
+				trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = {}
+					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					arrObj.prdID = obj.@prdID;
+					arrObj.prd_purReqID = obj.@prd_purReqID;
+					arrObj.prd_prodID = obj.@prd_prodID;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodComModUse = obj.@prodComModUse;
+					arrObj.srPrice = obj.@srPrice;
+					arrObj.num = num;
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				if (_params.qBox){
+					_params.itemRen.isDispatch = false;
+					_params.qBox.setDataProvider(arrCol,3);
+					_params.qBox = null;
+					_params = null;
+				}
+			}else if (_params.type=="get_req_no"){
+				if (_params.qBox){
+					_params.qBox.txtReqNo.text = String(evt.result);
+					_params.qBox = null;
+					_params = null;
+				}	
+			}else{
+				
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = {}
+						/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
+					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
+					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
+					arrObj.purReqID = obj.@purReqID;
+					arrObj.reqNo = obj.@reqNo;
+					arrObj.bCode = obj.@bCode;					
+					arrObj.branchID = obj.@branchID;
+					arrObj.preparedBy = obj.@preparedBy;
+					arrObj.approvedBy = obj.@approvedBy;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.totalAmt = obj.@totalAmt;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){					
+					_params.qBox.dataCollection = arrCol;
+					_params.qBox = null;
+					_params = null;
+				}
+			}
+		}
+		
+		public function purchaseOrd_AED(params:Object):void{
+			_params = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("purchaseOrd_AED",_params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PURCHASE_REQ_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(purchaseOrd_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function purchaseOrd_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("purchaseOrd_AED_onResult",strResult);
+			if(_params == null)
+				return;
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+				case "edit":
+					str="Updating";
+					break;
+				case "delete":
+					str="Deleting";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Purchase Order Error: "+strResult,"Error");
+				return;
+			}
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrObj:Object = {}
+			var obj:XML;
+			if (str){
+				Alert.show(str+" Purchase Order Complete.", str+" Purchase Order",4,null,function():void{
+					if (_params.pBox){
+						_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}else if (_params.ppnl){
+						_params.ppnl.parent.removeElement(_params.ppnl);
+						_params.ppnl = null;
+					}
+					_params = null;
+				});
+			}else if (_params.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				arrObj = {};
+				var num:int = 1;
+				//trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = {}
+					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					arrObj.prdID = obj.@prdID;
+					arrObj.prd_purReqID = obj.@prd_purReqID;
+					arrObj.prd_prodID = obj.@prd_prodID;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodComModUse = obj.@prodComModUse;
+					arrObj.srPrice = obj.@srPrice;
+					arrObj.num = num;
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				if (_params.qBox){
+					_params.itemRen.isDispatch = false;
+					_params.qBox.setDataProvider(arrCol,3);
+					_params.qBox = null;
+					_params = null;
+				}
+			}else if (_params.type=="get_req_no"){
+				if (_params.qBox){
+					_params.qBox.txtReqNo.text = String(evt.result);
+					_params.qBox = null;
+					_params = null;
+				}	
+			}else{
+				
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = {}
+					/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
+					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
+					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
+					arrObj.purReqID = obj.@purReqID;
+					arrObj.reqNo = obj.@reqNo;
+					arrObj.bCode = obj.@bCode;					
+					arrObj.branchID = obj.@branchID;
+					arrObj.preparedBy = obj.@preparedBy;
+					arrObj.approvedBy = obj.@approvedBy;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.totalAmt = obj.@totalAmt;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){					
+					_params.qBox.dataCollection = arrCol;
+					_params.qBox = null;
+					_params = null;
 				}
 			}
 		}
