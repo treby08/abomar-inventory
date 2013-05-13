@@ -26,9 +26,11 @@
 			private function closeRemClickHandler(evt:CloseEvent):void
 			{
 				if (evt.detail == Alert.YES){
+					//trace(parent.parent.parent.parent.parent.parent.parent.parent.parent)
 					var dg:DataGrid = (parent.parent.parent.parent.parent.parent.parent.parent.parent as DataGrid);
 					var obj:Object = (dg.dataProvider as ArrayCollection).removeItemAt(dg.selectedIndex);
-					Object(dg.parent.parent).removeItemHandler(obj);
+					/*check for Purchase Order module if parenting is still proper*/
+					Object(dg.parent.parent.parent).removeItemHandler(obj);
 				}
 			}
 			

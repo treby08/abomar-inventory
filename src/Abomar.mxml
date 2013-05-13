@@ -48,6 +48,7 @@
 				SecurityType.DBPASS = configXML.@pass;
 				SecurityType.DBNAME = configXML.@dbname; */
 				SecurityType.HTTP_HOST = configXML.http.@host;
+				SecurityType.IMG_PATH = configXML.http.@imgPath;
 				
 				super.initialized = true;
 			}
@@ -108,7 +109,7 @@
 							_cnv.label = "Customer";
 						}else if (code == "cus_lst"){
 							objBox = new CustomerListBox();
-							_cnv.label = "Customer List";
+							_cnv.label = "Customers";
 						}
 					break;
 					case 2:
@@ -117,7 +118,7 @@
 							_cnv.label = "New Product";
 						}else if (code == "inv_pl"){
 							objBox = new ProductList();	
-							_cnv.label = "Product List";
+							_cnv.label = "Product";
 						}
 					break;
 					case 3:

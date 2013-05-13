@@ -5,6 +5,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.QuoteRenderer;
@@ -26,17 +27,20 @@
 			import spark.events.TextOperationEvent;
 			private var _totalQty:int = 0;
 			public var custID:String = "";
+			public var _type:int = 0; 
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-							
 				
-				/* var styleName:String = "." + dg.getStyle("headerStyleName");
-				var cssDecl:CSSStyleDeclaration = StyleManager.getStyleDeclaration(styleName);
-				cssDecl.setStyle("textAlign", 'center'); */
+				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
+				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				
+				dfDate.selectedDate = new Date(); 
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -108,7 +112,7 @@
 				if (cmbProd.selectedItem == null) return;
 				var obj:Object = cmbProd.selectedItem;
 				txtPrice.text = obj.price;
-				txtStock.text =  obj.stockCnt;
+				//txtStock.text =  obj.stockCnt;
 				txtQty.maximum = Number(obj.stockCnt);
 				if (txtQty.value !=0){
 					txtQtychangeHandler(null);
@@ -117,9 +121,9 @@
 			
 			protected function txtQtychangeHandler(event:Event):void
 			{
-				if (txtStock.text =="0" || txtQty.value == 0) return;
+				if (txtQty.value == 0) return;
 				
-				
+				//txtStock.text =="0" || 
 				txtSub.text = roundDec(Number(txtPrice.text)*int(txtQty.value)).toFixed(2);
 			}
 			
@@ -166,8 +170,13 @@
 				txtQty.value = 0;
 				txtPrice.text = txtSub.text = "0.00";
 				txtQtychangeHandler(null);
-				txtStock.text = "0";
+				//txtStock.text = "0";
 				cmbProd.setFocus();
+			}
+			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER)
+					(event.target as Button).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			}
 			
 			private function updateTotal(editVat:Boolean =true):void{
@@ -218,13 +227,9 @@
 				cmbQuote.textInput.text = ""; */
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";
-				txtBname.text = "";
-				txtBAdd.text = "";
-				txtBPhone.text = "";
-				txtBMobile.text = "";
 				txtQty.textDisplay.text = "0";
 				txtPrice.text = "0.00";
-				txtStock.text = "0.00";
+				//txtStock.text = "0.00";
 				txtSub.text = "0.00";
 				txtSubtot.text = "0.00";
 				txtGT.text = "0.00";
@@ -239,13 +244,30 @@
 				if (dg.dataProvider != null){
 					Alert.show("Are you sure to create a new transaction?","Transaction not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
 				}else{
+					_type = 0;
+					mainCont.enabled = true;
+					btnCheckOut.label = "Submit Requisition";
+					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
 				}
 			}
+			protected function editClickHandler(event:MouseEvent):void
+			{
+				_type = 1;
+				btnCheckOut.label = "Save Requisition Changes";
+				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+				mainCont.enabled = true;
+			}
 			
 			private function newSalesHandler(event:CloseEvent):void{
 				if (event.detail == Alert.YES){
+					_type = 0;
+					mainCont.enabled = true;
+					btnCheckOut.label = "Submit Requisition";
+					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
 				}
@@ -285,6 +307,10 @@
 				updateTotal();
 			}
 			
+			public function reComputeHandler(obj:Object,isSelected:Boolean):void{
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -302,14 +328,13 @@
 					weight="2"/> 
 			</s:borderStroke> 
 			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-				<s:Label text="Search Quote:"/>
-				<s:TextInput prompt="[Enter Quote Name Here]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
+				<s:Label text="Search"/>
+				<s:TextInput prompt="[Requisition No / Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
 				<s:Button label="Search" click="SearchClickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
-				<s:Label text="Quote ID" width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Quote Decription" width="55%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Control" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Requisition No." width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Branch" width="65%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
@@ -324,146 +349,128 @@
 		</s:BorderContainer>
 	</s:HGroup>
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-		<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
-			<s:borderStroke> 
-				<mx:SolidColorStroke 
-					color="{AccessVars.instance().borderStrokeColor}" 
-					weight="2"/> 
-			</s:borderStroke> 
-			<s:HGroup  width="100%" height="100%">
-				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-					<s:Label text="Sales Information"/>
-					<mx:HRule width="100%" height="2"/>
-					<s:HGroup  width="100%">
-						<!--<s:Label text="Qoute:" width="90"/>
-						<s:ComboBox id="cmbQuote" width="100%" tabIndex="1" changing="cmbQuotechangingHandler(event)"/>
-						<s:Label text="*" color="red"/>
-						<s:Spacer width="20"/> -->
-						<s:Label text="Branch:" width="90"/>
-						<s:TextInput id="txtBranch" width="150" editable="false"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Business Name:" width="90"/>
-						<s:TextInput id="txtBname" width="100%" editable="false" />
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Business Address:" width="90"/>
-						<s:TextArea id="txtBAdd" width="100%" height="50" editable="false"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Business Phone Number:" width="90"/>
-						<s:TextInput id="txtBPhone" width="100%" restrict="0-9\-()" editable="false"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Business Mobile Number:" width="90"/>
-						<s:TextInput id="txtBMobile" width="100%" restrict="0-9\-" editable="false"/>
-					</s:HGroup>
-				</s:VGroup>
-				
-				<s:VGroup  width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-					<s:Label text="Select a Product"/>
-					<mx:HRule width="100%" height="2"/>
-					<s:HGroup width="100%">
-						<s:Label text="Product Name:" width="90"/>
-						<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
-						<s:Label text="*" color="red"/>
-					</s:HGroup>
-					<s:HGroup width="100%">
-						<s:Label text="Quantity:" width="90"/>
-						<s:NumericStepper id="txtQty" width="100%" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
-						<s:Label text="*" color="red"/>
-						<s:Label text="Net Price:" width="90"/>
-						<mx:Text id="txtPrice" width="100%" text="0.00" textAlign="right" selectable="false"/>
-						
-					</s:HGroup>
-					
-					<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
-						<s:HGroup verticalAlign="middle" paddingLeft="10">
-							<s:Label text="Stock:" backgroundColor="0xFCFCFC" fontWeight="bold"/>
-							<mx:Text id="txtStock" text="0" textAlign="right" width="100" fontWeight="bold"/>
+		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false">
+			<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
+				<s:borderStroke> 
+					<mx:SolidColorStroke 
+						color="{AccessVars.instance().borderStrokeColor}" 
+						weight="2"/> 
+				</s:borderStroke> 
+				<s:HGroup  width="100%" height="100%" fontSize="16">
+					<s:VGroup  width="45%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="25" paddingRight="25">
+						<s:HGroup  width="100%" verticalAlign="middle">
+							<s:Label text="Supplier" width="90" textAlign="right"/>
+							<s:DropDownList id="cmbBranch" width="100%" />
 						</s:HGroup>
-						<s:Spacer width="35%"/>
-						<s:HGroup width="65%" fontSize="16" verticalAlign="middle">
-							<s:Label text="Extend:" width="90"/>
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="Invoice To" width="90" textAlign="right"/>
+							<s:TextInput id="txtInvoice" width="100%" />
+						</s:HGroup>
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="Deliver To" width="90" textAlign="right"/>
+							<s:DropDownList id="cmbDeliver" width="100%" />
+						</s:HGroup>
+					</s:VGroup>
+					
+					<s:VGroup  width="55%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="PO No." width="115" textAlign="right"/>
+							<s:TextInput id="txtReqNo" width="100%" editable="false"/>
+							<s:Label text="Date" textAlign="center"/>
+							<mx:DateField id="dfDate" width="150" showToday="true"/>
+						</s:HGroup>
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="Item / Model No." width="115" textAlign="right"/>
+							<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
+						</s:HGroup>
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="Quantity" width="115" textAlign="right"/>
+							<s:NumericStepper id="txtQty" width="150" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
+							<s:TextInput id="txtPrice" width="150" text="0.00" textAlign="right" selectable="false" visible="false" includeInLayout="false"/>
+							<s:Button id="btnAdd" label="Add  Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
+							<s:Spacer width="35%"/>
+							<s:Label text="Net Price"/>
 							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
 						</s:HGroup>
+						
+						<!--<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
+						<s:HGroup verticalAlign="middle" paddingLeft="10">
+						<s:Label text="Stock:" backgroundColor="0xFCFCFC" fontWeight="bold"/>
+						<mx:Text id="txtStock" text="0" textAlign="right" width="100" fontWeight="bold"/>
+						</s:HGroup>
+						<s:Spacer width="35%"/>
+						<s:HGroup width="50%" fontSize="16" verticalAlign="middle">
+						<s:Label text="Net Price:" width="90"/>
+						<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
+						</s:HGroup>
+						</s:HGroup>-->
+						
+						
+						
+					</s:VGroup>
+				</s:HGroup>
+			</s:BorderContainer>
+			<s:Spacer height="5"/>
+			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
+						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
+				<s:columns>
+					<s:ArrayList>
+						<s:GridColumn width="20" itemRenderer="com.module.renderer.IncludeItemRenderer" editable="false"/>
+						<s:GridColumn width="45" dataField="num" headerText="Item" editable="false"/>
+						<s:GridColumn dataField="qty" headerText="Qty" width="80"  editable="true"/>
+						<s:GridColumn dataField="modelNo" headerText="Item / Model No.">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="left"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						
+						<s:GridColumn dataField="price" headerText="Price" width="180"  editable="false">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="right"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="total" headerText="Extend" width="180" editable="false">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+					</s:ArrayList>
+				</s:columns>
+			</s:DataGrid>
+			<s:HGroup width="100%" verticalAlign="bottom" fontSize="14">
+				<s:Label text="Number of Items: "/>
+				<s:Label id="numItems" text="0"/>
+				<s:Spacer width="100%"/>
+				<s:VGroup width="40%">
+					<s:HGroup width="100%">
+						<s:Label text="Subtotal" width="90"/>
+						<mx:Text id="txtSubtot" width="100%" text="0.00" textAlign="right"/>
 					</s:HGroup>
-					
-					
-					<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="bottom" paddingBottom="5">
-						<s:Spacer width="100%"/>
-						<s:Button id="btnNew" label="New Purchase Order" tabIndex="4" click="btnNewclickHandler(event)" visible="false" includeInLayout="false"/>
-						<s:Button id="btnAdd" label="Add To Order" tabIndex="4" click="btnAddclickHandler(event)"/>
-						<s:Button id="btnCheckOut" label="Save To Warehouse Receipt" click="CheckOutclickHandler(event)"/>
-						<s:Button id="btnPrint" label="Print" click="printPrevPO()"/>
+					<s:HGroup width="100%">
+						<s:Label text="VAT" width="90"/>
+						<s:TextInput id="txtVat" width="100%" text="0.00" textAlign="right" borderVisible="false" restrict="0-9." focusOut="{updateTotal(false)}" keyUp="txtVat_keyUpHandler(event)"/>
+					</s:HGroup>
+					<s:HGroup width="100%">
+						<s:Label text="TOTAL" fontSize="16"/>
+						<s:Label id="txtGT" textAlign="right" text="0.00" fontSize="18" width="100%"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
-		</s:BorderContainer>
-		<s:Spacer height="5"/>
-		<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
-					gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
-			<s:columns>
-				<s:ArrayList>
-					<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
-					<s:GridColumn width="90" dataField="prodID" headerText="Prod ID" editable="false"/>
-					<s:GridColumn dataField="qty" headerText="Qty" width="50" editable="true"/>
-					<s:GridColumn dataField="prodName" headerText="Description" editable="false">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="left" />
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-					<!--<s:GridColumn dataField="stockCount" headerText="Stock" width="70">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="left"/>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>-->
-					<s:GridColumn dataField="branchName" headerText="Branch" width="180" editable="false">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="left"/>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-					<s:GridColumn dataField="price" headerText="Price" width="180" editable="true">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="right"/>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-					<s:GridColumn dataField="total" headerText="Total" editable="false" >
-						<s:itemRenderer>
-							<fx:Component>
-								<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-				</s:ArrayList>
-			</s:columns>
-		</s:DataGrid>
-		<s:HGroup width="100%" verticalAlign="bottom" fontSize="14">
-			<s:Label text="Number of Items: "/>
-			<s:Label id="numItems" text="0"/>
+		</s:VGroup>		
+		<mx:HRule height="5" width="100%"/>
+		<s:HGroup id="hgControl" width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+				  horizontalAlign="left" verticalAlign="middle">						
+			<s:Button id="btnCheckOut" label="Submit Requisition" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
-			<s:VGroup width="40%">
-				<s:HGroup width="100%">
-					<s:Label text="Subtotal:" width="90"/>
-					<mx:Text id="txtSubtot" width="100%" text="0.00" textAlign="right"/>
-				</s:HGroup>
-				<s:HGroup width="100%">
-					<s:Label text="VAT:" width="90"/>
-					<s:TextInput id="txtVat" width="100%" text="0.00" textAlign="right" borderVisible="false" restrict="0-9." focusOut="{updateTotal(false)}" keyUp="txtVat_keyUpHandler(event)"/>
-				</s:HGroup>
-				<s:HGroup width="100%">
-					<s:Label text="Grand Total:" fontSize="16"/>
-					<s:Label id="txtGT" textAlign="right" text="0.00" fontSize="18" width="100%"/>
-				</s:HGroup>
-			</s:VGroup>
+			<s:Button id="btnNew"  label="New Requisition" click="btnNewclickHandler(event)"/>
+			<s:Button id="btnEdit"  label="Edit Requisition" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
+			<!--<s:Button id="btnView"  label="View Requisition" click="printPrevPO()" visible="false" includeInLayout="false"/>-->
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>

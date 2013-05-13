@@ -7,11 +7,13 @@
 			
 		    public static var  LOGIN_SERVICE:String = "login_service";
 		    public static var  USER_TYPE_LIST:String = "user_type_list";
+		    public static var  BRANCH_LIST:String = "branch_list";
 		    public static var  USER_SERVICE:String = "user_service";
 		    public static var  CUSTOMER_SERVICE:String = "customer_service";
 		    public static var  PRODUCT_SERVICE:String = "product_service";
 		    public static var  SALES_SERVICE:String = "sales_service";
 		    public static var  QOUTE_SERVICE:String = "qoute_service";
+		    public static var  PURCHASE_REQ_SERVICE:String = "purchase_req_service";
 		
 		    
 			public function getHTTPService( name : String ) : HTTPService
@@ -28,6 +30,10 @@
 		showBusyCursor="true" />
 	<mx:HTTPService id="user_type_list"
 		url="{SecurityType.HTTP_HOST+'/userTypeList.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="branch_list"
+		url="{SecurityType.HTTP_HOST+'/branchList.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="user_service"
@@ -48,6 +54,10 @@
 		showBusyCursor="true" />
 	<mx:HTTPService id="qoute_service"
 		url="{SecurityType.HTTP_HOST+'/quoteAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="purchase_req_service"
+		url="{SecurityType.HTTP_HOST+'/purchaseReqAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 						

@@ -8,6 +8,8 @@ package com.variables
 		
 		[Bindable]
 		public static var HTTP_HOST:String = "";
+		[Bindable]
+		public static var IMG_PATH:String = "";
 		
 		public static var LOGIN_DETAILS:XML;
 		

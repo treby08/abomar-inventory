@@ -21,6 +21,9 @@
 			
 			private var _data:Object;
 			private var _theBox:CustomerListBox;
+			[Bindable]
+			public var _bgColor:uint = AccessVars.instance().colBgColor;
+			
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
 			
@@ -34,39 +37,50 @@
 			
 			public function creationCompleteHandler(event:FlexEvent):void
 			{
-				txtName.text = _data.fname +" "+_data.mname +" "+_data.lname;
-				txtBname.text = _data.businame;
+				txtName.text = _data.conPerson;
+				txtAcct.text = _data.acctno;
+				/* txtBname.text = _data.businame;
 				var contList:String = "";
 				contList = (_data.pNum != "")?"Tel No. "+_data.pNum+"\r":"";
 				contList += (_data.mNum != "")?"Cell No. "+_data.mNum+"\r":"";
 				contList += (_data.bPhoneNum != "")?"Busi Tel No. "+_data.bPhoneNum+"\r":"";
 				contList += (_data.bMobileNum != "")?"Busi Cell No. "+_data.bMobileNum+"\r":"";
 				contList += (_data.email != "")?"Email Address: "+_data.email:"";
-				txtContInfo.text = contList;
+				txtContInfo.text = contList; */
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				_theBox.txtfname.text = _data.fname;
-				_theBox.txtmname.text = _data.mname;
-				_theBox.txtlname.text = _data.lname;
+				
+				_theBox.txtAcctNo.text = _data.acctno;
+				_theBox.cmbOpenBranch.selectedIndex = _theBox.setSelectedItem(_theBox.arrBranch,"branchId",_data.branchId);
 				_theBox.txtAdd.text = _data.address;
-				_theBox.txtPhone.text = _data.pNum;
-				_theBox.txtMobile.text = _data.mNum;
 				_theBox.txtTin.text = _data.tin;
+				_theBox.txtCreditLine.text = _data.creditLine;
+				_theBox.cmbTerm.selectedIndex = _theBox.setSelectedItem(_theBox.arrTerm,"termId",_data.term);
+				trace("_data.inactive:",_data.inactive)
+				_theBox.cbInactive.selected = (_data.inactive as Boolean);
+				
+				_theBox.txtConName.text = _data.conPerson;
+				_theBox.txtDesig.text = _data.desig;
+				_theBox.txtMobile.text = _data.mNum;
+				_theBox.txtPhone.text = String(_data.pNum).split("|")[0];
+				_theBox.txtExt.text = String(_data.pNum).split("|")[1];
 				_theBox.txtEmail.text = _data.email;
-				_theBox.txtBname.text = _data.businame;
-				_theBox.txtBAdd.text = _data.baddress;
-				_theBox.txtBMobile.text = _data.bMobileNum;
-				_theBox.txtBPhone.text = _data.bPhoneNum;
-				_theBox.rbMale.selected = (_data.sex == "Male")
-				_theBox.rbFemale.selected = (_data.sex == "Female")
+				_theBox.txtWeb.text = _data.web;
+				
 				_theBox._type = 1;
 				_theBox._data = _data;
+				_theBox.btnSave.visible = _theBox.btnSave.includeInLayout = false;
+				_theBox.btnNewCus.visible = _theBox.btnNewCus.includeInLayout = true;
+				_theBox.mainCont.enabled = false;
+				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				_theBox.btnOrdHis.visible = _theBox.btnOrdHis.includeInLayout = true;
+				_theBox.btnClear.visible = _theBox.btnClear.includeInLayout = false;
 				//_theBox.btnNewUser.visible = true;
-				_theBox.btnSave.label = "Update";
+				/* _theBox.btnSave.label = "Update";
 				_theBox.btnSave.visible = true;
-				_theBox.btnClear.label = "Reset to Default";
+				_theBox.btnClear.label = "Reset to Default"; */
 				_theBox.owner = this;
 			}
 			
@@ -86,17 +100,15 @@
 		]]>
 	</fx:Script>
 	<s:Rect width="100%" height="100%">
-		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
+		<s:fill><s:SolidColor color="{_bgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
+	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="15" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=_bgColor}"
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtName" width="30%" textAlign="center"/>
-		<s:Label id="txtBname" width="35%" textAlign="center" visible="false" includeInLayout="false"/>
-		<mx:Text id="txtContInfo" width="55%" selectable="false"/>
-		<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
-			<!--<s:Button label="Edit" click="editClickHandler(event)"  useHandCursor="true" buttonMode="true"/>-->
-			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Del" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
-		</s:HGroup>
+		<s:Label id="txtAcct" width="35%" textAlign="center"/> 
+		<s:Label id="txtName" width="65%" textAlign="center"/> 
+		<!--<s:HGroup width="30%" horizontalAlign="center" paddingRight="5">		
+			<s:Label text="Deactivate" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true" color="0"/>
+		</s:HGroup>-->
 	</s:HGroup>
 	
 </s:Group>

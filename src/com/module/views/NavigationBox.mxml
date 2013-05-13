@@ -14,6 +14,7 @@
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
+			import mx.controls.menuClasses.MenuBarItem;
 			import mx.events.FlexEvent;
 			import mx.events.MenuEvent;
 			[Bindable]
@@ -72,24 +73,29 @@
 				'	</sub>' +
 				'</main>' +
 			'</root>');
+			/* <sub name="New Product" code="inv_np"/> 
+			<sub name="New Customer" code="cus_new"/>*/
 			private var menuNavList:XMLList = 
 				<>
-				<main icon="assets/icons/icon_inv.png" name="Inventory">
-					<sub name="New Product" code="inv_np" icon="assets/icons/icon_inv.png"/>
-					<sub name="Product List" code="inv_pl"/>
-					<sub name="Warehouse Receipt" code="inv_wr"/>
-					<sub name="Warehouse Discrepancy" code="inv_wd"/>
-				</main>
 				<main icon="assets/icons/icon_inv.png" name="Purchasing">
-					<sub name="Puchase Requisition" code="pur_pr"/>
+					<sub name="Purchase Requisition" code="pur_pr"/>
 					<sub name="Purchase Order" code="pur_po"/>
 					<sub name="Purchase Order List" code="pur_pol"/>					
+				</main>
+				<main icon="assets/icons/icon_inv.png" name="Inventory">
+					<sub name="Warehouse Receipt" code="inv_wr"/>
+					<sub name="Warehouse Discrepancy" code="inv_wd"/>
 				</main>
 				<main icon="assets/icons/icon_sales.png" name="Sales">
 					<sub name="New Sales Quote" code="sal_nsq"/>
 					<sub name="New Sales Order" code="sal_nso"/>
 					<sub name="Sales Order List" code="sal_sol"/>
 				</main>
+				
+				<main name="Customer" code="cus_lst"/>	
+				<main name="Products" code="inv_pl" icon="assets/icons/icon_inv.png"/>
+				<main name="Supplier" code="pur_vl"/>
+				
 				<main icon="assets/icons/icon_report.png" name="Report">
 					<sub name="Inventory Reports">
 						<sub name="Inventory Summary" code="rep_inv_is"/>
@@ -103,24 +109,14 @@
 						<sub name="Purchase Order Summary" code="rep_pur_pos"/>
 						<sub name="Purchase Order Details" code="rep_pur_pod"/>
 						<sub name="Purchase Order Status" code="rep_pur_postat"/>
-						<sub name="Vendor Product List" code="rep_pur_vpl"/>
-						<sub name="Vendor List" code="rep_pur_vl"/>
+						<sub name="Supplier Product List" code="rep_pur_vpl"/>
 					</sub>
 					<sub name="Sales Reports">
 						<sub name="Sales Representative Report" code="rep_sal_srr"/>
 						<sub name="Sales by Product Summary" code="rep_sal_sbps"/>
 						<sub name="Customer Payment Summary" code="rep_sal_cps"/>
 						<sub name="Customer Order History" code="rep_sal_coh"/>
-						<sub name="Customer List" code="rep_sal_cl"/>
 					</sub>
-				</main>
-				<main name="Customer">
-					<sub name="New Customer" code="cus_new"/>
-					<sub name="Customer List" code="cus_lst"/>
-				</main>
-				<main name="Vendor">
-					<sub name="New Vendor" code="pur_nv"/>
-					<sub name="Vendor List" code="pur_vl"/>
 				</main>
 			</>;
 			
@@ -160,9 +156,35 @@
 				}
 			}
 			
+			protected function menuClickHandler(event:MouseEvent):void
+			{
+				if(VerticalMenuBar(event.currentTarget).selectedIndex == -1)
+					return;
+				/* trace(VerticalMenuBar(event.currentTarget).selectedIndex);
+				trace(VerticalMenuBar(event.currentTarget).getMenuAt(VerticalMenuBar(event.currentTarget).selectedIndex).dataProvider.length());
+				trace(VerticalMenuBar(event.currentTarget).getMenuAt(VerticalMenuBar(event.currentTarget).selectedIndex).dataProvider.toXMLString())
+				return; */
+				try{
+					var item:XML = XML(VerticalMenuBar(event.currentTarget).getMenuAt(VerticalMenuBar(event.currentTarget).selectedIndex).dataProvider.toXMLString());
+				}catch(e:Error){
+					return;
+				}
+				if (!item.hasOwnProperty("@code"))return;
+				
+				trace(item.@code)
+				switch(String(item.@code)){
+					case "cus_lst":	
+						AccessVars.instance().mainApp.appChange(null,1,String(item.@code));
+					break;
+					case "inv_pl":		
+						AccessVars.instance().mainApp.appChange(null,2,String(item.@code));
+					break;
+				}
+			}
+			
 		]]>
 	</fx:Script>
-	<controls:VerticalMenuBar dataProvider="{menuNav}" iconField="{iconTwo_App}" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
+	<controls:VerticalMenuBar dataProvider="{menuNav}" click="menuClickHandler(event)" iconField="{iconTwo_App}" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
 							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" buttonMode="true" itemSkin="assets.skins.skin_menuBar">
 	
 	</controls:VerticalMenuBar>	

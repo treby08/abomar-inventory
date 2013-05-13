@@ -44,7 +44,7 @@
           width="69" height="20"
           radiusX="3" radiusY="3">
        <s:stroke>
-            <s:SolidColorStroke color="#FFFFFF" color.over="#a8a800" color.down="#e2e615" weight="1"/>
+            <s:SolidColorStroke color="#FFFFFF" color.over="#000000" color.down="#000000" weight="1"/>
         </s:stroke>
 		<s:filters>
 			<s:DropShadowFilter distance="1"/>
@@ -82,10 +82,10 @@
     </s:Rect>
     <!-- label -->
     <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
-    <s:Label id="labelDisplay" color="#e2e615" color.up="#e2e615" color.over="#226303" color.down="#a8a800"
+    <s:Label id="labelDisplay" color="#e2e615" color.up="#e2e615" color.over="#226303" color.down="#226303"
              horizontalCenter="0" verticalCenter="1" verticalCenter.down="2"
-             left="10" right="10" top="2" bottom="2" 
-             textAlign="center" fontFamily="Arial, Helvetica, '_sans'" fontSize="12"			 
+             left="10" right="10" top="2" bottom="2" typographicCase="lowercaseToSmallCaps"
+             textAlign="center" fontFamily="Arial, Helvetica, '_sans'" fontSize="10"			 
              verticalAlign="middle" lineBreak="toFit"
              maxDisplayedLines="-1" useHandCursor="true" buttonMode="true">
     </s:Label>

@@ -19,6 +19,7 @@ package com.module.control
 			addCommand( LoginEvent.SIGN_IN, LoginCommand );
 			
 			addCommand( DataListEvent.GET_USERTYPE_LIST, DataListCommand );
+			addCommand( DataListEvent.GET_BRANCH_LIST, DataListCommand );
 			
 			addCommand( UserEvent.ADD_USER, UserCommand );
 			addCommand( UserEvent.EDIT_USER, UserCommand );
@@ -45,6 +46,20 @@ package com.module.control
 			addCommand( ItemsTransEvent.DELETE_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.SEARCH_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_QUOTE_DETAILS, ItemsTransCommand );
+			
+			addCommand( ItemsTransEvent.ADD_REQUISITION, ItemsTransCommand );
+			addCommand( ItemsTransEvent.EDIT_REQUISITION, ItemsTransCommand );
+			addCommand( ItemsTransEvent.DELETE_REQUISITION, ItemsTransCommand );
+			addCommand( ItemsTransEvent.SEARCH_REQUISITION, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_REQUISITION_DETAILS, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_REQUISITION_NUMBER, ItemsTransCommand );
+			
+			addCommand( ItemsTransEvent.ADD_PURORD, ItemsTransCommand );
+			addCommand( ItemsTransEvent.EDIT_PURORD, ItemsTransCommand );
+			addCommand( ItemsTransEvent.DELETE_PURORD, ItemsTransCommand );
+			addCommand( ItemsTransEvent.SEARCH_PURORD, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_PURORD_DETAILS, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_PURORD_NUMBER, ItemsTransCommand );
 		}
 	}
 }

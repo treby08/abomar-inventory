@@ -21,6 +21,20 @@ package com.module.events
 		public static var SEARCH_QUOTE:String = "search_quote";
 		public static var GET_QUOTE_DETAILS:String = "get_quote_details";
 		
+		public static var ADD_REQUISITION:String = "add_requisition";
+		public static var EDIT_REQUISITION:String = "edit_requisition";
+		public static var DELETE_REQUISITION:String = "delete_requisition";
+		public static var SEARCH_REQUISITION:String = "search_requisition";
+		public static var GET_REQUISITION_DETAILS:String = "get_requisition_details";
+		public static var GET_REQUISITION_NUMBER:String = "get_requisition_number";
+		
+		public static var ADD_PURORD:String = "add_purord";
+		public static var EDIT_PURORD:String = "edit_purord";
+		public static var DELETE_PURORD:String = "delete_purord";
+		public static var SEARCH_PURORD:String = "search_purord";
+		public static var GET_PURORD_DETAILS:String = "get_purord_details";
+		public static var GET_PURORD_NUMBER:String = "get_purord_number";
+		
 		public var params:Object;
 		
 		public function ItemsTransEvent(type:String, _params:Object = null,bubbles:Boolean=false, cancelable:Boolean=false)
