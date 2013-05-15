@@ -385,7 +385,7 @@ package com.module.business
 			if(params.sBox)
 				params.sBox = null;
 			trace("purchaseOrd_AED",_params.type);
-			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PURCHASE_REQ_SERVICE);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PURCHASE_ORD_SERVICE);
 			var token:AsyncToken = service.send(params);
 			var responder:mx.rpc.Responder = new mx.rpc.Responder(purchaseOrd_AED_onResult, Main_onFault);
 			token.addResponder(responder);
