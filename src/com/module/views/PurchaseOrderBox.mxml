@@ -8,7 +8,7 @@
 			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.renderer.QuoteRenderer;
+			import com.module.renderer.PurchaseOrdRenderer;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -48,9 +48,10 @@
 					cmbProd.dataProvider = arr;
 					cmbProd.labelFunction = mycmbProdLabelFunction;
 				}else if (type == 1){
-					dataCollection = arr
-					//cmbQuote.dataProvider = arr;
-					//cmbQuote.labelFunction = mycmbQuoteLabelFunction;
+					//dataCollection = arr
+					
+					cmbDeliver.dataProvider = arr;
+					cmbDeliver.labelFunction = mycmbDeliverLabelFunction;
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					numItems.text = "0";
@@ -79,15 +80,25 @@
 				}
 				
 				if (arrCol.length > 0){
-					var itemUser:QuoteRenderer;
+					var itemUser:PurchaseOrdRenderer;
 					for each (var obj:Object in arrCol){
-						itemUser = new QuoteRenderer()
+						itemUser = new PurchaseOrdRenderer()
 						itemUser.data = obj;
 						itemUser.theBox = this
 						dgSearch.addElement(itemUser);
 					}
 				}
 			}
+			
+			/* public function setSelectedBranch(bID:String):void{
+				for each (var item:Object in cmbBranch.dataProvider as ArrayCollection){
+					trace(item.branchID," == ",bID)
+					if (item.branchID == bID){
+						cmbBranch.selectedItem = item;
+						break;
+					}	
+				}
+			} */
 			
 			public function removeItemHandler(obj:Object):void{
 				txtSubtot.text = roundDec(Number(txtSubtot.text)- obj.total).toFixed(2);
@@ -103,8 +114,8 @@
 			private function mycmbCusLabelFunction(item:Object):String{
 				return (item)?item.fname +" "+item.lname+" ("+item.businame:")";
 			}
-			private function mycmbQuoteLabelFunction(item:Object):String{
-				return (item)?"Q#"+item.quoteLabel +" - "+item.customer +" - "+item.branchName:"";
+			private function mycmbDeliverLabelFunction(item:Object):String{
+				return (item)?item.bCode:"";
 			}
 			
 			protected function cmbProdchangeHandler(event:IndexChangeEvent):void
@@ -242,11 +253,11 @@
 			protected function btnNewclickHandler(event:MouseEvent):void
 			{
 				if (dg.dataProvider != null){
-					Alert.show("Are you sure to create a new transaction?","Transaction not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
+					Alert.show("Are you sure to create a new Purchase Order?","Purchase Order not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
 				}else{
 					_type = 0;
 					mainCont.enabled = true;
-					btnCheckOut.label = "Submit Requisition";
+					btnCheckOut.label = "Submit Purchase Order";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
@@ -256,7 +267,7 @@
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				_type = 1;
-				btnCheckOut.label = "Save Requisition Changes";
+				btnCheckOut.label = "Save Purchase Order Changes";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 				mainCont.enabled = true;
 			}
@@ -265,7 +276,7 @@
 				if (event.detail == Alert.YES){
 					_type = 0;
 					mainCont.enabled = true;
-					btnCheckOut.label = "Submit Requisition";
+					btnCheckOut.label = "Submit Purchase Order";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
@@ -341,11 +352,6 @@
 					<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0xCCCCCC" clipAndEnableScrolling="true"/>
 				</s:Scroller>
 			</s:Group>
-			<mx:HRule width="100%" height="3"/>
-			<s:HGroup width="100%" gap="5" verticalAlign="middle" fontSize="14" >
-				<s:Label text="Total Quote: "/>
-				<s:Label id="totCount" text="0"/>
-			</s:HGroup>
 		</s:BorderContainer>
 	</s:HGroup>
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
@@ -360,7 +366,7 @@
 					<s:VGroup  width="45%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="25" paddingRight="25">
 						<s:HGroup  width="100%" verticalAlign="middle">
 							<s:Label text="Supplier" width="90" textAlign="right"/>
-							<s:DropDownList id="cmbBranch" width="100%" />
+							<s:DropDownList id="cmbSupplier" width="100%" />
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Invoice To" width="90" textAlign="right"/>
@@ -416,8 +422,15 @@
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="20" itemRenderer="com.module.renderer.IncludeItemRenderer" editable="false"/>
-						<s:GridColumn width="45" dataField="num" headerText="Item" editable="false"/>
-						<s:GridColumn dataField="qty" headerText="Qty" width="80"  editable="true"/>
+						<s:GridColumn width="45" dataField="num" headerText="No." editable="false"/>
+						<s:GridColumn dataField="qty" headerText="Qty" width="60"  editable="true">
+							<s:headerRenderer>
+								<fx:Component>
+									<s:DefaultGridHeaderRenderer textAlign="center"/>
+								</fx:Component>
+							</s:headerRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="unit" headerText="Unit" width="65"  editable="false"/>
 						<s:GridColumn dataField="modelNo" headerText="Item / Model No.">
 							<s:itemRenderer>
 								<fx:Component>
@@ -425,7 +438,13 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						
+						<s:GridColumn dataField="weight" headerText="WT" width="60"  editable="false">
+							<s:headerRenderer>
+								<fx:Component>
+									<s:DefaultGridHeaderRenderer textAlign="center"/>
+								</fx:Component>
+							</s:headerRenderer>
+						</s:GridColumn>
 						<s:GridColumn dataField="price" headerText="Price" width="180"  editable="false">
 							<s:itemRenderer>
 								<fx:Component>
@@ -443,10 +462,15 @@
 					</s:ArrayList>
 				</s:columns>
 			</s:DataGrid>
-			<s:HGroup width="100%" verticalAlign="bottom" fontSize="14">
+			<s:HGroup width="100%" verticalAlign="bottom" fontSize="14" paddingTop="3" paddingBottom="3">
 				<s:Label text="Number of Items: "/>
 				<s:Label id="numItems" text="0"/>
 				<s:Spacer width="100%"/>
+				<s:HGroup width="330" height="100%" paddingTop="2" paddingLeft="2" fontWeight="bold">
+					<s:Label text="Total Weight: "/>
+					<s:Label id="totWeight" text="0"/>
+					<s:Label text="kg"/>
+				</s:HGroup>
 				<s:VGroup width="40%">
 					<s:HGroup width="100%">
 						<s:Label text="Subtotal" width="90"/>
@@ -466,11 +490,11 @@
 		<mx:HRule height="5" width="100%"/>
 		<s:HGroup id="hgControl" width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
 				  horizontalAlign="left" verticalAlign="middle">						
-			<s:Button id="btnCheckOut" label="Submit Requisition" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnCheckOut" label="Submit Purchase Order" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
-			<s:Button id="btnNew"  label="New Requisition" click="btnNewclickHandler(event)"/>
-			<s:Button id="btnEdit"  label="Edit Requisition" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
-			<!--<s:Button id="btnView"  label="View Requisition" click="printPrevPO()" visible="false" includeInLayout="false"/>-->
+			<s:Button id="btnNew"  label="New Purchase Order" click="btnNewclickHandler(event)"/>
+			<s:Button id="btnEdit"  label="Edit Purchase Order" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnView"  label="View Purchase Order" click="printPrevPO()" visible="false" includeInLayout="false"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>
