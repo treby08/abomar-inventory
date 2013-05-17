@@ -120,7 +120,7 @@
 					var addUser:DataListEvent = new DataListEvent(DataListEvent.ADD_BRANCH,obj);
 					CairngormEventDispatcher.getInstance().dispatchEvent(addUser);
 				}else{
-					obj.custID = _data.custID;
+					obj.branchID = _data.branchID;
 					obj.cpnl = this;
 					_fromUpdate = true;
 					var editUser:DataListEvent = new DataListEvent(DataListEvent.EDIT_BRANCH,obj);

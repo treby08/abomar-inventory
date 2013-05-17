@@ -74,6 +74,12 @@
 				/* _theBox.btnSave.label = "Update";
 				_theBox.btnSave.visible = true;
 				_theBox.btnClear.label = "Reset to Default"; */
+				_theBox.btnSave.visible = _theBox.btnSave.includeInLayout = false;
+				_theBox.btnNewCus.visible = _theBox.btnNewCus.includeInLayout = true;
+				_theBox.mainCont.enabled = false;
+				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				_theBox.btnOrdHis.visible = _theBox.btnOrdHis.includeInLayout = true;
+				_theBox.btnClear.visible = _theBox.btnClear.includeInLayout = false;
 				_theBox.owner = this;
 			}
 			
