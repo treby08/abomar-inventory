@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.flexlib.controls.tabBarClasses.SuperTab;
+			import com.module.views.BranchBox;
 			import com.module.views.CustomerBox;
 			import com.module.views.CustomerListBox;
 			import com.module.views.InventoryBox;
@@ -141,11 +142,11 @@
 							_cnv.label = "Purchase Order";
 						}
 					break;
-					/* case 5:
-						objBox = new InventoryBox();
-						_cnv.label = "Inventory";
+					case 5:
+						objBox = new BranchBox();
+						_cnv.label = "Branches";
 					break;
-					case 6:
+					/* case 6:
 						objBox = new ReportBox();
 						_cnv.label = "Report";
 					break; */

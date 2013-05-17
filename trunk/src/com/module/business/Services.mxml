@@ -8,6 +8,7 @@
 		    public static var  LOGIN_SERVICE:String = "login_service";
 		    public static var  USER_TYPE_LIST:String = "user_type_list";
 		    public static var  BRANCH_LIST:String = "branch_list";
+		    public static var  BRANCH_SERVICE:String = "branch_service";
 		    public static var  USER_SERVICE:String = "user_service";
 		    public static var  CUSTOMER_SERVICE:String = "customer_service";
 		    public static var  PRODUCT_SERVICE:String = "product_service";
@@ -35,6 +36,10 @@
 		showBusyCursor="true" />
 	<mx:HTTPService id="branch_list"
 		url="{SecurityType.HTTP_HOST+'/branchList.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="branch_service"
+		url="{SecurityType.HTTP_HOST+'/branchAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="user_service"

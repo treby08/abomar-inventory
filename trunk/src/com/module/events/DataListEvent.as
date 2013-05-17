@@ -7,7 +7,12 @@ package com.module.events
 	public class DataListEvent extends CairngormEvent
 	{
 		public static var GET_USERTYPE_LIST:String = "get_usertype_list";
+		
 		public static var GET_BRANCH_LIST:String = "get_branch_list";
+		public static var ADD_BRANCH:String = "add_branch";
+		public static var EDIT_BRANCH:String = "edit_branch";
+		public static var DELETE_BRANCH:String = "del_branch";
+		public static var SEARCH_BRANCH:String = "search_branch";
 		
 		public var params:Object;
 		

@@ -95,6 +95,7 @@
 				<main name="Customer" code="cus_lst"/>	
 				<main name="Products" code="inv_pl" icon="assets/icons/icon_inv.png"/>
 				<main name="Supplier" code="pur_vl"/>
+				<main name="Branch" code="branch"/>
 				
 				<main icon="assets/icons/icon_report.png" name="Report">
 					<sub name="Inventory Reports">
@@ -178,6 +179,9 @@
 					break;
 					case "inv_pl":		
 						AccessVars.instance().mainApp.appChange(null,2,String(item.@code));
+					break;
+					case "branch":		
+						AccessVars.instance().mainApp.appChange(null,5,String(item.@code));
 					break;
 				}
 			}

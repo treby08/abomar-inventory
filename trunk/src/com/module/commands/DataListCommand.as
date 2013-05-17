@@ -14,6 +14,7 @@ package com.module.commands
 		
 		public function execute(event:CairngormEvent):void
 		{
+			var obj:Object = (event as DataListEvent).params
 			switch(event.type){
 				case DataListEvent.GET_USERTYPE_LIST:
 					DataListDelegate.instance().getUserlist((event as DataListEvent).params);
@@ -21,6 +22,23 @@ package com.module.commands
 				
 				case DataListEvent.GET_BRANCH_LIST:
 					DataListDelegate.instance().getBranchlist((event as DataListEvent).params);
+				break;
+				
+				case DataListEvent.ADD_BRANCH:
+					obj.type = "add";
+					DataListDelegate.instance().branchAED((event as DataListEvent).params);
+				break;
+				case DataListEvent.EDIT_BRANCH:
+					obj.type = "edit";
+					DataListDelegate.instance().branchAED((event as DataListEvent).params);
+				break;
+				case DataListEvent.DELETE_BRANCH:
+					obj.type = "delete";
+					DataListDelegate.instance().branchAED((event as DataListEvent).params);
+				break;
+				case DataListEvent.SEARCH_BRANCH:
+					obj.type = "search";
+					DataListDelegate.instance().branchAED((event as DataListEvent).params);
 				break;
 				
 			}
