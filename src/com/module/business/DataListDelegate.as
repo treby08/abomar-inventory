@@ -5,6 +5,7 @@ package com.module.business
 	import com.variables.SecurityType;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
@@ -22,6 +23,7 @@ package com.module.business
 		}
 		
 		private var _profPanel:Object;
+		private var _params:Object;
 		
 		public function getUserlist(params:Object):void{
 			_profPanel = params;
@@ -63,6 +65,76 @@ package com.module.business
 		}
 		private function Main_onFault(evt:FaultEvent):void{
 			trace(evt.message)
+		}
+		
+		public function branchAED(params:Object):void{
+			_params = params;
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.BRANCH_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(branchAED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function branchAED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("branchAED_onResult",strResult);
+			
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+				case "edit":
+					str="Updating";
+					break;
+				case "delete":
+					str="Deleting";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Branch Error: "+strResult,"Error");
+				return;
+			}
+			
+			if (str){
+				Alert.show(str+" Branch Complete.", str+" Branch",4,null,function():void{
+					if (_params.pBox){
+						_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}
+					_params = null;
+				});
+			}else{
+				var listXML:XML = XML(evt.result);
+				var arrCol:ArrayCollection = new ArrayCollection()
+				var arrObj:Object = {}
+				for each (var obj:XML in listXML.children()){
+					arrObj = {}
+					arrObj.branchID = obj.@branchID;
+					arrObj.bCode = obj.@bCode;
+					arrObj.bLoc = obj.@bLoc;
+					arrObj.address = obj.address;
+					arrObj.desig = obj.@desig;
+					arrObj.conPerson = obj.@conPerson;					
+					arrObj.phoneNum = obj.@bPhoneNum;
+					arrObj.mobileNum = obj.@bMobileNum;
+					arrObj.email = obj.@bEmailAdd;
+					arrObj.LocMap = obj.@bLocMap;					
+					
+					arrCol.addItem(arrObj);
+				}
+				/*if (_params.qBox){
+					_params.qBox.setDataProvider(arrCol,1);
+					_params.qBox = null;
+					_params = null;
+				}else */
+				if (_params.sBox){
+					_params.sBox.dataCollection = arrCol;
+					_params.sBox = null;
+					_params = null;
+				}
+			}
 		}
 	}
 }

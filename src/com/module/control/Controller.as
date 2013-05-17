@@ -20,6 +20,10 @@ package com.module.control
 			
 			addCommand( DataListEvent.GET_USERTYPE_LIST, DataListCommand );
 			addCommand( DataListEvent.GET_BRANCH_LIST, DataListCommand );
+			addCommand( DataListEvent.ADD_BRANCH, DataListCommand );
+			addCommand( DataListEvent.EDIT_BRANCH, DataListCommand );
+			addCommand( DataListEvent.DELETE_BRANCH, DataListCommand );
+			addCommand( DataListEvent.SEARCH_BRANCH, DataListCommand );
 			
 			addCommand( UserEvent.ADD_USER, UserCommand );
 			addCommand( UserEvent.EDIT_USER, UserCommand );
