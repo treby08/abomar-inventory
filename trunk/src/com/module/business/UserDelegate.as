@@ -4,6 +4,7 @@ package com.module.business
 	import com.module.views.CustomerListBox;
 	import com.module.views.ProfilePanel;
 	import com.module.views.SalesBox;
+	import com.module.views.SupplierBox;
 	import com.module.views.UserBox;
 	import com.variables.AccessVars;
 	import com.variables.SecurityType;
@@ -41,6 +42,14 @@ package com.module.business
 			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.CUSTOMER_SERVICE);
 			var token:AsyncToken = service.send(params);
 			var responder:mx.rpc.Responder = new mx.rpc.Responder(Customer_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		public function supplier_AED(params:Object):void{
+			_params = params;
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.SUPPLIER_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(supplier_AED_onResult, Main_onFault);
 			token.addResponder(responder);
 		}
 		
@@ -143,6 +152,70 @@ package com.module.business
 			}
 			
 		}
+		private function supplier_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("supplier_AED_onResult",strResult);
+			trace("_params.type:",_params.type)
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Add";
+					break;
+				case "edit":
+					str="Edit";
+					break;
+				case "delete":
+					str="Delete";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show("Supplier "+str+" Error: "+strResult,"Error");
+				_params.qBox.hgControl.enabled = true;
+				return;
+			}
+			var listXML:XML;
+			var arrCol:ArrayCollection;
+			var obj:XML;
+			if (str){
+				Alert.show(str+" Supplier Complete.", str+" Supplier",4,null,function():void{
+					if (_params.qBox){
+						_params.qBox.clearFields(null);
+						_params.qBox.hgControl.enabled = true;
+						_params.qBox = null;
+					}
+					_params = null;
+				});
+			}else if (_params.type=="search"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection()
+				for each (obj in listXML.children()){
+					arrCol.addItem({supID:obj.@supID,supCode:obj.@supCode,compName:obj.@compName,creditLine:obj.@creditLine,address:obj.@address,
+						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
+						email:obj.@email,isLocal:obj.@isLocal})
+				}
+				if (_params.qBox){
+					(_params.qBox as SupplierBox).dataCollection = arrCol;
+					(_params.qBox as SupplierBox).totCount.text = String(arrCol.length);
+					//_params.dg as .cmbUserType.dataProvider =AccessVars.instance().userType = arrCol;
+				}
+			}else if (_params.type=="get_list"){
+				listXML =  XML(evt.result);
+				arrCol = new ArrayCollection()
+				for each (obj in listXML.children()){
+					arrCol.addItem({supID:obj.@supID,supCode:obj.@supCode,compName:obj.@compName,creditLine:obj.@creditLine,address:obj.@address,
+						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
+						email:obj.@email,isLocal:obj.@isLocal})
+				}
+				if (_params.qBox){ 
+					_params.qBox.setDataProvider(arrCol,4);
+					_params.qBox = null;
+					_params = null;
+				}
+			}
+			
+		}
+		
 		private function Main_onFault(evt:FaultEvent):void{
 			trace(evt.message)
 		}

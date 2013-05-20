@@ -8,7 +8,14 @@
 			import mx.collections.ArrayCollection;			
 			import spark.components.DataGrid;
 			
-			
+			override public function prepare(hasBeenRecycled:Boolean):void {
+				if (cb && data){
+					if (data.isSelected =="1")
+						cb.selected = true;
+					else if (data.isSelected =="0")
+						cb.selected = false;
+				}
+			}
 			protected function removeclickHandler(event:MouseEvent):void
 			{
 				var dg:DataGrid = (parent.parent.parent.parent.parent.parent.parent.parent.parent as DataGrid);
@@ -21,6 +28,6 @@
 		]]>
 	</fx:Script>
 	<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
-		<s:CheckBox toolTip="Include Item" useHandCursor="true" buttonMode="true" selected="true" click="removeclickHandler(event)"/>
+		<s:CheckBox id="cb" toolTip="Include Item" useHandCursor="true" buttonMode="true" selected="true" click="removeclickHandler(event)"/>
 	</s:HGroup>	
 </s:GridItemRenderer>

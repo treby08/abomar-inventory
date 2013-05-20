@@ -16,6 +16,12 @@ package com.module.events
 		public static var DELETE_CUSTOMER:String = "delete_customer";
 		public static var SEARCH_CUSTOMER:String = "search_customer";
 		
+		public static var ADD_SUPPLIER:String = "add_supplier";
+		public static var EDIT_SUPPLIER:String = "edit_supplier";
+		public static var DELETE_SUPPLIER:String = "delete_supplier";
+		public static var SEARCH_SUPPLIER:String = "search_supplier";
+		public static var GET_SUPPLIER_LIST:String = "get_supplier_list";
+		
 		public var params:Object;
 		
 		public function UserEvent(type:String, _params:Object = null,bubbles:Boolean=false, cancelable:Boolean=false)

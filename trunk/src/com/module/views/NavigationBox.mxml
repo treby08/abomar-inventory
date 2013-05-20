@@ -92,10 +92,10 @@
 					<sub name="Sales Order List" code="sal_sol"/>
 				</main>
 				
-				<main name="Customer" code="cus_lst"/>	
+				<main name="Customers" code="cus_lst"/>	
 				<main name="Products" code="inv_pl" icon="assets/icons/icon_inv.png"/>
-				<main name="Supplier" code="pur_vl"/>
-				<main name="Branch" code="branch"/>
+				<main name="Suppliers" code="supplier"/>
+				<main name="Branches" code="branch"/>
 				
 				<main icon="assets/icons/icon_report.png" name="Report">
 					<sub name="Inventory Reports">
@@ -182,6 +182,9 @@
 					break;
 					case "branch":		
 						AccessVars.instance().mainApp.appChange(null,5,String(item.@code));
+					break;
+					case "supplier":		
+						AccessVars.instance().mainApp.appChange(null,6,String(item.@code));
 					break;
 				}
 			}

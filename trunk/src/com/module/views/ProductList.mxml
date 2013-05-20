@@ -9,6 +9,7 @@
 			import com.customComponents.ProgBarforImage;
 			import com.flexlib.controls.Base64Image;
 			import com.module.events.ItemsTransEvent;
+			import com.module.events.UserEvent;
 			import com.module.renderer.ProductRenderer;
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
@@ -114,6 +115,9 @@
 			{
 				btnSave.addEventListener(MouseEvent.CLICK,updateClickHandler);
 				btnClear.addEventListener(MouseEvent.CLICK,clearFields);
+				
+				var log4:UserEvent = new UserEvent(UserEvent.GET_SUPPLIER_LIST,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log4);
 				//var d:Date = new Date();
 				dfDate.selectedDate = new Date(); 
 			}
@@ -145,6 +149,17 @@
 					}
 				}
 			}
+			public function setDataProvider(arr:ArrayCollection,type:int):void{
+				if (type == 4){
+					//dataCollection = arr
+					cmbSupplier.dataProvider = arr;
+					cmbSupplier.labelFunction = mycmbSupplierLabelFunction;
+					cmbSupplier.validateNow();
+				}
+			}
+			private function mycmbSupplierLabelFunction(item:Object):String{
+				return (item)?item.supCode+" - "+item.compName:"";
+			}
 			
 			protected function newProdClickHandler(event:MouseEvent):void
 			{
@@ -166,8 +181,9 @@
 					_data.modelNo = txtItemModNo.text;
 					_data.pCode = txtItemCode.text;
 					_data.subNum = txtSubNum.text;
+					_data.desc = txtDesc.text
 					_data.comModUse = txtComModUse.text;
-					_data.supplier = txtSupplier.text;
+					_data.supplier = cmbSupplier.selectedItem.supID;
 					_data.remarks = cbNotCD.selected+"|"+cbNotAvail.selected+"|"+cbOthers.selected+"|"+txtOthers.text;
 					_data.pDate = setDateFormat(dfDate.selectedDate);
 					_data.factor = txtFactor.text;
@@ -197,10 +213,11 @@
 					txtLstPrice.text = "0.00";
 					txtDealPrice.text = "0.00";
 					txtSRP.text = "0.00";
-					txtSupplier.text = "";
+					cmbSupplier.selectedIndex = -1;
 					txtWeight.text = "";
 					txtSize.text = "";
 					txtSubNum.text = "";
+					txtDesc.text = "";
 					txtComModUse.text = "";	
 					txtFactor.text = "";
 					dfDate.selectedDate = null;
@@ -229,7 +246,8 @@
 					txtItemCode.text = _data.pCode;
 					txtSubNum.text = _data.subNum;
 					txtComModUse.text = _data.comModUse;
-					txtSupplier.text = _data.supplier;
+					txtDesc.text = _data.desc;
+					cmbSupplier.selectedItem = setSelectedSupplier(_data.supplier);
 					txtFactor.text = _data.factor;
 					var arr:Array = String(_data.pDate).split("-");
 					dfDate.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
@@ -261,6 +279,19 @@
 					
 					imgProd.unloadAndStop();
 					imgProd.source = _data.imgPath!=""?SecurityType.IMG_PATH+_data.imgPath:DEF_IMG;
+				}
+			}
+			
+			public function setSelectedSupplier(supID:String):void{
+				var i:int=0;
+				for each (var item:Object in cmbSupplier.dataProvider as ArrayCollection){
+					trace(item.supID," == ",supID)
+					if (item.supID == supID){
+						cmbSupplier.selectedItem = item;
+						cmbSupplier.selectedIndex = i;
+						break;
+					}	
+					i++;
 				}
 			}
 			
@@ -344,8 +375,9 @@
 				obj.modelNo = txtItemModNo.text;
 				obj.pCode = txtItemCode.text;
 				obj.subNum = txtSubNum.text;
+				obj.desc = txtDesc.text;
 				obj.comModUse = txtComModUse.text;
-				obj.supplier = txtSupplier.text;
+				obj.supplier = cmbSupplier.selectedItem.supID;
 				obj.remarks = cbNotCD.selected+"|"+cbNotAvail.selected+"|"+cbOthers.selected+"|"+txtOthers.text;
 				obj.pDate = setDateFormat(dfDate.selectedDate);
 				obj.factor = txtFactor.text;
@@ -538,12 +570,16 @@
 								<s:TextInput id="txtSubNum" width="100%"/>
 							</s:HGroup>
 							<s:HGroup  width="100%" verticalAlign="middle">
+								<s:Label text="Description" width="130" textAlign="right"/>
+								<s:TextArea id="txtDesc" width="100%" height="50"/>
+							</s:HGroup>
+							<s:HGroup  width="100%" verticalAlign="middle">
 								<s:Label text="Common model use" width="130" textAlign="right"/>
 								<s:TextInput id="txtComModUse" width="100%"/>
 							</s:HGroup>
 							<s:HGroup width="100%" verticalAlign="middle">
 								<s:Label text="Supplier" width="130" textAlign="right"/>
-								<s:TextInput id="txtSupplier" width="100%"/>
+								<s:DropDownList id="cmbSupplier" width="100%" prompt="[Select Supplier]" open="cmbSupplier.skin['dropDown'].owner = this"/>
 							</s:HGroup>
 							<s:HGroup width="100%" verticalAlign="middle" gap="5">
 								<s:Label text="Remarks" width="130" textAlign="right"/>
@@ -575,7 +611,7 @@
 									<s:VGroup paddingLeft="5" paddingRight="5">
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Weight" textAlign="right"/>
-											<s:TextInput id="txtWeight" width="100%"/>
+											<s:TextInput id="txtWeight" width="100%" restrict="0-9."/>
 										</s:HGroup>
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Size" textAlign="right"/>

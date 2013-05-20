@@ -221,7 +221,7 @@
 					</s:HGroup>
 					<s:HGroup  width="100%">
 						<s:Label text="Weight:" width="90"/>
-						<s:TextInput id="txtWeight" width="100%"/>
+						<s:TextInput id="txtWeight" width="100%" restrict="0-9."/>
 						<s:Label text="Size:" width="90"/>
 						<s:TextInput id="txtSize" width="100%"/>
 					</s:HGroup>

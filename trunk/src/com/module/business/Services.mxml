@@ -11,6 +11,7 @@
 		    public static var  BRANCH_SERVICE:String = "branch_service";
 		    public static var  USER_SERVICE:String = "user_service";
 		    public static var  CUSTOMER_SERVICE:String = "customer_service";
+		    public static var  SUPPLIER_SERVICE:String = "supplier_service";
 		    public static var  PRODUCT_SERVICE:String = "product_service";
 		    public static var  SALES_SERVICE:String = "sales_service";
 		    public static var  QOUTE_SERVICE:String = "qoute_service";
@@ -48,6 +49,10 @@
 		showBusyCursor="true" />
 	<mx:HTTPService id="customer_service"
 		url="{SecurityType.HTTP_HOST+'/customerAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="supplier_service"
+		url="{SecurityType.HTTP_HOST+'/supplierAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="product_service"

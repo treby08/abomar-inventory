@@ -49,6 +49,27 @@ package com.module.commands
 					UserDelegate.instance().Customer_AED(obj);
 					break;
 				
+				case UserEvent.ADD_SUPPLIER:
+					obj.type = "add";
+					UserDelegate.instance().supplier_AED(obj);
+					break;
+				case UserEvent.EDIT_SUPPLIER:
+					obj.type = "edit";
+					UserDelegate.instance().supplier_AED(obj);
+					break;
+				case UserEvent.DELETE_SUPPLIER:
+					obj.type = "delete";
+					UserDelegate.instance().supplier_AED(obj);
+					break;
+				case UserEvent.SEARCH_SUPPLIER:
+					obj.type = "search";
+					UserDelegate.instance().supplier_AED(obj);
+					break;
+				case UserEvent.GET_SUPPLIER_LIST:
+					obj.type = "get_list";
+					UserDelegate.instance().supplier_AED(obj);
+					break;
+				
 			}
 		}
 	}
