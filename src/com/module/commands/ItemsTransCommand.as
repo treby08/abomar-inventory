@@ -96,7 +96,7 @@ package com.module.commands
 				break;
 				case ItemsTransEvent.GET_REQUISITION_NUMBER:
 					obj.type = "get_req_no";
-					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+					ItemsTransDelegate.instance().purchaseReq_ReqNo(obj);
 				break;
 				
 				/*PURCHASE Order*/
@@ -123,7 +123,7 @@ package com.module.commands
 					break;
 				case ItemsTransEvent.GET_PURORD_NUMBER:
 					obj.type = "get_req_no";
-					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					ItemsTransDelegate.instance().purchaseOrd_ReqNo(obj);
 					break;
 			}
 		}

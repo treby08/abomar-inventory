@@ -3,19 +3,21 @@
 	
 	$type = $_REQUEST['type'];
 	if ($type == "add" || $type == "edit"){
-		$fname = $_REQUEST['fname'];
-		$mname = $_REQUEST['mname'];
-		$lname = $_REQUEST['lname'];
+		$acctno = $_REQUEST['acctno'];
+		$branchID = $_REQUEST['branchId'];
+		$creditLine = $_REQUEST['creditLine'];
 		$address = $_REQUEST['address'];
 		$phoneNum = $_REQUEST['phoneNum'];
 		$mobileNum = $_REQUEST['mobileNum'];
 		$tin = $_REQUEST['tin'];
-		$businame = $_REQUEST['businame'];
-		$baddress = $_REQUEST['baddress'];
-		$bPhoneNum = $_REQUEST['bPhoneNum'];
+		$term = $_REQUEST['term'];
+		$inactive = $_REQUEST['inactive'];
+		
+		$conPerson = $_REQUEST['conPerson'];
+		$desig = $_REQUEST['desig'];
 		$bMobileNum = $_REQUEST['bMobileNum'];
 		$email = $_REQUEST['email'];
-		$gender = $_REQUEST['gender'];
+		$web = $_REQUEST['web'];
 		if ($type == "edit")
 			$custID = $_REQUEST['custID'];
 	}else if ($type == "delete")
@@ -24,22 +26,24 @@
 		$searchSTR = $_REQUEST['searchstr'];
 	
 	if ($type == "add"){
-		$query = mysql_query("SELECT lname FROM customers WHERE lname='$lname' AND mname='$mname' AND  fname='$fname'",$conn);
+		$query = mysql_query("SELECT acctno FROM customers WHERE acctno='$acctno' AND conPerson='$conPerson'",$conn);
 		if (mysql_num_rows($query) > 0){
-			echo "$fname $mname $lname Already Exist";
+			echo "$conPerson - $acctno Already Exist";
 		}else{
-			$query = mysql_query("INSERT INTO customers (fname, mname, lname, address, phoneNum, mobileNum, tin, businame, baddress, bPhoneNum, bMobileNum, email, gender) VALUES (\"$fname\", \"$mname\", \"$lname\", \"$address\", \"$phoneNum\", \"$mobileNum\", \"$tin\", \"$businame\", \"$baddress\", \"$bPhoneNum\", \"$bMobileNum\", \"$email\", \"$gender\" )",$conn);
+		
+			$query = mysql_query("INSERT INTO customers (acctno, cus_branchID, address, creditLine, tin, cus_term, conPerson, desig, phoneNum, mobileNum, email, web, isDeleted) VALUES (\"$acctno\", $branchID, \"$address\", \"$creditLine\", \"$tin\", $term, \"$conPerson\", \"$desig\", \"$phoneNum\", \"$mobileNum\",\"$email\", \"$web\", $inactive)",$conn);
 		}
 		
 	}else if ($type == "edit"){
-		mysql_query("UPDATE customers SET fname = '$fname' , mname = '$mname' , lname = '$lname' , address = '$address' , phoneNum = '$phoneNum' , mobileNum = '$mobileNum' , tin = '$tin' , businame = '$businame' , baddress = '$baddress' , bPhoneNum = '$bPhoneNum' , bMobileNum = '$bMobileNum' , email = '$email' , gender = '$gender' WHERE custID = $custID",$conn);
+		mysql_query("UPDATE customers SET acctno = '$acctno' , cus_branchID = $branchID , address = '$address' , creditLine = '$creditLine' , tin = '$tin' , cus_term = '$term' , conPerson = '$conPerson' , desig = '$desig' , phoneNum = '$phoneNum' , mobileNum = '$mobileNum' , email = '$email' , web = '$web' , isDeleted = $inactive WHERE custID = $custID",$conn);
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM customers WHERE custID = '$custID'",$conn);
 	}else if ($type == "search"){
-		$query = mysql_query("SELECT * from customers WHERE fname LIKE '%$searchSTR%' OR lname LIKE '%$searchSTR%' OR mname LIKE '%$searchSTR%' OR businame LIKE '%$searchSTR%'",$conn);
+		$query = mysql_query("SELECT * from customers WHERE acctno LIKE '%$searchSTR%' OR conPerson LIKE '%$searchSTR%'",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item custID=\"".$row['custID']."\" fname=\"".$row['fname']."\" mname=\"".$row['mname']."\" lname=\"".$row['lname']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" businame=\"".$row['businame']."\" baddress=\"".$row['baddress']."\" bPhoneNum=\"".$row['bPhoneNum']."\" bMobileNum=\"".$row['bMobileNum']."\" email=\"".$row['email']."\" sex=\"".$row['gender']."\" />";
+				$inactive = $row['isDeleted']=="1"?"true":"false";
+				$xml .= "<item custID=\"".$row['custID']."\" acctno=\"".$row['acctno']."\" branchId=\"".$row['cus_branchID']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['cus_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" inactive=\"".$inactive."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;

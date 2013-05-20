@@ -66,8 +66,9 @@
 				_theBox.txtItemModNo.text = _data.modelNo;
 				_theBox.txtItemCode.text = _data.pCode;
 				_theBox.txtSubNum.text = _data.subNum;
+				_theBox.txtDesc.text = _data.desc;
 				_theBox.txtComModUse.text = _data.comModUse;
-				_theBox.txtSupplier.text = _data.supplier;
+				_theBox.cmbSupplier.selectedItem = _theBox.setSelectedSupplier(_data.supplier);
 				_theBox.txtFactor.text = _data.factor;
 				trace("_data.pDate",_data.pDate);
 				var arr:Array = String(_data.pDate).split("-");

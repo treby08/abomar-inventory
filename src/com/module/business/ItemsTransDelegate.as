@@ -26,6 +26,7 @@ package com.module.business
 		}
 		
 		private var _params:Object;
+		private var _paramsUniqueID:Object;
 		private var _paramsItems:Object;
 		private var _paramsQuote:Object;
 				
@@ -77,7 +78,7 @@ package com.module.business
 				trace("search",XML(evt.result).toXMLString())
 				for each (var obj:XML in listXML.children()){
 					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,modelNo:obj.@modelNo,remarks:obj.@remarks,stockCnt:obj.@stockCnt,returnable:obj.@returnable,
-						imgPath:obj.@imgPath,supplier:obj.@supplier,weight:obj.@weight,size:obj.@size,subNum:obj.@subNum,
+						imgPath:obj.@imgPath,supplier:obj.@supplier,weight:obj.@weight,size:obj.@size,subNum:obj.@subNum, desc:obj.@desc,
 						comModUse:obj.@comModUse,pDate:obj.@pDate,factor:obj.@factor,inactive:obj.@inactive,listPrice:obj.@listPrice,
 						dealPrice:obj.@dealPrice,srPrice:obj.@srPrice, priceCurr:obj.@priceCurr});
 					
@@ -256,7 +257,7 @@ package com.module.business
 					arrCol.addItem(arrObj);
 				}
 				if (_paramsQuote.qBox){					
-					_paramsQuote.qBox.setDataProvider(arrCol,1);
+					_paramsQuote.qBox.dataCollection = arrCol;
 					_paramsQuote.qBox = null;
 					_paramsQuote = null;
 				}else if (_params.sBox){
@@ -266,8 +267,28 @@ package com.module.business
 				}
 			}
 		}
-		
-		
+		public function purchaseReq_ReqNo(params:Object):void{
+			_paramsUniqueID = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("purchaseReq_ReqNo",params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PURCHASE_REQ_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(purchaseReq_ReqNo_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		private function purchaseReq_ReqNo_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("purchaseReq_ReqNo_onResult",strResult);
+			
+			if (_paramsUniqueID.type=="get_req_no"){
+				if (_paramsUniqueID.qBox){
+					_paramsUniqueID.qBox.txtReqNo.text = String(evt.result);
+					_paramsUniqueID.qBox = null;
+					_paramsUniqueID = null;
+				}	
+			}
+		}
 		public function purchaseReq_AED(params:Object):void{
 			_params = params;
 			if(params.sBox)
@@ -334,9 +355,12 @@ package com.module.business
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodDesc = obj.@desc;
+					arrObj.weight = obj.@weight;
 					arrObj.prodComModUse = obj.@prodComModUse;
-					arrObj.srPrice = obj.@srPrice;
+					arrObj.price = obj.@srPrice;
 					arrObj.num = num;
+					arrObj.isSelected = "1";
 					arrCol.addItem(arrObj);
 					num++;
 				}
@@ -346,12 +370,6 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}
-			}else if (_params.type=="get_req_no"){
-				if (_params.qBox){
-					_params.qBox.txtReqNo.text = String(evt.result);
-					_params.qBox = null;
-					_params = null;
-				}	
 			}else{
 				
 				listXML = XML(evt.result);
@@ -420,7 +438,10 @@ package com.module.business
 			if (str){
 				Alert.show(str+" Purchase Order Complete.", str+" Purchase Order",4,null,function():void{
 					if (_params.pBox){
-						_params.pBox.clearFields(null);
+						if (str == "Adding")
+							_params.pBox.updateCurrentPO();
+						else
+							_params.pBox.clearFields(null);
 						_params.pBox = null;
 					}else if (_params.ppnl){
 						_params.ppnl.parent.removeElement(_params.ppnl);
@@ -447,8 +468,9 @@ package com.module.business
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodComModUse = obj.@prodComModUse;
+					arrObj.weight = obj.@weight;
 					arrObj.srPrice = obj.@srPrice;
-					arrObj.num = num;
+					arrObj.num = num;					
 					arrCol.addItem(arrObj);
 					num++;
 				}
@@ -490,6 +512,26 @@ package com.module.business
 					_params = null;
 				}
 			}
+		}
+		
+		public function purchaseOrd_ReqNo(params:Object):void{
+			_paramsUniqueID = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("purchaseOrd_ReqNo",params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PURCHASE_ORD_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(purchaseOrd_ReqNo_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		private function purchaseOrd_ReqNo_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("purchaseOrd_ReqNo_onResult",strResult);
+			if (_paramsUniqueID.qBox){
+				_paramsUniqueID.qBox.txtReqNo.text = String(evt.result);
+				_paramsUniqueID.qBox = null;
+				_paramsUniqueID = null;
+			}	
 		}
 		
 		private function Main_onFault(evt:FaultEvent):void{

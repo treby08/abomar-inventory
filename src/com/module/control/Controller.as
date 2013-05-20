@@ -35,6 +35,12 @@ package com.module.control
 			addCommand( UserEvent.DELETE_CUSTOMER, UserCommand );
 			addCommand( UserEvent.SEARCH_CUSTOMER, UserCommand );
 			
+			addCommand( UserEvent.ADD_SUPPLIER, UserCommand );
+			addCommand( UserEvent.EDIT_SUPPLIER, UserCommand );
+			addCommand( UserEvent.DELETE_SUPPLIER, UserCommand );
+			addCommand( UserEvent.SEARCH_SUPPLIER, UserCommand );
+			addCommand( UserEvent.GET_SUPPLIER_LIST, UserCommand );
+			
 			addCommand( ItemsTransEvent.ADD_PRODUCT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_PRODUCT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.DELETE_PRODUCT, ItemsTransCommand );

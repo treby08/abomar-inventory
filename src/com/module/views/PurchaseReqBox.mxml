@@ -50,6 +50,7 @@
 				}else if (type == 1){
 					cmbBranch.dataProvider = arr;
 					cmbBranch.labelFunction = mycmbBraLabelFunction;
+					cmbBranch.selectedIndex = 0;
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					dg.validateDisplayList();
@@ -161,7 +162,7 @@
 				var obj:Object = cmbProd.selectedItem;
 				_totalQty +=txtQty.value;
 				
-				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text,total:txtSub.text});
+				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text,total:txtSub.text});
 				dg.dataProvider = arrCol;
 				
 				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
@@ -270,7 +271,7 @@
 				}
 				txtAppBy.text = "";
 				txtPrepBy.text = "";
-				cmbBranch.selectedIndex = -1;
+				cmbBranch.selectedIndex = 0;
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";				
 				txtQty.textDisplay.text = "0";
@@ -281,8 +282,7 @@
 				txtVat.text = "0.00";
 				numItems.text = "0";
 				dg.dataProvider = null;
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				
 				
 				dfDate.selectedDate = new Date(); 
 			}
@@ -352,6 +352,8 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
+					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
 			}
 			
@@ -363,6 +365,8 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
+					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
 			}
 
@@ -485,14 +489,20 @@
 						<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
 						<s:GridColumn width="45" dataField="num" headerText="Item" editable="false"/>
 						<s:GridColumn dataField="qty" headerText="Qty" width="80"  editable="true"/>
-						<s:GridColumn dataField="modelNo" headerText="Item / Model No.">
+						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="150"  editable="false">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="left"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						
+						<s:GridColumn dataField="prodDesc" headerText="Description" editable="false" >
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="left"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
 						<s:GridColumn dataField="price" headerText="Price" width="180"  editable="false">
 							<s:itemRenderer>
 								<fx:Component>

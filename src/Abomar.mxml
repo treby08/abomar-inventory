@@ -20,6 +20,7 @@
 			import com.module.views.ReportBox;
 			import com.module.views.SalesBox;
 			import com.module.views.SalesQuoteBox;
+			import com.module.views.SupplierBox;
 			import com.module.views.UserBox;
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
@@ -146,6 +147,10 @@
 						objBox = new BranchBox();
 						_cnv.label = "Branches";
 					break;
+					case 6:
+						objBox = new SupplierBox();
+						_cnv.label = "Suppliers";
+						break;
 					/* case 6:
 						objBox = new ReportBox();
 						_cnv.label = "Report";

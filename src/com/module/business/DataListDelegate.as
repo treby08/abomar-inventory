@@ -101,6 +101,7 @@ package com.module.business
 				Alert.show(str+" Branch Complete.", str+" Branch",4,null,function():void{
 					if (_params.pBox){
 						_params.pBox.clearFields(null);
+						_params.pBox.hgControl.enabled = true;
 						_params.pBox = null;
 					}
 					_params = null;
@@ -114,7 +115,7 @@ package com.module.business
 					arrObj.branchID = obj.@branchID;
 					arrObj.bCode = obj.@bCode;
 					arrObj.bLoc = obj.@bLoc;
-					arrObj.address = obj.address;
+					arrObj.address = obj.@address;
 					arrObj.desig = obj.@desig;
 					arrObj.conPerson = obj.@conPerson;					
 					arrObj.phoneNum = obj.@bPhoneNum;
