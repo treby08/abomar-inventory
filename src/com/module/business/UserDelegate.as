@@ -177,6 +177,7 @@ package com.module.business
 			var listXML:XML;
 			var arrCol:ArrayCollection;
 			var obj:XML;
+			var arrObj:Object;
 			if (str){
 				Alert.show(str+" Supplier Complete.", str+" Supplier",4,null,function():void{
 					if (_params.qBox){
@@ -189,10 +190,24 @@ package com.module.business
 			}else if (_params.type=="search"){
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection()
+				
 				for each (obj in listXML.children()){
-					arrCol.addItem({supID:obj.@supID,supCode:obj.@supCode,compName:obj.@compName,creditLine:obj.@creditLine,address:obj.@address,
-						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
-						email:obj.@email,isLocal:obj.@isLocal})
+					arrObj = new Object();
+					arrObj.supID = obj.@supID;
+					arrObj.supCode = obj.@supCode;
+					arrObj.compName = obj.@compName;
+					arrObj.creditLine = obj.@creditLine;
+					arrObj.address = obj.@address;
+					arrObj.pNum = obj.@pNum;
+					arrObj.mNum = obj.@mNum;
+					arrObj.tin = obj.@tin;
+					arrObj.term = obj.@term;
+					arrObj.conPerson = obj.@conPerson;
+					arrObj.desig = obj.@desig;
+					arrObj.web = obj.@web;
+					arrObj.email = obj.@email;
+					arrObj.isLocal = obj.@isLocal;
+					arrCol.addItem(arrObj)
 				}
 				if (_params.qBox){
 					(_params.qBox as SupplierBox).dataCollection = arrCol;
@@ -203,9 +218,23 @@ package com.module.business
 				listXML =  XML(evt.result);
 				arrCol = new ArrayCollection()
 				for each (obj in listXML.children()){
-					arrCol.addItem({supID:obj.@supID,supCode:obj.@supCode,compName:obj.@compName,creditLine:obj.@creditLine,address:obj.@address,
-						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
-						email:obj.@email,isLocal:obj.@isLocal})
+					arrObj = new Object();
+					arrObj.supID = obj.@supID;
+					arrObj.supCode = obj.@supCode;
+					arrObj.compName = obj.@compName;
+					arrObj.creditLine = obj.@creditLine;
+					arrObj.address = obj.@address;
+					arrObj.pNum = obj.@pNum;
+					arrObj.mNum = obj.@mNum;
+					arrObj.tin = obj.@tin;
+					arrObj.term = obj.@term;
+					arrObj.conPerson = obj.@conPerson;
+					arrObj.desig = obj.@desig;
+					arrObj.web = obj.@web;
+					arrObj.email = obj.@email;
+					arrObj.isLocal = obj.@isLocal;
+					
+					arrCol.addItem(arrObj)
 				}
 				if (_params.qBox){ 
 					_params.qBox.setDataProvider(arrCol,4);

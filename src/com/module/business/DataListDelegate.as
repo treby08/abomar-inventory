@@ -53,11 +53,25 @@ package com.module.business
 		}
 		
 		private function getBranchlist_onResult(evt:ResultEvent):void{
+			trace("getBranchlist_onResult: ", evt.result)
 			var listXML:XML = XML(evt.result);
-			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrCol:ArrayCollection = new ArrayCollection();
+			var arrObj:Object;
 			for each (var obj:XML in listXML.children()){
-				arrCol.addItem({bCode:obj.@bCode,branchID:obj.@branchID,bLocation:obj.@bLocation,bAddress:obj.@bAddress,bConPerson:obj.@bConPerson,
-					bDesig:obj.@bDesig,bPhoneNum:obj.@bPhoneNum,bMobileNum:obj.@bMobileNum,bEmailAdd:obj.@bEmailAdd,bLocMap:obj.@bLocMap})
+				arrObj = new Object;
+				arrObj.bCode = obj.@bCode;
+				arrObj.branchID = obj.@branchID;
+				arrObj.bLocation = obj.@bLocation;
+				arrObj.bAddress = obj.@bAddress;
+				arrObj.bConPerson = obj.@bConPerson;
+				arrObj.bDesig = obj.@bDesig;
+				arrObj.bPhoneNum = obj.@bPhoneNum;
+				arrObj.bMobileNum = obj.@bMobileNum;
+				arrObj.bEmailAdd = obj.@bEmailAdd;
+				arrObj.bLocMap = obj.@bLocMap;
+				arrObj.label = obj.@bCode+" - "+obj.@bLocation;
+				
+				arrCol.addItem(arrObj)
 			}
 			_profPanel.pBox.setDataProvider(arrCol,1);
 			_profPanel.pBox = null;

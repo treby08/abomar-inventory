@@ -54,9 +54,9 @@
 				}else if (type == 1){
 					//dataCollection = arr
 					cmbDeliver.dataProvider = arr;
-					cmbDeliver.labelFunction = mycmbDeliverLabelFunction;
+					//cmbDeliver.labelFunction = mycmbDeliverLabelFunction;
 					cmbDeliver.selectedIndex = 0;
-					cmbDeliver.validateNow();
+					//cmbDeliver.validateNow();
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					numItems.text = "0";
@@ -336,7 +336,7 @@
 				cmbProd.textInput.text = "";
 				txtQty.textDisplay.text = "0";
 				cmbSupplier.selectedIndex = -1;
-				cmbDeliver.selectedIndex = -1;
+				cmbDeliver.selectedIndex = 0;
 				txtInvoice.text = "";
 				txtPrice.text = "0.00";
 				//txtStock.text = "0.00";
@@ -505,7 +505,7 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Deliver To" width="90" textAlign="right"/>
-							<s:DropDownList id="cmbDeliver" width="100%" />
+							<s:DropDownList id="cmbDeliver" width="100%" labelField="label"/>
 						</s:HGroup>
 					</s:VGroup>
 					
@@ -603,13 +603,14 @@
 			<s:HGroup width="100%" verticalAlign="bottom" fontSize="14" paddingTop="3" paddingBottom="3">
 				<s:Label text="Number of Items: "/>
 				<s:Label id="numItems" text="0"/>
-				<s:Spacer width="100%"/>
+				<s:Spacer width="50%"/>
 				<s:HGroup width="230" height="100%" paddingTop="2" paddingLeft="2" fontWeight="bold">
+					<s:Spacer width="100%"/>
 					<s:Label text="Total Weight: "/>
 					<s:Label id="totWeight" text="0"/>
 					<s:Label text="kg"/>
 				</s:HGroup>
-				<s:VGroup width="40%">
+				<s:VGroup width="50%">
 					<s:HGroup width="100%">
 						<s:Label text="Subtotal" width="90"/>
 						<mx:Text id="txtSubtot" width="100%" text="0.00" textAlign="right"/>
