@@ -53,7 +53,7 @@
 			{
 				
 				_theBox.txtAcctNo.text = _data.acctno;
-				_theBox.cmbOpenBranch.selectedIndex = _theBox.setSelectedItem(_theBox.arrBranch,"branchId",_data.branchId);
+				_theBox.cmbOpenBranch.selectedIndex = _theBox.setSelectedItem(_theBox.arrBranch,"branchID",_data.branchID);
 				_theBox.txtAdd.text = _data.address;
 				_theBox.txtTin.text = _data.tin;
 				_theBox.txtCreditLine.text = _data.creditLine;
