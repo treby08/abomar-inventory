@@ -117,7 +117,7 @@
 				return (item)?item.pCode +" - "+item.modelNo:"";
 			}
 			private function mycmbBraLabelFunction(item:Object):String{
-				return (item)?item.bCode:"";
+				return (item)?item.bCode+" - "+item.bLocation:"";
 			}
 			
 			protected function cmbProdchangeHandler(event:IndexChangeEvent):void
@@ -459,7 +459,7 @@
 							<s:Label text="Quantity" width="115" textAlign="right"/>
 							<s:NumericStepper id="txtQty" width="150" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
 							<s:Button id="btnAdd" label="Add  Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
-							<s:Spacer width="35%"/>
+							<s:Spacer width="10"/>
 							<s:Label text="Net Price"/>
 							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
 						</s:HGroup>

@@ -76,11 +76,30 @@ package com.module.business
 				var listXML:XML = XML(evt.result);
 				var arrCol:ArrayCollection = new ArrayCollection();
 				trace("search",XML(evt.result).toXMLString())
+				var arrObj:Object;
 				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({prodID:obj.@prodID,pCode:obj.@pCode,modelNo:obj.@modelNo,remarks:obj.@remarks,stockCnt:obj.@stockCnt,returnable:obj.@returnable,
-						imgPath:obj.@imgPath,supplier:obj.@supplier,weight:obj.@weight,size:obj.@size,subNum:obj.@subNum, desc:obj.@desc,
-						comModUse:obj.@comModUse,pDate:obj.@pDate,factor:obj.@factor,inactive:obj.@inactive,listPrice:obj.@listPrice,
-						dealPrice:obj.@dealPrice,srPrice:obj.@srPrice, priceCurr:obj.@priceCurr});
+					arrObj = new Object();
+					arrObj.prodID = obj.@prodID;
+					arrObj.pCode = obj.@pCode;
+					arrObj.modelNo = obj.@modelNo;
+					arrObj.remarks = obj.@remarks;
+					arrObj.stockCnt = obj.@stockCnt;
+					arrObj.returnable = obj.@returnable;
+					arrObj.imgPath = obj.@imgPath;
+					arrObj.supplier = obj.@supplier;
+					arrObj.weight = obj.@weight;
+					arrObj.size = obj.@size;
+					arrObj.subNum = obj.@subNum;
+					arrObj.desc = obj.@desc;
+					arrObj.comModUse = obj.@comModUse;
+					arrObj.pDate = obj.@pDate;
+					arrObj.factor = obj.@factor;
+					arrObj.inactive = obj.@inactive;
+					arrObj.listPrice = obj.@listPrice,
+					arrObj.dealPrice = obj.@dealPrice;
+					arrObj.srPrice = obj.@srPrice;
+					arrObj.priceCurr = obj.@priceCurr;
+					arrCol.addItem(arrObj);
 					
 				}
 				if (_paramsItems.pBox){
