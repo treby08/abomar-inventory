@@ -6,6 +6,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.module.events.DataListEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.CustomerRenderer;
 			import com.variables.AccessVars;
@@ -33,7 +34,7 @@
 				if (_fromUpdate){
 					_fromUpdate = false;
 					_data.acctno = txtAcctNo.text;
-					_data.branchId = cmbOpenBranch.selectedItem.branchId;
+					_data.branchID = cmbOpenBranch.selectedItem.branchID;
 					_data.address = txtAdd.text;
 					_data.tin = txtTin.text;
 					_data.creditLine = txtCreditLine.text;
@@ -86,7 +87,7 @@
 			private function resetDefCloseHandler(evt:CloseEvent):void{
 				if (evt.detail == Alert.YES){
 					txtAcctNo.text = _data.acctno;
-					cmbOpenBranch.selectedIndex = setSelectedItem(arrBranch,"branchId",_data.branchId);
+					cmbOpenBranch.selectedIndex = setSelectedItem(arrBranch,"branchID",_data.branchID);
 					txtAdd.text = _data.address;
 					txtTin.text = _data.tin;
 					txtCreditLine.text = _data.creditLine;
@@ -128,7 +129,7 @@
 				
 				var obj:Object = {}
 				obj.acctno = txtAcctNo.text;
-				obj.branchId = cmbOpenBranch.selectedItem.branchId;
+				obj.branchId = cmbOpenBranch.selectedItem.branchID;
 				obj.address = txtAdd.text;
 				obj.tin = txtTin.text;
 				obj.creditLine = txtCreditLine.text;
@@ -197,6 +198,9 @@
 			{
 				btnSave.addEventListener(MouseEvent.CLICK,saveClickHandler);
 				btnClear.addEventListener(MouseEvent.CLICK,clearFields);
+				
+				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 			
 			private var _arrCol:ArrayCollection;
@@ -219,6 +223,16 @@
 						dgSearch.addElement(itemUser);
 						i++;
 					}
+				}
+			}
+			
+			public function setDataProvider(arr:ArrayCollection,type:int):void{
+				if (type == 1){
+					//dataCollection = arr
+					cmbOpenBranch.dataProvider = arrBranch = arr;
+					//cmbDeliver.labelFunction = mycmbDeliverLabelFunction;
+					cmbOpenBranch.selectedIndex = 0;
+					//cmbDeliver.validateNow();
 				}
 			}
 			
@@ -306,7 +320,7 @@
 					</s:HGroup>
 					<s:HGroup width="100%" verticalAlign="middle">
 						<s:Label text="Opening Branch" width="95" textAlign="right"/>
-						<s:DropDownList id="cmbOpenBranch" width="100%" dataProvider="{arrBranch}" labelField="name" selectedIndex="0"/>
+						<s:DropDownList id="cmbOpenBranch" width="100%" labelField="label"/>
 					</s:HGroup>
 					<s:HGroup width="100%" verticalAlign="middle">
 						<s:Label text="Address" width="90" textAlign="right"/>

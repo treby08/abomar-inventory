@@ -20,6 +20,7 @@
 			import mx.managers.PopUpManager;
 			
 			private var _data:Object;
+			private var _isSelected:Boolean = false;
 			private var _theBox:PurchaseOrderBox;
 			public var isDispatch:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
@@ -32,6 +33,17 @@
 				return _data;
 			}
 			
+			public function set isSelected(value:Boolean):void{
+				_isSelected = value
+				if (value)
+					sFill.color = AccessVars.instance().colBgColorOver
+				else
+					sFill.color=AccessVars.instance().colBgColor;
+			}
+			public function get isSelected():Boolean{
+				return _isSelected;
+			}
+			
 			public function set theBox(value:PurchaseOrderBox):void{
 				_theBox = value
 			}
@@ -40,11 +52,18 @@
 			{
 				txtReqNo.text = _data.reqNo; //_data.fname +" "+_data.mname +" "+_data.lname;
 				txtBranch.text = _data.bCode;
-				
+				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
+				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
+				//hbCont.removeEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
+				//hbCont.removeEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
+				for (var i:int =0; i < _theBox.dgSearch.numElements; i++){
+					(_theBox.dgSearch.getElementAt(i) as PurchaseOrdRenderer).isSelected = false;
+				}
+				isSelected = true;
 				
 				isDispatch = true;
 				_theBox.owner = this;
@@ -86,12 +105,25 @@
 				}
 			}
 			
+			private function itemMouseOver(evt:MouseEvent):void{
+				if (!isSelected)
+					sFill.color = AccessVars.instance().colBgColorOver;
+				/*if (!hbCont.hasEventListener(MouseEvent.MOUSE_OUT))
+					hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);*/
+			}
+			private function itemMouseOut(evt:MouseEvent):void{
+				if (!isSelected)
+					sFill.color=AccessVars.instance().colBgColor;
+				/*if (!hbCont.hasEventListener(MouseEvent.MOUSE_OVER))
+					hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);*/
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Rect width="100%" height="100%">
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
+	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 		<s:Label id="txtReqNo" width="30%" textAlign="center"/>
 		<mx:Text id="txtBranch" width="55%" selectable="false"/>

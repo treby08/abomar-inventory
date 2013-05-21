@@ -136,7 +136,7 @@ package com.module.business
 				var listXML:XML = XML(evt.result);
 				var arrCol:ArrayCollection = new ArrayCollection()
 				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({custID:obj.@custID,acctno:obj.@acctno,branchId:obj.@branchId,creditLine:obj.@creditLine,address:obj.@address,
+					arrCol.addItem({custID:obj.@custID,acctno:obj.@acctno,branchID:obj.@branchId,creditLine:obj.@creditLine,address:obj.@address,
 						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
 						email:obj.@email,inactive:obj.@inactive})
 				}
