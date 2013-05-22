@@ -106,7 +106,7 @@
 				else
 					_theBox.unloadImage();
 				
-				_theBox.owner = this;
+				_theBox.theOwner = this;
 				//_theBox.showHide(true);
 				
 				_theBox.btnSave.visible = _theBox.btnSave.includeInLayout = false;

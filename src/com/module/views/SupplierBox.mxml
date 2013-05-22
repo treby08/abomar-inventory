@@ -16,6 +16,7 @@
 			import mx.events.FlexEvent;
 			
 			public var _data:Object;
+			public var theOwner:Object;
 			/** 0=add 1=edit**/
 			public var _type:int = 0; 
 			private var _fromUpdate:Boolean = false;
@@ -47,8 +48,8 @@
 					_data.email = txtEmail.text;
 					_data.web = txtWeb.text;
 					
-					(owner as SupplierRenderer).data = _data;
-					(owner as SupplierRenderer).creationCompleteHandler(null);
+					(theOwner as SupplierRenderer).data = _data;
+					(theOwner as SupplierRenderer).creationCompleteHandler(null);
 					return;
 				}
 				
@@ -91,7 +92,7 @@
 					txtAdd.text = _data.address;
 					txtTin.text = _data.tin;
 					txtCreditLine.text = _data.creditLine;
-					cmbTerm.selectedIndex = setSelectedItem(arrBranch,"termId",_data.term);
+					cmbTerm.selectedIndex = setSelectedItem(arrTerm,"termId",_data.term);
 					cbLocal.selected = (_data.local as Boolean);
 					
 					txtConName.text = _data.conPerson;

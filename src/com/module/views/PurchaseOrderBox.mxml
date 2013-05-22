@@ -29,6 +29,7 @@
 			public var _tempData:Object;
 			public var purReqID:String = "";
 			public var _type:int = 0; 
+			public var theOwner:Object;
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
@@ -79,8 +80,8 @@
 				}else if (type == 4){
 					//dataCollection = arr
 					cmbSupplier.dataProvider = arr;
-					cmbSupplier.labelFunction = mycmbSupplierLabelFunction;
-					cmbSupplier.validateNow();
+					//cmbSupplier.labelFunction = mycmbSupplierLabelFunction;
+					//cmbSupplier.validateNow();
 				}
 			}
 			
@@ -233,7 +234,7 @@
 				
 				txtSubtot.text = numFmttr.format(Number(txtSub.text.replace(/\b,\b/g,""))+Number(txtSubtot.text.replace(/\b,\b/g,"")));
 				if(editVat)
-					txtVat.text = roundDec(Number(txtSubtot.text.replace(/\b,\b/g,""))*0.12).toFixed(2);
+					txtVat.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))*0.12);
 				txtGT.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))+Number(txtVat.text.replace(/\b,\b/g,"")));
 			}
 			
@@ -414,12 +415,21 @@
 			{
 				var item:Object = event.column.grid.dataGrid.selectedItem;
 				item.total = roundDec(Number(item.qty * item.price)).toFixed(2)
+				item.weight = Number(item.oWeight)*Number(item.qty)
 				dg.dataProvider.itemUpdated(item);
 				var subTot:Number = 0;
+				var subTotWeight:Number = 0;
+				var subTotQty:Number = 0;
 				for each (var items:Object in dg.dataProvider){
-					subTot += Number(items.total)
+					if (items.isSelected=="1"){
+						subTot += Number(items.total);
+						subTotWeight+=Number(items.weight);
+						subTotQty+=Number(items.qty);
+					}
 				}
 				txtSubtot.text = numFmttr.format(subTot);
+				totWeight.text = String(subTotWeight);
+				numItems.text = String(subTotQty);
 				updateTotal();
 			}
 			
@@ -497,7 +507,7 @@
 					<s:VGroup  width="45%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="25" paddingRight="25">
 						<s:HGroup  width="100%" verticalAlign="middle">
 							<s:Label text="Supplier" width="90" textAlign="right"/>
-							<s:DropDownList id="cmbSupplier" width="100%" prompt="[Select Supplier]"/>
+							<s:DropDownList id="cmbSupplier" width="100%" prompt="[Select Supplier]" labelField="label"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Invoice To" width="90" textAlign="right"/>

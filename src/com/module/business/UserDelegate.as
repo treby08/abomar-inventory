@@ -233,7 +233,7 @@ package com.module.business
 					arrObj.web = obj.@web;
 					arrObj.email = obj.@email;
 					arrObj.isLocal = obj.@isLocal;
-					
+					arrObj.label = obj.@supCode+" - "+obj.@compName;		
 					arrCol.addItem(arrObj)
 				}
 				if (_params.qBox){ 

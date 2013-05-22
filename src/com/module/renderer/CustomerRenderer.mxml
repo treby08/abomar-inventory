@@ -81,7 +81,7 @@
 				/* _theBox.btnSave.label = "Update";
 				_theBox.btnSave.visible = true;
 				_theBox.btnClear.label = "Reset to Default"; */
-				_theBox.owner = this;
+				_theBox.theOwner = this;
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void
