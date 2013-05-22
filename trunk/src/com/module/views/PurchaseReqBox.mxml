@@ -28,6 +28,7 @@
 			public var _type:int = 0; 
 			public var _data:Object;
 			private var _fromUpdate:Boolean = false;
+			public var theOwner:Object;
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
@@ -265,8 +266,8 @@
 					_data.srPrice = txtSRP.text;
 					_data.priceCurr = cmbLstCurr.selectedIndex+"|"+cmbDealCurr.selectedIndex;*/
 					
-					(owner as PurchaseReqRenderer).data = _data;
-					(owner as PurchaseReqRenderer).creationCompleteHandler(null);
+					(theOwner as PurchaseReqRenderer).data = _data;
+					(theOwner as PurchaseReqRenderer).creationCompleteHandler(null);
 					return;
 				}
 				txtAppBy.text = "";

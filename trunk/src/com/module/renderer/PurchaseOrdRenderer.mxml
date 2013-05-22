@@ -66,7 +66,7 @@
 				isSelected = true;
 				
 				isDispatch = true;
-				_theBox.owner = this;
+				_theBox.theOwner = this;
 				_theBox.clearFields(null);
 				/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" 
 				bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>*/
@@ -77,8 +77,8 @@
 				//_theBox.txtReqNo.text = obj.reqNo;
 				//var arr:Array = String(_data.dateTrans).split("-");
 				//_theBox.dfDate.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
-				_theBox.cmbSupplier.selectedItem = _theBox.setSelectedSupplier(_data.supplier);
-				_theBox.cmbDeliver.selectedItem = _theBox.setSelectedDelivery(String(obj.branchID));
+				_theBox.setSelectedSupplier(_data.supplier);//_theBox.cmbSupplier.selectedItem = 
+				_theBox.setSelectedDelivery(String(obj.branchID));//_theBox.cmbDeliver.selectedItem = 
 				_theBox.purReqID = obj.purReqID;
 				_theBox.txtGT.text = obj.totalAmt;
 				_theBox.txtInvoice.text = obj.bCode;//setSelectedBranch(String(obj.branchID));

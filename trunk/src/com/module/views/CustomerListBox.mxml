@@ -20,6 +20,7 @@
 			/** 0=add 1=edit**/
 			public var _type:int = 0; 
 			private var _fromUpdate:Boolean = false;
+			public var theOwner:Object;
 			
 			public var arrTerm:ArrayCollection = new ArrayCollection([
 				{name:"PRE-PAID",termId:0},{name:"CASH",termId:1},{name:"COD",termId:2},

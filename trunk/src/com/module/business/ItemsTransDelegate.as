@@ -359,11 +359,10 @@ package com.module.business
 			}else if (_params.type=="get_details"){
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				arrObj = {};
 				var num:int = 1;
 				trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
-					arrObj = {}
+					arrObj = new Object();
 					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
 					arrObj.prdID = obj.@prdID;
 					arrObj.prd_purReqID = obj.@prd_purReqID;
@@ -375,7 +374,8 @@ package com.module.business
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodDesc = obj.@desc;
-					arrObj.weight = obj.@weight;
+					arrObj.oWeight = obj.@weight;
+					arrObj.weight = Number(obj.@weight)*Number(obj.@quantity);
 					arrObj.prodComModUse = obj.@prodComModUse;
 					arrObj.price = obj.@srPrice;
 					arrObj.num = num;
@@ -393,9 +393,9 @@ package com.module.business
 				
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				arrObj = {};
+				//arrObj = {};
 				for each (obj in listXML.children()){
-					arrObj = {}
+					arrObj = new Object();
 						/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
 					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
 					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
