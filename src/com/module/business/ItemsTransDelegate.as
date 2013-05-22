@@ -452,7 +452,7 @@ package com.module.business
 			}
 			var listXML:XML = XML(evt.result);
 			var arrCol:ArrayCollection = new ArrayCollection()
-			var arrObj:Object = {}
+			var arrObj:Object ;
 			var obj:XML;
 			if (str){
 				Alert.show(str+" Purchase Order Complete.", str+" Purchase Order",4,null,function():void{
@@ -471,11 +471,11 @@ package com.module.business
 			}else if (_params.type=="get_details"){
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				arrObj = {};
+				//arrObj = {};
 				var num:int = 1;
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
-					arrObj = {}
+					arrObj = new Object();
 					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
 					arrObj.prdID = obj.@prdID;
 					arrObj.prd_purReqID = obj.@prd_purReqID;
@@ -509,9 +509,9 @@ package com.module.business
 				
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				arrObj = {};
+				//arrObj = {};
 				for each (obj in listXML.children()){
-					arrObj = {}
+					arrObj = new Object();
 					/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
 					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
 					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
