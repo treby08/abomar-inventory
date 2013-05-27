@@ -302,7 +302,8 @@ package com.module.business
 			
 			if (_paramsUniqueID.type=="get_req_no"){
 				if (_paramsUniqueID.qBox){
-					_paramsUniqueID.qBox.txtReqNo.text = String(evt.result);
+					_paramsUniqueID.qBox.reqNo = String(evt.result);
+					_paramsUniqueID.qBox.genReqNoCode();
 					_paramsUniqueID.qBox = null;
 					_paramsUniqueID = null;
 				}	
@@ -402,6 +403,7 @@ package com.module.business
 					arrObj.purReqID = obj.@purReqID;
 					arrObj.reqNo = obj.@reqNo;
 					arrObj.bCode = obj.@bCode;					
+					arrObj.bLocation = obj.@bLocation;					
 					arrObj.branchID = obj.@branchID;
 					arrObj.preparedBy = obj.@preparedBy;
 					arrObj.approvedBy = obj.@approvedBy;
@@ -499,12 +501,6 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}
-			}else if (_params.type=="get_req_no"){
-				if (_params.qBox){
-					_params.qBox.txtReqNo.text = String(evt.result);
-					_params.qBox = null;
-					_params = null;
-				}	
 			}else{
 				
 				listXML = XML(evt.result);
@@ -517,7 +513,8 @@ package com.module.business
 					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
 					arrObj.purReqID = obj.@purReqID;
 					arrObj.reqNo = obj.@reqNo;
-					arrObj.bCode = obj.@bCode;					
+					arrObj.bCode = obj.@bCode;				
+					arrObj.bLocation = obj.@bLocation;				
 					arrObj.branchID = obj.@branchID;
 					arrObj.preparedBy = obj.@preparedBy;
 					arrObj.approvedBy = obj.@approvedBy;

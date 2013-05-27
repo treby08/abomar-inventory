@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" initialize="init()"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -29,19 +29,36 @@
 			public var _data:Object;
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
+			public var _reqNo:String = "000";
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
-			{
+			public function set reqNo(val:String):void{
+				_reqNo = val;
+			}
+			public function get reqNo():String{
+				return _reqNo;
+			}
+			
+			private function init():void{
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
 				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
+				
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
 				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				
 				dfDate.selectedDate = new Date(); 
+				
+			}
+			
+			public function genReqNoCode():void{
+				var yr:String = String(dfDate.selectedDate.getFullYear());
+				txtReqNo.text = cmbBranch.selectedItem.bCode+"-"+yr.substr(2)+"-"+_reqNo;
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -52,6 +69,7 @@
 					cmbBranch.dataProvider = arr;
 					cmbBranch.labelFunction = mycmbBraLabelFunction;
 					cmbBranch.selectedIndex = 0;
+					
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					dg.validateDisplayList();
@@ -379,6 +397,11 @@
 				mainCont.enabled = true;
 			}
 			
+			protected function cmbBranchchangeHandler(event:Event):void
+			{
+				genReqNoCode(); 
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -401,8 +424,8 @@
 				<s:Button label="Search" click="SearchClickHandler(event)"/>				
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
-				<s:Label text="PR No." width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
-				<s:Label text="Requesting Branch" width="65%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+				<s:Label text="PR No." width="45%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+				<s:Label text="Requesting Branch" width="55%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
@@ -428,7 +451,7 @@
 					<s:VGroup  width="45%" height="100%" paddingBottom="5" paddingTop="20" paddingLeft="25" paddingRight="25">
 						<s:HGroup  width="100%" verticalAlign="middle">
 							<s:Label text="Branch" width="90" textAlign="right"/>
-							<s:DropDownList id="cmbBranch" width="100%" prompt="[Requesting Branch]"/>
+							<s:DropDownList id="cmbBranch" width="100%" prompt="[Requesting Branch]" change="cmbBranchchangeHandler(event)"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Prepared By" width="90" textAlign="right"/>
@@ -445,7 +468,7 @@
 							<s:Label text="Requisition No." width="115" textAlign="right"/>
 							<s:TextInput id="txtReqNo" width="100%" editable="false"/>
 							<s:Label text="Date" textAlign="center"/>
-							<mx:DateField id="dfDate" width="150" showToday="true"/>
+							<mx:DateField id="dfDate" width="150" showToday="true" change="cmbBranchchangeHandler(event)"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Item / Model No." width="115" textAlign="right"/>
