@@ -50,8 +50,10 @@
 			
 			public function creationCompleteHandler(event:FlexEvent):void
 			{
-				txtReqNo.text = _data.reqNo; //_data.fname +" "+_data.mname +" "+_data.lname;
-				txtBranch.text = _data.bCode;
+				var arr:Array = String(_data.dateTrans).split("-");
+				var yr:String = String( new Date(arr[0],(arr[1]-1),arr[2]).getFullYear());
+				txtReqNo.text = _data.bCode+"-"+yr.substr(2)+"-"+ _data.reqNo;
+				txtBranch.text = _data.bCode +" - "+_data.bLocation;
 				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
 				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
 			}
@@ -125,7 +127,7 @@
 	</s:Rect>
 	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtReqNo" width="30%" textAlign="center"/>
+		<s:Label id="txtReqNo" width="45%" textAlign="center"/>
 		<mx:Text id="txtBranch" width="55%" selectable="false"/>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
