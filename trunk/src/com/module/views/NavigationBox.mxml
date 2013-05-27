@@ -19,62 +19,7 @@
 			import mx.events.MenuEvent;
 			[Bindable]
 			private var menuNav:XMLListCollection;
-			[Bindable]
-			private var menuNav2:XML = new XML('<root>' +
-				'<main icon="assets/icons/icon_inv.png" name="Inventory">' +
-				'	<sub name="New Product" code="inv_np" icon="assets/icons/icon_inv.png"/>' +
-				'	<sub name="Product List" code="inv_pl"/>' +
-				'	<sub name="Product Categories" code="inv_pc" icon="assets/icons/icon_inv.png"/>' +
-				'	<sub name="Product Pricing" code="inv_pp"/>' +
-				'	<sub name="Current Stock" code="inv_np"/>' +
-				'	<sub name="Movement History" code="inv_mh"/>' +
-				'	<sub name="Adjust Stock" code="inv_as"/>' +
-				'	<sub name="Count Sheet" code="inv_cs"/>' +
-				'	<sub name="Transfer Stock" code="inv_ts"/>' +
-				'	<sub name="Reorder Stock" code="inv_rs"/>' +
-				'	<sub name="Work Order" code="inv_wo"/>' +
-				'</main>' +
-				'<main icon="assets/icons/icon_inv.png" name="Purchasing">' +
-				'	<sub name="New Puchase Order" code="pur_npo"/>' +
-				'	<sub name="Purchase Order List" code="pur_pol"/>' +
-				'	<sub name="Sales Order List" code="pur_sol"/>' +
-				'	<sub name="New Vendor" code="pur_nv"/>' +
-				'	<sub name="Vendor List" code="pur_vl"/>' +
-				'</main>' +
-				'<main icon="assets/icons/icon_sales.png" name="Sales">' +
-				'	<sub name="New Sales Quote" code="sal_nsq"/>' +
-				'	<sub name="New Sales Order" code="sal_nso"/>' +
-				'	<sub name="Sales Order List" code="sal_sol"/>' +
-				'	<sub name="New Customer" code="sal_nc"/>' +
-				'	<sub name="Customer List" code="sal_cl"/>' +
-				'</main>' +
-				'<main icon="assets/icons/icon_report.png" name="Report">' +
-				'	<sub name="Inventory Reports">' +
-				'		<sub name="Inventory Summary" code="rep_inv_is"/>' +
-				'		<sub name="Invetory Details Report" code="rep_inv_idr"/>' +
-				'		<sub name="Inventory by Location" code="rep_inv_ibl"/>' +
-				'		<sub name="Inventory Movement Summary" code="rep_inv_ims"/>' +
-				'		<sub name="Stock Reordering Report" code="rep_inv_srr"/>' +
-				'		<sub name="Product Price List" code="rep_inv_ppl"/>' +
-				'	</sub>' +
-				'	<sub name="Purchasing Reports">' +
-				'		<sub name="Purchase Order Summary" code="rep_pur_pos"/>' +
-				'		<sub name="Purchase Order Details" code="rep_pur_pod"/>' +
-				'		<sub name="Purchase Order Status" code="rep_pur_postat"/>' +
-				'		<sub name="Vendor Product List" code="rep_pur_vpl"/>' +
-				'		<sub name="Vendor List" code="rep_pur_vl"/>' +
-				'	</sub>' +
-				'	<sub name="Sales Reports">' +
-				'		<sub name="Sales Representative Report" code="rep_sal_srr"/>' +
-				'		<sub name="Sales by Product Summary" code="rep_sal_sbps"/>' +
-				'		<sub name="Customer Payment Summary" code="rep_sal_cps"/>' +
-				'		<sub name="Customer Order History" code="rep_sal_coh"/>' +
-				'		<sub name="Customer List" code="rep_sal_cl"/>' +
-				'	</sub>' +
-				'</main>' +
-			'</root>');
-			/* <sub name="New Product" code="inv_np"/> 
-			<sub name="New Customer" code="cus_new"/>*/
+			
 			private var menuNavList:XMLList = 
 				<>
 				<main icon="assets/icons/icon_inv.png" name="Purchasing">

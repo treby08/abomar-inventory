@@ -34,7 +34,13 @@ package com.module.events
 		public static var SEARCH_PURORD:String = "search_purord";
 		public static var GET_PURORD_DETAILS:String = "get_purord_details";
 		public static var GET_PURORD_NUMBER:String = "get_purord_number";
-		
+				
+		public static var ADD_WH_RECEIPT:String = "add_wh_receipt";
+		public static var EDIT_WH_RECEIPT:String = "edit_wh_receipt";
+		public static var DELETE_WH_RECEIPT:String = "delete_wh_receipt";
+		public static var SEARCH_WH_RECEIPT:String = "search_wh_receipt";
+		public static var GET_WH_RECEIPT_DETAILS:String = "get_wh_receipt_details";
+		public static var GET_WH_RECEIPT_NUMBER:String = "get_wh_receipt_number";
 		public var params:Object;
 		
 		public function ItemsTransEvent(type:String, _params:Object = null,bubbles:Boolean=false, cancelable:Boolean=false)
