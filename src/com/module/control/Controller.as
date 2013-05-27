@@ -70,6 +70,13 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_PURORD, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_PURORD_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_PURORD_NUMBER, ItemsTransCommand );
+			
+			addCommand( ItemsTransEvent.ADD_WH_RECEIPT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.EDIT_WH_RECEIPT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.DELETE_WH_RECEIPT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.SEARCH_WH_RECEIPT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_WH_RECEIPT_DETAILS, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_WH_RECEIPT_NUMBER, ItemsTransCommand );
 		}
 	}
 }

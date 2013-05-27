@@ -22,6 +22,7 @@
 			import com.module.views.SalesQuoteBox;
 			import com.module.views.SupplierBox;
 			import com.module.views.UserBox;
+			import com.module.views.WareReceiptBox;
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
 			
@@ -120,7 +121,10 @@
 							_cnv.label = "New Product";
 						}else if (code == "inv_pl"){
 							objBox = new ProductList();	
-							_cnv.label = "Product";
+							_cnv.label = "Product";						
+						}else if (code == "inv_wr"){
+							objBox = new WareReceiptBox();	
+							_cnv.label = "Warehouse Receipt";
 						}
 					break;
 					case 3:

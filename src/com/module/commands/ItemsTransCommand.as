@@ -125,6 +125,33 @@ package com.module.commands
 					obj.type = "get_req_no";
 					ItemsTransDelegate.instance().purchaseOrd_ReqNo(obj);
 					break;
+				
+				/*WareHouse Reciept*/
+				case ItemsTransEvent.ADD_WH_RECEIPT:
+					obj.type = "add";
+					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
+					break;
+				case ItemsTransEvent.EDIT_WH_RECEIPT:
+					obj.type = "edit";
+					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
+					break;
+				case ItemsTransEvent.DELETE_WH_RECEIPT:
+					obj.type = "delete";
+					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
+					break;
+				
+				case ItemsTransEvent.SEARCH_WH_RECEIPT:
+					obj.type = "search";
+					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
+					break;
+				case ItemsTransEvent.GET_WH_RECEIPT_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
+					break;
+				case ItemsTransEvent.GET_WH_RECEIPT_NUMBER:
+					obj.type = "get_req_no";
+					ItemsTransDelegate.instance().warehouseReceipt_WRNo(obj);
+					break;
 			}
 		}
 	}

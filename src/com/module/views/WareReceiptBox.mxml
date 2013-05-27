@@ -8,7 +8,7 @@
 			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.renderer.PurchaseOrdRenderer;
+			import com.module.renderer.WareReceiptRenderer;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -27,23 +27,16 @@
 			import spark.events.TextOperationEvent;
 			private var _totalQty:int = 0;
 			public var _tempData:Object;
-			public var purReqID:String = "";
 			public var _type:int = 0; 
+			public var _data:Object;
+			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
+			public var tempWRID:String="";
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-				
-				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				
-				var log4:UserEvent = new UserEvent(UserEvent.GET_SUPPLIER_LIST,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log4);
+				/* var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
 				
 				dfDate.selectedDate = new Date(); 
 			}
@@ -51,48 +44,18 @@
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
 				if (type == 0){
 					
-				}else if (type == 1){
-					//dataCollection = arr
-					cmbDeliver.dataProvider = arr;
-					//cmbDeliver.labelFunction = mycmbDeliverLabelFunction;
-					cmbDeliver.selectedIndex = 0;
-					//cmbDeliver.validateNow();
+				}else if (type == 1){					
+					//cmbDeliver.dataProvider = arr;
+					//cmbDeliver.selectedIndex = 0;
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					
 				}else if (type == 4){
-					//dataCollection = arr
-					cmbSupplier.dataProvider = arr;
-					//cmbSupplier.labelFunction = mycmbSupplierLabelFunction;
-					//cmbSupplier.validateNow();
+					//cmbSupplier.dataProvider = arr;
 				}
 			}
 			
-			public function setSelectedSupplier(supID:String):void{
-				var i:int=0;
-				for each (var item:Object in cmbSupplier.dataProvider as ArrayCollection){
-					trace(item.supID," == ",supID)
-					if (item.supID == supID){
-						cmbSupplier.selectedItem = item;
-						cmbSupplier.selectedIndex = i;
-						break;
-					}	
-					i++;
-				}
-			}
-			public function setSelectedDelivery(branchID:String):void{
-				var i:int=0;
-				for each (var item:Object in cmbDeliver.dataProvider as ArrayCollection){
-					trace(item.branchID," == ",branchID)
-					if (item.branchID == branchID){
-						cmbDeliver.selectedItem = item;
-						cmbDeliver.selectedIndex = i;
-						break;
-					}	
-					i++;
-				}
-			}
-			
+						
 			private var _arrCol:ArrayCollection;
 			public function set dataCollection(arrCol:ArrayCollection):void{
 				_arrCol = arrCol
@@ -102,9 +65,9 @@
 				}
 				
 				if (arrCol.length > 0){
-					var itemUser:PurchaseOrdRenderer;
+					var itemUser:WareReceiptRenderer;
 					for each (var obj:Object in arrCol){
-						itemUser = new PurchaseOrdRenderer()
+						itemUser = new WareReceiptRenderer()
 						itemUser.data = obj;
 						itemUser.theBox = this
 						dgSearch.addElement(itemUser);
@@ -126,15 +89,20 @@
 			protected function CheckOutclickHandler(event:MouseEvent):void
 			{
 				if (dg.dataProviderLength == 0 )return;
-				if (cmbSupplier.selectedIndex == -1){
-					Alert.show("Please select a supplier","No Supplier Selected");
+				if (txtSupInvNo.text == ""){
+					Alert.show("Please type a Supplier Invoice No.","Supplier Invoice No. Empty");
+					return;
+				}
+				
+				if (txtPrepBy.text == ""){
+					Alert.show("Please fill up the 'Prepared By' field","Field Empty");
 					return;
 				}
 				var obj:Object = {}
-				obj.purReqID = purReqID;//cmbQuote.selectedItem.custID;
-				obj.supID = cmbSupplier.selectedItem.supID;
+				//obj.purReqID = purReqID;//cmbQuote.selectedItem.custID;
+				obj.supID = txtSupInvNo.text;
 				obj.branchID = _tempData.branchID;
-				obj.delID = cmbDeliver.selectedItem.branchID;
+				//obj.delID = cmbDeliver.selectedItem.branchID;
 				
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
 				//obj.vat = txtVat.text;
@@ -146,10 +114,13 @@
 				obj.purOrdDetails = strItem.join("||");
 				obj.pBox = this;
 				trace("purOrdDetails", obj.purOrdDetails)
-				 var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_PURORD,obj)
+				 var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_WH_RECEIPT,obj)
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2); 
-				//printPrevPO()
-				//btnPrint.enabled = true;
+				
+				
+				log2 = new ItemsTransEvent(ItemsTransEvent.ADD_WH_RECEIPT,obj)
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				
 			}
 			
 			private function setDateFormat(d:Date):String{
@@ -159,45 +130,7 @@
 				return strDate;
 			}
 			
-			public function updateCurrentPO():void{
-				var item:Object;
-				for (var i:int = (dg.dataProvider as ArrayCollection).length-1; i >=0 ; i--){
-					item = (dg.dataProvider as ArrayCollection).getItemAt(i);
-					if (item.isSelected=="1")
-						(dg.dataProvider as ArrayCollection).removeItemAt(i);
-					else{
-						item.isSelected = "1";
-						dg.dataProvider.itemUpdated(item);
-					}
-				}
-				trace("(dg.dataProvider as ArrayCollection).length:",(dg.dataProvider as ArrayCollection).length)
-				var num:int = 1;
-				for each (var item:Object in dg.dataProvider){
-					item.num = num;
-					item.isSelected = "1";
-					dg.dataProvider.itemUpdated(item);
-					num++;
-				}
-				setDataProvider((dg.dataProvider as ArrayCollection),3);
-				if ((dg.dataProvider as ArrayCollection).length==0){
-					clearFields(null);
-					mainCont.enabled = false;
-					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
-					btnEdit.visible = btnEdit.includeInLayout = false;
-					Alert.show("All Items are fully serve on Requisition No.:"+_tempData.reqNo,"Requisition Complete");
-					var PO_renderer:PurchaseOrdRenderer;
-					for (i=dgSearch.numElements-1; i >= 0; i-- ){
-						PO_renderer = (dgSearch.getElementAt(i) as PurchaseOrdRenderer);
-						if (PO_renderer.data == _tempData){
-							dgSearch.removeElementAt(i);
-							break;							
-						}
-					}
-				}
-					
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-			}
+			
 			
 			protected function printPrevPO():void
 			{
@@ -233,18 +166,18 @@
 				}else{
 					_type = 0;
 					mainCont.enabled = true;
-					btnCheckOut.label = "Submit Purchase Order";
+					btnCheckOut.label = "Save WH Receipt";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
+					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
 			}
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				_type = 0;
+				_type = 1;
 				//btnCheckOut.label = "Save Purchase Order Changes";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 				mainCont.enabled = true;
@@ -254,7 +187,7 @@
 				if (event.detail == Alert.YES){
 					_type = 0;
 					mainCont.enabled = true;
-					btnCheckOut.label = "Submit Purchase Order";
+					btnCheckOut.label = "Save WH Receipt";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
@@ -268,14 +201,14 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PURORD,{searchstr:txtSearchStr.text,qBox:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 						
 			
 			protected function dg_gridDoubleClickHandler(event:GridEvent):void
 			{
-				if (event.column.columnIndex == 2){
+				if (event.column.columnIndex == 6){
 					event.grid.dataGrid.startItemEditorSession(event.rowIndex, event.columnIndex);
 				}
 			}
@@ -309,9 +242,9 @@
 				<s:Button label="Search" click="SearchClickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
-				<s:Label text="PO No." width="30%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Supplier" width="45%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Date" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="PO No." width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Supplier" width="50%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Date" width="30%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
@@ -368,7 +301,7 @@
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>
-						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="true">
+						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="false">
 							<s:headerRenderer>
 								<fx:Component>
 									<s:DefaultGridHeaderRenderer textAlign="center"/>
@@ -390,14 +323,14 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="70"  editable="false">
+						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="false">
 							<s:headerRenderer>
 								<fx:Component>
 									<s:DefaultGridHeaderRenderer textAlign="center"/>
 								</fx:Component>
 							</s:headerRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="false">
+						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="true">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="right"/>
@@ -427,10 +360,10 @@
 		<mx:HRule height="5" width="100%"/>
 		<s:HGroup id="hgControl" width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
 				  horizontalAlign="left" verticalAlign="middle">						
-			<s:Button id="btnCheckOut" label="Submit Purchase Order" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnCheckOut" label="Save WH Receipt" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
-			<s:Button id="btnNew"  label="New Receipt" click="btnNewclickHandler(event)"/>
-			<s:Button id="btnEdit"  label="Update Receipt" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnNew"  label="New WH Receipt" click="btnNewclickHandler(event)"/>
+			<s:Button id="btnEdit"  label="Update WH Receipt" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnView"  label="View Listings" click="printPrevPO()" visible="false" includeInLayout="false"/>
 		</s:HGroup>
 	</s:VGroup>

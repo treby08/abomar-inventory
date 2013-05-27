@@ -17,8 +17,8 @@
 		    public static var  QOUTE_SERVICE:String = "qoute_service";
 		    public static var  PURCHASE_REQ_SERVICE:String = "purchase_req_service";
 		    public static var  PURCHASE_ORD_SERVICE:String = "purchase_ord_service";
-		
-		    
+		    public static var  WAREHOUSE_RECEIPT_SERVICE:String = "warehouse_receipt_service";
+					    
 			public function getHTTPService( name : String ) : HTTPService
 		    {
 		      	return this[name];
@@ -73,6 +73,10 @@
 		showBusyCursor="true" />
 	<mx:HTTPService id="purchase_ord_service"
 		url="{SecurityType.HTTP_HOST+'/purchaseOrdAED.php'}"
+		resultFormat="e4x"
+		showBusyCursor="true" />
+	<mx:HTTPService id="warehouse_receipt_service"
+		url="{SecurityType.HTTP_HOST+'/whReceiptAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 						

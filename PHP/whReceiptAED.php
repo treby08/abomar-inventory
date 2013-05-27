@@ -60,12 +60,14 @@
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM purchaseReq WHERE purReqID = '$purReqID'",$conn);
 	}else if ($type == "search"){
-		$query = mysql_query("SELECT pr.*, b.bCode, b.branchID, b.bLocation FROM purchaseReq pr
-							INNER JOIN branches b ON b.branchID=pr.purReq_branchID
-							WHERE (bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%') AND purReq_status=0",$conn);
+		$searchSTR = str_replace("0","",$searchSTR);
+		$query = mysql_query("SELECT po.*, b.bCode, b.branchID, b.bLocation,s.supCompName FROM purchaseOrd po
+							LEFT JOIN branches b ON b.branchID=po.purOrd_branchID
+							LEFT JOIN supplier s ON s.supID=po.purOrd_supID
+							WHERE (purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%') AND onProcess=0",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad_req($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>";
+				$xml .= "<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
@@ -81,13 +83,12 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_req_no"){
-		$sql = "SELECT MAX(purOrdID)+1 as purOrdID FROM purchaseOrd";
-		//$sql = "SELECT MAX(prdID)+1 AS prdID FROM purchaseReq_details";
+		$sql = "SELECT MAX(whrID)+1 as whrID FROM wh_receipt";
 		$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 			
 		$row = mysql_fetch_assoc($query);
-		$reqNum = $row['purOrdID']?$row['purOrdID']:1;
-		echo number_pad($reqNum);
+		$reqNum = $row['whrID']?$row['whrID']:1;
+		echo number_pad_req($reqNum);
 	}
 	
 	function number_pad($number) {

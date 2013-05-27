@@ -10,7 +10,6 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.views.PurchaseOrderBox;
 			import com.module.views.UserPanel;
 			import com.module.views.WareReceiptBox;
 			import com.variables.AccessVars;
@@ -45,23 +44,30 @@
 				return _isSelected;
 			}
 			
-			public function set theBox(value:PurchaseOrderBox):void{
+			public function set theBox(value:WareReceiptBox):void{
 				_theBox = value
 			}
 			
 			public function creationCompleteHandler(event:FlexEvent):void
 			{
-				txtPoNo.text = _data.purNo;
-				txtVendor.text = _data.supName;
+				txtPoNo.text = zeroPad(_data.purOrdID,5);
+				txtVendor.text = _data.supCompName;
 				txtDate.text =String(_data.dateTrans);
 				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
 				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
 			}
 			
+			public function zeroPad(number:int, width:int):String {
+				var ret:String = ""+number;
+				while( ret.length < width )
+					ret="0" + ret;
+				return ret;
+			}
+			
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				for (var i:int =0; i < _theBox.dgSearch.numElements; i++){
-					(_theBox.dgSearch.getElementAt(i) as PurchaseOrdRenderer).isSelected = false;
+					(_theBox.dgSearch.getElementAt(i) as WareReceiptRenderer).isSelected = false;
 				}
 				isSelected = true;
 				
@@ -69,19 +75,24 @@
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
 				
-				var obj:Object = _theBox._tempData = _data;
-				_theBox.setSelectedSupplier(_data.supplier);//_theBox.cmbSupplier.selectedItem = 
-				_theBox.setSelectedDelivery(String(obj.branchID));//_theBox.cmbDeliver.selectedItem = 
-				_theBox.purReqID = obj.purReqID;
-				_theBox.txtInvoice.text = obj.bCode;//setSelectedBranch(String(obj.branchID));
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				var obj:Object  = _data;
+				_theBox.txtPONo.text = zeroPad(obj.purOrdID,5);;
+				_theBox.txtBranch.text = obj.bCode+ " - "+obj.bLocation ;//setSelectedBranch(String(obj.branchID));
+				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				//var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this})
+				//CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = true;
 				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
-				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				//_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 			}			
+			
+			public function updateWRID(wrID:String):void{
+				var yr:String = String(_theBox.dfDate.selectedDate.getFullYear());
+				_theBox.txtWRNo.text = "WR-"+_data.bCode+"-"+yr.substr(2)+"-"+wrID;
+			}
 			
 			
 			protected function deleteClickHandler(event:MouseEvent):void
@@ -117,9 +128,9 @@
 	</s:Rect>
 	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtPoNo" width="30%" textAlign="center"/>
+		<s:Label id="txtPoNo" width="20%" textAlign="center"/>
 		<mx:Text id="txtVendor" width="50%" selectable="false"/>
-		<s:Label id="txtDate" width="20%" selectable="false"/>
+		<s:Label id="txtDate" width="30%" textAlign="center"/>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>-->

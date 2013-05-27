@@ -550,6 +550,139 @@ package com.module.business
 			}	
 		}
 		
+		public function warehouseReceipt_AED(params:Object):void{
+			_params = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("warehouseReceipt_AED",_params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.WAREHOUSE_RECEIPT_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(warehouseReceipt_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function warehouseReceipt_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("warehouseReceipt_AED_onResult",strResult);
+			if(_params == null)
+				return;
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+				case "edit":
+					str="Updating";
+					break;
+				case "delete":
+					str="Deleting";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Warehouse Receipt Error: "+strResult,"Error");
+				return;
+			}
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrObj:Object ;
+			var obj:XML;
+			if (str){
+				Alert.show(str+" Warehouse Receipt Complete.", str+" Warehouse Receipt",4,null,function():void{
+					if (_params.pBox){
+						if (str == "Adding")
+							_params.pBox.updateCurrentPO();
+						else
+							_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}else if (_params.ppnl){
+						_params.ppnl.parent.removeElement(_params.ppnl);
+						_params.ppnl = null;
+					}
+					_params = null;
+				});
+			}else if (_params.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				var num:int = 1;
+				//trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					arrObj.prdID = obj.@prdID;
+					arrObj.prd_purReqID = obj.@prd_purReqID;
+					arrObj.prd_prodID = obj.@prd_prodID;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodComModUse = obj.@prodComModUse;
+					arrObj.weight = obj.@weight;
+					arrObj.srPrice = obj.@srPrice;
+					arrObj.num = num;					
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				if (_params.qBox){
+					_params.itemRen.isDispatch = false;
+					_params.qBox.setDataProvider(arrCol,3);
+					_params.qBox = null;
+					_params = null;
+				}
+			}else{
+				
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					/*"<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" 
+					purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
+					purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" 
+					totalAmt=\"".$row['totalAmt']."\"/>"*/
+					arrObj.purOrdID = obj.@purOrdID;
+					arrObj.purOrd_supID = obj.@purOrd_supID;
+					arrObj.supCompName = obj.@supCompName;
+					arrObj.bCode = obj.@bCode;				
+					arrObj.bLocation = obj.@bLocation;			
+					arrObj.purOrd_delID = obj.@purOrd_delID;			
+					arrObj.totalWeight = obj.@totalWeight;			
+					arrObj.branchID = obj.@purOrd_branchID;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.totalAmt = obj.@totalAmt;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){					
+					_params.qBox.dataCollection = arrCol;
+					_params.qBox = null;
+					_params = null;
+				}
+			}
+		}
+		
+		public function warehouseReceipt_WRNo(params:Object):void{
+			_paramsUniqueID = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("warehouseReceipt_WRNo",params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.WAREHOUSE_RECEIPT_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(warehouseReceipt_WRNo_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		private function warehouseReceipt_WRNo_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("warehouseReceipt_WRNo_onResult",strResult);
+			if (_paramsUniqueID.qBox){
+				_paramsUniqueID.qBox.updateWRID(String(evt.result));
+				_paramsUniqueID.qBox = null;
+				_paramsUniqueID = null;
+			}	
+		}
+		
 		private function Main_onFault(evt:FaultEvent):void{
 			Alert.show("Query Fault:"+evt.message);
 		}
