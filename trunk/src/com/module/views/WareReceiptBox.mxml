@@ -35,8 +35,8 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				/* var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
+				var log3:DataListEvent = new DataListEvent(DataListEvent.GET_REMARKS_LIST,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3); 
 				
 				dfDate.selectedDate = new Date(); 
 			}
@@ -149,8 +149,9 @@
 			public function clearFields(event:MouseEvent):void{
 				
 				txtBranch.text = "";
-				txtPONo.text = "";
+				txtPONo.text = "[No PO Selected]";
 				txtSupInvNo.text = "";
+				txtWRNo.text = "";
 				dfDate.selectedDate = new Date();
 				dfInvDate.selectedDate = new Date();
 				
@@ -171,14 +172,14 @@
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
 				}
 			}
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				_type = 1;
-				//btnCheckOut.label = "Save Purchase Order Changes";
+				btnCheckOut.label = "Save WH Receipt";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 				mainCont.enabled = true;
 			}
@@ -208,7 +209,7 @@
 			
 			protected function dg_gridDoubleClickHandler(event:GridEvent):void
 			{
-				if (event.column.columnIndex == 6){
+				if (event.column.columnIndex == 6 || event.column.columnIndex == 5){
 					event.grid.dataGrid.startItemEditorSession(event.rowIndex, event.columnIndex);
 				}
 			}
@@ -262,28 +263,28 @@
 						weight="2"/> 
 				</s:borderStroke> 
 				<s:HGroup  width="100%" height="100%" fontSize="16" verticalAlign="middle">
-					<s:VGroup  width="45%" paddingBottom="10" paddingTop="10" paddingLeft="25" paddingRight="25">
+					<s:VGroup  width="40%" paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Branch" width="90" textAlign="right"/>
 							<s:TextInput id="txtBranch" width="100%" />
 						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle">
+						<s:HGroup width="100%" height="100%" verticalAlign="middle">
 							<s:Label text="PO No." width="90" textAlign="right"/>
-							<s:TextInput id="txtPONo" width="100%" />
+							<s:Label id="txtPONo" width="100%" fontSize="16" text="[No PO selected]"/>
 						</s:HGroup>
 					</s:VGroup>
 					
-					<s:VGroup  width="35%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:VGroup  width="30%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Supplier's Invoice No." width="130" textAlign="right"/>
-							<s:TextInput id="txtSupInvNo" width="100%" editable="false"/>
+							<s:TextInput id="txtSupInvNo" width="100%" />
 						</s:HGroup>	
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label width="130" text="Invoice Date" textAlign="right"/>
 							<mx:DateField id="dfInvDate" width="100%" showToday="true"/>
 						</s:HGroup>						
 					</s:VGroup>
-					<s:VGroup  width="35%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:VGroup  width="30%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="WR No." width="50" textAlign="right"/>
 							<s:TextInput id="txtWRNo" width="100%" editable="false"/>
@@ -296,7 +297,7 @@
 				</s:HGroup>
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
-			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
+			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" fontSize="12" editable="true"
 						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
 				<s:columns>
 					<s:ArrayList>
@@ -323,17 +324,17 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="false">
+						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="true">
 							<s:headerRenderer>
 								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
+									<s:DefaultGridHeaderRenderer textAlign="left"/>
 								</fx:Component>
 							</s:headerRenderer>
 						</s:GridColumn>
 						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="true">
 							<s:itemRenderer>
 								<fx:Component>
-									<s:DefaultGridItemRenderer textAlign="right"/>
+									<s:DefaultGridItemRenderer textAlign="center"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
@@ -350,9 +351,9 @@
 			</s:DataGrid>
 			<s:HGroup width="100%" verticalAlign="middle" gap="10" paddingLeft="20">
 				<s:Label text="Prepared By" width="75" textAlign="right"/>
-				<s:TextInput id="txtPrepBy" width="200" editable="false"/>
+				<s:TextInput id="txtPrepBy" width="200" />
 				<s:Label text="Checked By" width="75" textAlign="right"/>
-				<s:TextInput id="txtCheckBy" width="200" editable="false"/>
+				<s:TextInput id="txtCheckBy" width="200"/>
 				<s:Spacer width="100%"/>
 				<s:Button id="btnAddItems" label="Add Items to Warehouse Receipt"/>
 			</s:HGroup>
@@ -363,7 +364,7 @@
 			<s:Button id="btnCheckOut" label="Save WH Receipt" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnNew"  label="New WH Receipt" click="btnNewclickHandler(event)"/>
-			<s:Button id="btnEdit"  label="Update WH Receipt" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnEdit"  label="Edit WH Receipt" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnView"  label="View Listings" click="printPrevPO()" visible="false" includeInLayout="false"/>
 		</s:HGroup>
 	</s:VGroup>

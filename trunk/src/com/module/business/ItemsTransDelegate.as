@@ -609,10 +609,15 @@ package com.module.business
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
+					/*<item podID=\"".$row['podID']."\" pod_purOrdID=\"".$row['pod_purOrdID']."\" pod_prodID=\"".$row['pod_prodID']."\" 
+					prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" 
+					prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" 
+					srPrice=\"".$row['srPrice']."\"/>*/
 					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
-					arrObj.prdID = obj.@prdID;
-					arrObj.prd_purReqID = obj.@prd_purReqID;
-					arrObj.prd_prodID = obj.@prd_prodID;
+					arrObj.podID = obj.@podID;
+					arrObj.pod_purOrdID = obj.@pod_purOrdID;
+					arrObj.pod_prodID = obj.@pod_prodID;
+					arrObj.prodDesc = obj.@prodDescrip;
 					arrObj.qty = obj.@quantity;
 					arrObj.total = obj.@totalPurchase;
 					arrObj.prodID = obj.@prodCode;
@@ -620,7 +625,6 @@ package com.module.business
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodComModUse = obj.@prodComModUse;
-					arrObj.weight = obj.@weight;
 					arrObj.srPrice = obj.@srPrice;
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);

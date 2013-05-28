@@ -77,6 +77,41 @@ package com.module.business
 			_profPanel.pBox = null;
 			_profPanel = null;
 		}
+		
+		public function getDatalist(params:Object):void{
+			_profPanel = params;
+			trace("getDatalist:",params.type)
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.DATA_LIST);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(getDatalist_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function getDatalist_onResult(evt:ResultEvent):void{
+			trace("getDatalist_onResult: ", XML(evt.result).toXMLString())
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection();
+			var arrObj:Object;
+			switch(_profPanel.type){
+				case "userType":
+				break;
+				case "branches":
+				break;
+				case "remarks":
+					for each (var obj:XML in listXML.children()){
+						arrObj = new Object;
+						arrObj.remID = obj.@remID;
+						arrObj.remLabel = obj.@remLabel;
+						
+						arrCol.addItem(arrObj)
+					}
+					trace("getDatalist_onResult:",arrCol.length)
+					AccessVars.instance().remarks = arrCol;
+				break;
+			}
+			
+		}
+		
 		private function Main_onFault(evt:FaultEvent):void{
 			trace(evt.message)
 		}
