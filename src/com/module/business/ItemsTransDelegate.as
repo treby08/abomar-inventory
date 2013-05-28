@@ -591,7 +591,7 @@ package com.module.business
 				Alert.show(str+" Warehouse Receipt Complete.", str+" Warehouse Receipt",4,null,function():void{
 					if (_params.pBox){
 						if (str == "Adding")
-							_params.pBox.updateCurrentPO();
+							_params.pBox.updateWR();
 						else
 							_params.pBox.clearFields(null);
 						_params.pBox = null;
@@ -626,6 +626,9 @@ package com.module.business
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodComModUse = obj.@prodComModUse;
 					arrObj.srPrice = obj.@srPrice;
+					arrObj.pkgNo = "";
+					arrObj.qtyRec = "";
+					arrObj.remarks="";
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);
 					num++;

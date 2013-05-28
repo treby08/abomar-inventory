@@ -6,14 +6,21 @@
 	<fx:Script>
 		<![CDATA[
 			import com.variables.AccessVars;
+			
+			import spark.events.IndexChangeEvent;
 			override public function prepare(hasBeenRecycled:Boolean):void {
 				cmbRemarks.dataProvider = AccessVars.instance().remarks;
 			}
 			
 			
+			protected function cmbRemarks_changeHandler(event:IndexChangeEvent):void
+			{
+				data.remarks = cmbRemarks.selectedItem.remID;
+			}
+			
 		]]>
 	</fx:Script>
 	<s:HGroup width="95%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingLeft="5" paddingRight="2">
-		<s:DropDownList id="cmbRemarks" width="100%" labelField="remLabel"/>
+		<s:DropDownList id="cmbRemarks" width="100%" labelField="remLabel" change="cmbRemarks_changeHandler(event)"/>
 	</s:HGroup>	
 </s:GridItemRenderer>

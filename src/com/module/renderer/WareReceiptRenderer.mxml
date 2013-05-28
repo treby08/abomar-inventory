@@ -87,6 +87,7 @@
 				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
 				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				_theBox.btnPrintWR.visible =_theBox. btnPrintWR.includeInLayout = false;
 			}			
 			
 			public function updateWRID(wrID:String):void{
