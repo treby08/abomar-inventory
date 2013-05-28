@@ -80,13 +80,13 @@
 				_theBox.txtBranch.text = obj.bCode+ " - "+obj.bLocation ;//setSelectedBranch(String(obj.branchID));
 				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				//var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this})
-				//CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_DETAILS,{purOrdID:obj.purOrdID,qBox:_theBox,itemRen:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
-				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = true;
+				//_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = true;
 				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
-				//_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 			}			
 			
 			public function updateWRID(wrID:String):void{
