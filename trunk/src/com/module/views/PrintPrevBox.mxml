@@ -264,7 +264,7 @@
 			private var _salesBox:Object;
 			private var arrOrderType:ArrayCollection = new ArrayCollection(
 				[{name:"Purchase Order",type:1},{name:"Sales Order",type:2},
-				{name:"Sales Quote",type:3},{name:"Warehouse Transfer",type:4}])
+				{name:"Sales Quote",type:3},{name:"Warehouse Receipt",type:4}])
 			
 			public function set boxType(value:Object):void{
 				_salesBox = value;
