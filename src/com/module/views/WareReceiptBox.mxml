@@ -149,7 +149,7 @@
 				printJob.send();*/
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 0;
+				_printBox.orderTypeID = 4;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
@@ -179,6 +179,7 @@
 					btnCheckOut.label = "Save WH Receipt";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
 					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
@@ -190,6 +191,7 @@
 				_type = 1;
 				btnCheckOut.label = "Save WH Receipt";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+				btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 				mainCont.enabled = true;
 			}
 			
@@ -199,6 +201,7 @@
 					mainCont.enabled = true;
 					btnCheckOut.label = "Save WH Receipt";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
@@ -241,7 +244,8 @@
 			
 			public function updateWR():void{
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
-				btnEdit.visible = btnEdit.includeInLayout = false;
+				btnNew.label = "Clear WH Receipt";
+				btnEdit.visible = btnEdit.includeInLayout = true;
 				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				var PO_renderer:WareReceiptRenderer;
 				for (var i:int=dgSearch.numElements-1; i >= 0; i-- ){
@@ -251,6 +255,7 @@
 						break;							
 					}
 				}
+				mainCont.enabled = false;
 			}
 			
 		]]>

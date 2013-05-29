@@ -75,7 +75,7 @@
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
 				
-				var obj:Object  = _data;
+				var obj:Object  = _theBox._tempData = _data;
 				_theBox.txtPONo.text = zeroPad(obj.purOrdID,5);;
 				_theBox.txtBranch.text = obj.bCode+ " - "+obj.bLocation ;//setSelectedBranch(String(obj.branchID));
 				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})

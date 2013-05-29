@@ -296,9 +296,10 @@
 				}
 				setDataProvider((dg.dataProvider as ArrayCollection),3);
 				if ((dg.dataProvider as ArrayCollection).length==0){
-					clearFields(null);
+					//clearFields(null);
 					mainCont.enabled = false;
 					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+					btnView.visible = btnView.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					Alert.show("All Items are fully serve on Requisition No.:"+_tempData.reqNo,"Requisition Complete");
 					var PO_renderer:PurchaseOrdRenderer;
@@ -311,8 +312,8 @@
 					}
 				}
 					
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
 			}
 			
 			protected function printPrevPO():void
@@ -372,6 +373,7 @@
 			{
 				_type = 0;
 				//btnCheckOut.label = "Save Purchase Order Changes";
+				btnView.visible = btnView.includeInLayout = true;
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 				mainCont.enabled = true;
 			}
