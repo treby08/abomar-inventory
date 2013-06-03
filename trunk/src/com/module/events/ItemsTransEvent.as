@@ -41,6 +41,10 @@ package com.module.events
 		public static var SEARCH_WH_RECEIPT:String = "search_wh_receipt";
 		public static var GET_WH_RECEIPT_DETAILS:String = "get_wh_receipt_details";
 		public static var GET_WH_RECEIPT_NUMBER:String = "get_wh_receipt_number";
+		
+		public static var SEARCH_WH_DISCREPANCY:String = "search_wh_discrepancy";
+		public static var GET_WH_DISCREPANCY_DETAILS:String = "get_wh_discrepancy_details";
+		public static var GET_WH_DISCREPANCY_NUMBER:String = "get_wh_discrepancy_number";
 		public var params:Object;
 		
 		public function ItemsTransEvent(type:String, _params:Object = null,bubbles:Boolean=false, cancelable:Boolean=false)

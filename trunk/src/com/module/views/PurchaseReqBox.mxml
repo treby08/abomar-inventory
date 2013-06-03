@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" initialize="init()"
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" minWidth="1000" minHeight="550"
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="5" paddingLeft="10" paddingRight="10" paddingTop="5" initialize="init()"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -58,7 +58,8 @@
 			
 			public function genReqNoCode():void{
 				var yr:String = String(dfDate.selectedDate.getFullYear());
-				txtReqNo.text = cmbBranch.selectedItem.bCode+"-"+yr.substr(2)+"-"+_reqNo;
+				if (cmbBranch && txtReqNo && (cmbBranch.dataProvider as ArrayCollection).length > 0)
+					txtReqNo.text = cmbBranch.selectedItem.bCode+"-"+yr.substr(2)+"-"+_reqNo;
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -69,7 +70,7 @@
 					cmbBranch.dataProvider = arr;
 					cmbBranch.labelFunction = mycmbBraLabelFunction;
 					cmbBranch.selectedIndex = 0;
-					
+					genReqNoCode();
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					dg.validateDisplayList();
@@ -408,7 +409,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<!--<s:Label text="Sales Quote" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:VGroup id="searchProd" width="25%" height="100%" >
+	<s:VGroup id="searchProd" width="25%" height="100%" minWidth="300" maxWidth="350">
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:layout>
 				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
@@ -418,7 +419,7 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
+			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
 				<s:Label text="Search: "/>
 				<s:TextInput prompt="[Requi. No/Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
 				<s:Button label="Search" click="SearchClickHandler(event)"/>				
@@ -439,7 +440,7 @@
 			</s:HGroup>
 		</s:BorderContainer>
 	</s:VGroup>
-	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+	<s:VGroup id="cont" minHeight="600" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false">
 			<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
 				<s:borderStroke> 
@@ -448,7 +449,7 @@
 						weight="2"/> 
 				</s:borderStroke> 
 				<s:HGroup  width="100%" height="100%" fontSize="16">
-					<s:VGroup  width="45%" height="100%" paddingBottom="5" paddingTop="20" paddingLeft="25" paddingRight="25">
+					<s:VGroup width="50%" height="100%" paddingBottom="5" paddingTop="20" paddingLeft="15" paddingRight="15">
 						<s:HGroup  width="100%" verticalAlign="middle">
 							<s:Label text="Branch" width="90" textAlign="right"/>
 							<s:DropDownList id="cmbBranch" width="100%" prompt="[Requesting Branch]" change="cmbBranchchangeHandler(event)"/>
@@ -463,25 +464,25 @@
 						</s:HGroup>
 					</s:VGroup>
 					
-					<s:VGroup  width="55%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Requisition No." width="115" textAlign="right"/>
+							<s:Label text="Requisition No." width="90" textAlign="right"/>
 							<s:TextInput id="txtReqNo" width="100%" editable="false"/>
 							<s:Label text="Date" textAlign="center"/>
 							<mx:DateField id="dfDate" width="150" showToday="true" change="cmbBranchchangeHandler(event)"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Item / Model No." width="115" textAlign="right"/>
+							<s:Label text="Item/Model No." width="90" textAlign="right"/>
 							<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Selling Price" width="115" textAlign="right"/>
-							<s:TextInput id="txtPrice" width="150" text="0.00" textAlign="right" selectable="false"/>
+							<s:Label text="Selling Price" width="90" textAlign="right"/>
+							<s:TextInput id="txtPrice" width="100" text="0.00" textAlign="right" selectable="false"/>
 							<s:Button label="View Historical Pricing"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Quantity" width="115" textAlign="right"/>
-							<s:NumericStepper id="txtQty" width="150" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
+							<s:Label text="Quantity" width="90" textAlign="right"/>
+							<s:NumericStepper id="txtQty" width="100" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
 							<s:Button id="btnAdd" label="Add  Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
 							<s:Spacer width="10"/>
 							<s:Label text="Net Price"/>
@@ -506,7 +507,7 @@
 				</s:HGroup>
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
-			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
+			<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
 						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
 				<s:columns>
 					<s:ArrayList>
@@ -565,8 +566,8 @@
 			</s:HGroup>
 		</s:VGroup>		
 		<mx:HRule height="5" width="100%"/>
-		<s:HGroup id="hgControl" width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
-				  horizontalAlign="left" verticalAlign="middle">						
+		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+				  horizontalAlign="left" verticalAlign="top">						
 			<s:Button id="btnCheckOut" label="Submit Requisition" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnNew"  label="New Requisition" click="btnNewclickHandler(event)"/>

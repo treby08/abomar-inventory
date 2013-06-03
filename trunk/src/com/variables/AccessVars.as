@@ -24,5 +24,10 @@ package com.variables
 		public var colBgColorOver:uint = 0xecf7ab;
 		public var colBgColorOut:uint = 0xadde8c;
 		public var borderStrokeColor:uint = 0xadde8c;
+		
+		public var arrTerm:ArrayCollection = new ArrayCollection([
+			{name:"PRE-PAID",termId:0},{name:"CASH",termId:1},{name:"COD",termId:2},
+			{name:"7-DAYS",termId:3},{name:"15-DAYS",termId:4},{name:"30-DAYS",termId:5},
+			{name:"45-DAYS",termId:6},{name:"60-DAYS",termId:7},{name:"Special",termId:8}]);
 	}
 }

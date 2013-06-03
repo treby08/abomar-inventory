@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" minWidth="1000" minHeight="500"
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="5" paddingLeft="10" paddingRight="10" paddingTop="5"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -108,6 +108,18 @@
 					}	
 					i++;
 				}
+			}
+			
+			public function getSelectedInvoice(branchID:String):Object{
+				//var i:int=0;
+				for each (var item:Object in cmbDeliver.dataProvider as ArrayCollection){
+					//trace(item.branchID," == ",branchID)
+					if (item.branchID == branchID){
+						return item;
+					}	
+					//i++;
+				}
+				return {};
 			}
 			
 			private var _arrCol:ArrayCollection;
@@ -268,7 +280,7 @@
 				//btnPrint.enabled = true;
 			}
 			
-			private function setDateFormat(d:Date):String{
+			public function setDateFormat(d:Date):String{
 				var strDate:String="";
 				//strDate = String(d.month+1)+"/"+d.date+"/"+d.fullYear;
 				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
@@ -471,7 +483,7 @@
 		<mx:NumberFormatter id="numFmttr" precision="2" useThousandsSeparator="true"  />
 	</fx:Declarations>
 	<!--<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:HGroup width="30%" height="100%" maxWidth="350">
+	<s:HGroup width="30%" height="100%" minWidth="300" maxWidth="350" >
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:layout>
 				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
@@ -483,7 +495,7 @@
 			</s:borderStroke> 
 			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
 				<s:Label text="Search"/>
-				<s:TextInput prompt="[Requisition No / Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
+				<s:TextInput prompt="[Requisition No / Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
 				<s:Button label="Search" click="SearchClickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
@@ -497,42 +509,35 @@
 			</s:Group>
 		</s:BorderContainer>
 	</s:HGroup>
-	<s:VGroup id="cont" width="70%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+	<s:VGroup id="cont" minHeight="600" width="70%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false">
-			<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset">
+			<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 				<s:borderStroke> 
 					<mx:SolidColorStroke 
 						color="{AccessVars.instance().borderStrokeColor}" 
 						weight="2"/> 
 				</s:borderStroke> 
-				<s:HGroup  width="100%" height="100%" fontSize="16">
-					<s:VGroup  width="45%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="25" paddingRight="25">
-						<s:HGroup  width="100%" verticalAlign="middle">
-							<s:Label text="Supplier" width="90" textAlign="right"/>
-							<s:DropDownList id="cmbSupplier" width="100%" prompt="[Select Supplier]" labelField="label"/>
-						</s:HGroup>
+				<s:HGroup  width="100%" height="100%" fontSize="16">					
+					<s:HGroup width="50%" verticalAlign="top" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="15" paddingRight="15">
+						<s:Label text="Invoice To" width="90" textAlign="right"/>
+						<s:TextArea id="txtInvoice" width="100%" height="90"/>
+					</s:HGroup>
+					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Invoice To" width="90" textAlign="right"/>
-							<s:TextInput id="txtInvoice" width="100%" />
-						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Deliver To" width="90" textAlign="right"/>
-							<s:DropDownList id="cmbDeliver" width="100%" labelField="label"/>
-						</s:HGroup>
-					</s:VGroup>
-					
-					<s:VGroup  width="55%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="PO No." width="115" textAlign="right"/>
+							<s:Label text="PO No." width="60" textAlign="right"/>
 							<s:TextInput id="txtReqNo" width="100%" editable="false"/>
 							<s:Label text="Date" textAlign="center"/>
 							<mx:DateField id="dfDate" width="150" showToday="true"/>
 						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle" visible="false">
+						<s:HGroup width="100%" verticalAlign="middle" visible="false" includeInLayout="false">
 							<s:Label text="Item / Model No." width="115" textAlign="right"/>
 							<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
 						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle" visible="false">
+						<s:HGroup  width="100%" verticalAlign="middle">
+							<s:Label text="Supplier" width="60" textAlign="right"/>
+							<s:DropDownList id="cmbSupplier" width="100%" prompt="[Select Supplier]" labelField="label"/>
+						</s:HGroup>
+						<s:HGroup width="100%" verticalAlign="middle" visible="false" includeInLayout="false">
 							<s:Label text="Quantity" width="115" textAlign="right"/>
 							<s:NumericStepper id="txtQty" width="150" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
 							<s:TextInput id="txtPrice" width="150" text="0.00" textAlign="right" selectable="false" visible="false" includeInLayout="false"/>
@@ -540,6 +545,10 @@
 							<s:Spacer width="35%"/>
 							<s:Label text="Net Price"/>
 							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
+						</s:HGroup>
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="Deliver To" width="60" textAlign="right"/>
+							<s:DropDownList id="cmbDeliver" width="100%" labelField="label"/>
 						</s:HGroup>
 						
 						<!--<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
@@ -560,21 +569,21 @@
 				</s:HGroup>
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
-			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
+			<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
 						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="20" itemRenderer="com.module.renderer.IncludeItemRenderer" editable="false"/>
-						<s:GridColumn width="45" dataField="num" headerText="No." editable="false"/>
-						<s:GridColumn dataField="qty" headerText="Qty" width="60"  editable="true">
+						<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>
+						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="true">
 							<s:headerRenderer>
 								<fx:Component>
 									<s:DefaultGridHeaderRenderer textAlign="center"/>
 								</fx:Component>
 							</s:headerRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="unit" headerText="Unit" width="50"  editable="false"/>
-						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="150"  editable="false">
+						<s:GridColumn dataField="unit" headerText="Unit" width="40"  editable="false"/>
+						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="120"  editable="false">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="left"/>
@@ -588,7 +597,7 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="weight" headerText="WT" width="50"  editable="false">
+						<s:GridColumn dataField="weight" headerText="WT" width="40"  editable="false">
 							<s:headerRenderer>
 								<fx:Component>
 									<s:DefaultGridHeaderRenderer textAlign="center"/>
@@ -639,8 +648,8 @@
 			</s:HGroup>
 		</s:VGroup>		
 		<mx:HRule height="5" width="100%"/>
-		<s:HGroup id="hgControl" width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
-				  horizontalAlign="left" verticalAlign="middle">						
+		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+				  horizontalAlign="left" verticalAlign="top">						
 			<s:Button id="btnCheckOut" label="Submit Purchase Order" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnNew"  label="New Purchase Order" click="btnNewclickHandler(event)"/>

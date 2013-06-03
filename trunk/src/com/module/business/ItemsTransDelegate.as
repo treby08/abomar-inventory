@@ -488,6 +488,7 @@ package com.module.business
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodDesc = obj.@prodDesc;
 					arrObj.prodComModUse = obj.@prodComModUse;
 					arrObj.weight = obj.@weight;
 					arrObj.srPrice = obj.@srPrice;
@@ -609,11 +610,10 @@ package com.module.business
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
-					/*<item podID=\"".$row['podID']."\" pod_purOrdID=\"".$row['pod_purOrdID']."\" pod_prodID=\"".$row['pod_prodID']."\" 
-					prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" 
-					prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" 
-					srPrice=\"".$row['srPrice']."\"/>*/
-					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					/*<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" 
+					purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
+					purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" 
+					totalAmt=\"".$row['totalAmt']."\" />*/		
 					arrObj.podID = obj.@podID;
 					arrObj.pod_purOrdID = obj.@pod_purOrdID;
 					arrObj.pod_prodID = obj.@pod_prodID;
@@ -626,9 +626,11 @@ package com.module.business
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodComModUse = obj.@prodComModUse;
 					arrObj.srPrice = obj.@srPrice;
+					arrObj.prodWeight = obj.@prodWeight;
 					arrObj.pkgNo = "";
 					arrObj.qtyRec = "";
 					arrObj.remarks="";
+					
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);
 					num++;
@@ -649,7 +651,9 @@ package com.module.business
 					/*"<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" 
 					purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
 					purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" 
-					totalAmt=\"".$row['totalAmt']."\"/>"*/
+					totalAmt=\"".$row['totalAmt']."\" branchPNum=\"".$row['branchPNum']."\"  branchMNum=\"".$row['branchMNum']."\" 
+					supAddress=\"".$row['supAddress']."\" supPhoneNum=\"".$row['supPhoneNum']."\" supMobileNum=\"".$row['supMobileNum']."\" 
+					branchAdd=\"".$row['branchAdd']."\"/>"*/
 					arrObj.purOrdID = obj.@purOrdID;
 					arrObj.purOrd_supID = obj.@purOrd_supID;
 					arrObj.supCompName = obj.@supCompName;
@@ -660,6 +664,14 @@ package com.module.business
 					arrObj.branchID = obj.@purOrd_branchID;
 					arrObj.dateTrans = obj.@dateTrans;
 					arrObj.totalAmt = obj.@totalAmt;
+					arrObj.branchName = obj.@bCode+" - "+obj.@bLocation;
+					arrObj.branchPNum = obj.@branchPNum;
+					arrObj.branchAdd = obj.@branchAdd;
+					arrObj.branchMNum = obj.@branchMNum;
+					arrObj.supAddress = obj.@supAddress;
+					arrObj.supPhoneNum = obj.@supPhoneNum;
+					arrObj.supMobileNum = obj.@supMobileNum;
+					arrObj.term = obj.@term;
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					
@@ -685,6 +697,151 @@ package com.module.business
 			trace("warehouseReceipt_WRNo_onResult",strResult);
 			if (_paramsUniqueID.qBox){
 				_paramsUniqueID.qBox.updateWRID(String(evt.result));
+				_paramsUniqueID.qBox = null;
+				_paramsUniqueID = null;
+			}	
+		}
+		
+		public function warehouseDiscrepancy_AED(params:Object):void{
+			_params = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("warehouseDiscrepancy_AED",_params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.WAREHOUSE_DISCREPANCY_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(warehouseDiscrepancy_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function warehouseDiscrepancy_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("warehouseDiscrepancy_AED_onResult",strResult);
+			if(_params == null)
+				return;
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Warehouse Discrepancy Error: "+strResult,"Error");
+				return;
+			}
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrObj:Object ;
+			var obj:XML;
+			if (str){
+				Alert.show(str+" Warehouse Discrepancy Complete.", str+" Warehouse Discrepancy",4,null,function():void{
+					if (_params.pBox){
+						if (str == "Adding")
+							_params.pBox.updateWR();
+						else
+							_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}
+					_params = null;
+				});
+			}else if (_params.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				var num:int = 1;
+				//trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					/*whrdID,whrd_whrID, whrd_podID, whrd_prodID,whrd_qty,whrd_qty_rec,whrd_pkgNo,prodDescrip,prodModel,prodCode,remLabel*/		
+					arrObj.whrdID = obj.@whrdID;
+					arrObj.whrd_whrID = obj.@whrd_whrID;
+					arrObj.whrd_podID = obj.@whrd_podID;
+					arrObj.whrd_prodID = obj.@whrd_prodID;
+					arrObj.prodDesc = obj.@prodDescrip;
+					arrObj.qty = obj.@whrd_qty;
+					arrObj.qtyRec = obj.@whrd_qty_rec;
+					arrObj.pkgNo = obj.@whrd_pkgNo;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.remarks = obj.@remLabel;
+					if (obj.@isNew =="1"){
+						arrObj.diff = "New";
+					}else{
+						var diff:Number = Number(obj.@whrd_qty) - Number(obj.@whrd_qty_rec);
+						arrObj.diff = diff>0?"-"+diff:"+"+diff;
+					}
+					arrObj.num = num;					
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				if (_params.qBox){
+					_params.itemRen.isDispatch = false;
+					_params.qBox.setDataProvider(arrCol,3);
+					_params.qBox = null;
+					_params = null;
+				}
+			}else{
+				
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					/*<item whrID=\"".$row['whrID']."\" whr_purOrdID=\"".$row['whr_purOrdID']."\" whr_supID=\"".$row['whr_supID']."\" 
+					whr_supInvNo=\"".$row['whr_supInvNo']."\" whr_supInvDate=\"".$row['whr_supInvDate']."\" supCompName=\"".$row['supCompName']."\" 
+					bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" dateTrans=\"".$row['whr_date']."\" 
+					branchPNum=\"".$row['branchPNum']."\" branchMNum=\"".$row['branchMNum']."\" supAddress=\"".$row['supAddress']."\" 
+					supPhoneNum=\"".$row['supPhoneNum']."\" supMobileNum=\"".$row['supMobileNum']."\" branchAdd=\"".$row['branchAdd']."\" 
+					term=\"".$row['term']."\" whr_preparedBy=\"".$row['whr_preparedBy']."\" whr_checkedBy=\"".$row['whr_checkedBy']."\"/>*/
+					arrObj.whrID = obj.@whrID;
+					arrObj.whrID_label = obj.@whrID_label;
+					arrObj.whdID_label = obj.@whdID_label;
+					arrObj.whr_purOrdID = obj.@whr_purOrdID;
+					arrObj.whr_supID = obj.@whr_supID;
+					arrObj.supCompName = obj.@supCompName;
+					arrObj.bCode = obj.@bCode;				
+					arrObj.bLocation = obj.@bLocation;			
+					arrObj.whr_supInvNo = obj.@whr_supInvNo;			
+					arrObj.whr_supInvDate = obj.@whr_supInvDate;			
+					arrObj.whr_checkedBy = obj.@whr_checkedBy;			
+					arrObj.whr_preparedBy = obj.@whr_preparedBy;			
+					arrObj.branchID = obj.@whr_branchID;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.totalAmt = obj.@totalAmt;
+					arrObj.branchName = obj.@bCode+" - "+obj.@bLocation;
+					arrObj.branchPNum = obj.@branchPNum;
+					arrObj.branchAdd = obj.@branchAdd;
+					arrObj.branchMNum = obj.@branchMNum;
+					arrObj.supAddress = obj.@supAddress;
+					arrObj.supPhoneNum = obj.@supPhoneNum;
+					arrObj.supMobileNum = obj.@supMobileNum;
+					arrObj.term = obj.@term;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){					
+					_params.qBox.dataCollection = arrCol;
+					_params.qBox = null;
+					_params = null;
+				}
+			}
+		}
+		
+		public function warehouseDiscrepancy_WDNo(params:Object):void{
+			_paramsUniqueID = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("warehouseDiscrepancy_WDNo",params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.WAREHOUSE_DISCREPANCY_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(warehouseDiscrepancy_WDNo_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		private function warehouseDiscrepancy_WDNo_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("warehouseDiscrepancy_WDNo_onResult",strResult);
+			if (_paramsUniqueID.qBox){
+				_paramsUniqueID.qBox.updateWDID(String(evt.result));
 				_paramsUniqueID.qBox = null;
 				_paramsUniqueID = null;
 			}	

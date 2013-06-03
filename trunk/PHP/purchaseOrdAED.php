@@ -70,13 +70,13 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice 
+		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice 
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
 							WHERE prd_purReqID = $purReqID",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['srPrice']."\"/>";
+				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" prodDesc=\"".$row['prodDescrip']."\" srPrice=\"".$row['srPrice']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;

@@ -78,6 +78,10 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_WH_RECEIPT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_WH_RECEIPT_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_WH_RECEIPT_NUMBER, ItemsTransCommand );
+			
+			addCommand( ItemsTransEvent.SEARCH_WH_DISCREPANCY, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_WH_DISCREPANCY_NUMBER, ItemsTransCommand );
 		}
 	}
 }
