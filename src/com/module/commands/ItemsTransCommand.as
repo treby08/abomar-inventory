@@ -152,6 +152,20 @@ package com.module.commands
 					obj.type = "get_req_no";
 					ItemsTransDelegate.instance().warehouseReceipt_WRNo(obj);
 					break;
+				
+				/*Warehouse Discrepancy*/
+				case ItemsTransEvent.SEARCH_WH_DISCREPANCY:
+					obj.type = "search";
+					ItemsTransDelegate.instance().warehouseDiscrepancy_AED(obj);
+					break;
+				case ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().warehouseDiscrepancy_AED(obj);
+					break;
+				case ItemsTransEvent.GET_WH_DISCREPANCY_NUMBER:
+					obj.type = "get_whd_no";
+					ItemsTransDelegate.instance().warehouseDiscrepancy_WDNo(obj);
+					break;
 			}
 		}
 	}

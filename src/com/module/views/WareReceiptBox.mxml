@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" minWidth="1000" minHeight="500"
 		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
@@ -9,6 +9,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.WareReceiptRenderer;
+			import com.module.views.panels.AddProductPanel;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -48,6 +49,8 @@
 					//cmbDeliver.dataProvider = arr;
 					//cmbDeliver.selectedIndex = 0;
 				}else if (type == 3){
+					if (dg.dataProviderLength > 0)
+						dg.dataProvider.removeAll();
 					dg.dataProvider = arr;
 					
 				}else if (type == 4){
@@ -112,6 +115,7 @@
 				var obj:Object = new Object();
 				obj.supInvNo = txtSupInvNo.text;
 				obj.supInvDate = setDateFormat(dfInvDate.selectedDate);
+				obj.supID = _tempData.purOrd_supID;
 				obj.branchID = _tempData.branchID;
 				obj.purOrdID = _tempData.purOrdID;
 				obj.prepBy = txtPrepBy.text;
@@ -120,8 +124,12 @@
 				
 				var strItem:Array = new Array();
 				
-				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.podID+"|"+item.pod_prodID+"|"+item.qty+"|"+item.qtyRec+"|"+item.pkgNo+"|"+item.remarks);
+				for each (item in dg.dataProvider){
+					var prdNew:String = "0";
+					if (item.hasOwnProperty("isNew") && item.isNew=="1")
+						prdNew="1";
+						
+					strItem.push(item.podID+"|"+item.pod_prodID+"|"+item.qty+"|"+item.qtyRec+"|"+item.pkgNo+"|"+item.remarks+"|"+prdNew);
 				}
 				obj.whrDetails = strItem.join("||");
 				obj.pBox = this;
@@ -132,7 +140,7 @@
 				
 			}
 			
-			private function setDateFormat(d:Date):String{
+			public function setDateFormat(d:Date):String{
 				var strDate:String="";
 				//strDate = String(d.month+1)+"/"+d.date+"/"+d.fullYear;
 				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
@@ -149,7 +157,7 @@
 				printJob.send();*/
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 4;
+				_printBox.orderTypeID = 1;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
@@ -172,14 +180,15 @@
 			protected function btnNewclickHandler(event:MouseEvent):void
 			{
 				if (dg.dataProvider != null){
-					Alert.show("Are you sure to create a new Purchase Order?","Purchase Order not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
+					Alert.show("Are you sure to clear all field in this WH Receipt?","Clear WH Receipt",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
 				}else{
 					_type = 0;
-					mainCont.enabled = true;
+					mainCont.enabled = false;
 					btnCheckOut.label = "Save WH Receipt";
-					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
-					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
+					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnNew.visible = btnNew.includeInLayout = true;
 					clearFields(null);
 					//btnPrint.enabled = false;
 					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
@@ -191,22 +200,23 @@
 				_type = 1;
 				btnCheckOut.label = "Save WH Receipt";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
-				btnPrintWR.visible = btnPrintWR.includeInLayout = false;
+				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				mainCont.enabled = true;
 			}
 			
 			private function newSalesHandler(event:CloseEvent):void{
 				if (event.detail == Alert.YES){
 					_type = 0;
-					mainCont.enabled = true;
+					mainCont.enabled = false;
 					btnCheckOut.label = "Save WH Receipt";
-					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnNew.visible = btnNew.includeInLayout = true;
 					clearFields(null);
 					//btnPrint.enabled = false;
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
 				}
 			}
 			
@@ -245,7 +255,7 @@
 			public function updateWR():void{
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 				btnNew.label = "Clear WH Receipt";
-				btnEdit.visible = btnEdit.includeInLayout = true;
+				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				var PO_renderer:WareReceiptRenderer;
 				for (var i:int=dgSearch.numElements-1; i >= 0; i-- ){
@@ -258,13 +268,22 @@
 				mainCont.enabled = false;
 			}
 			
+			protected function addItemToWR(event:MouseEvent):void
+			{
+				var addProd:AddProductPanel = new AddProductPanel();
+				addProd.POID = _tempData.purOrdID;
+				addProd.dataGrid = dg;
+				PopUpManager.addPopUp(addProd,this,true);
+				PopUpManager.centerPopUp(addProd);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<mx:NumberFormatter id="numFmttr" precision="2" useThousandsSeparator="true"  />
 	</fx:Declarations>
 	<!--<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:HGroup width="30%" height="100%" maxWidth="350">
+	<s:HGroup width="25%" height="100%" minWidth="300" maxWidth="350">
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:layout>
 				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
@@ -276,7 +295,7 @@
 			</s:borderStroke> 
 			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
 				<s:Label text="Search"/>
-				<s:TextInput prompt="[PO No. / Supplier]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
+				<s:TextInput prompt="[PO No. / Supplier]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
 				<s:Button label="Search" click="SearchClickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
@@ -291,27 +310,27 @@
 			</s:Group>
 		</s:BorderContainer>
 	</s:HGroup>
-	<s:VGroup id="cont" width="70%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false">
-			<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset" >
+	<s:VGroup id="cont" minHeight="500" width="75%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false" minWidth="600">
+			<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset" >
 				<s:borderStroke> 
 					<mx:SolidColorStroke 
 						color="{AccessVars.instance().borderStrokeColor}" 
 						weight="2"/> 
 				</s:borderStroke> 
-				<s:HGroup  width="100%" height="100%" fontSize="16" verticalAlign="middle">
-					<s:VGroup  width="40%" paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10">
+				<s:HGroup width="100%" height="100%" fontSize="16" verticalAlign="middle">
+					<s:VGroup  width="30%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10" verticalAlign="middle">
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Branch" width="90" textAlign="right"/>
+							<s:Label text="Branch" width="50" textAlign="right"/>
 							<s:TextInput id="txtBranch" width="100%" />
 						</s:HGroup>
-						<s:HGroup width="100%" height="100%" verticalAlign="middle">
-							<s:Label text="PO No." width="90" textAlign="right"/>
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:Label text="PO No." width="50" textAlign="right"/>
 							<s:Label id="txtPONo" width="100%" fontSize="16" text="[No PO selected]"/>
 						</s:HGroup>
 					</s:VGroup>
 					
-					<s:VGroup  width="30%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:VGroup  width="40%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" verticalAlign="middle">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Supplier's Invoice No." width="130" textAlign="right"/>
 							<s:TextInput id="txtSupInvNo" width="100%" />
@@ -321,7 +340,7 @@
 							<mx:DateField id="dfInvDate" width="100%" showToday="true"/>
 						</s:HGroup>						
 					</s:VGroup>
-					<s:VGroup  width="30%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:VGroup  width="30%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" verticalAlign="middle">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="WR No." width="50" textAlign="right"/>
 							<s:TextInput id="txtWRNo" width="100%" editable="false"/>
@@ -334,7 +353,7 @@
 				</s:HGroup>
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
-			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" fontSize="12" editable="true" gridClick="dg_gridClickHandler(event)"
+			<s:DataGrid id="dg" width="100%" height="100%" minHeight="250" sortableColumns="false" fontSize="12" editable="true" gridClick="dg_gridClickHandler(event)"
 						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
 				<s:columns>
 					<s:ArrayList>
@@ -386,23 +405,24 @@
 					</s:ArrayList>
 				</s:columns>
 			</s:DataGrid>
-			<s:HGroup width="100%" verticalAlign="middle" gap="10" paddingLeft="20">
-				<s:Label text="Prepared By" width="75" textAlign="right"/>
-				<s:TextInput id="txtPrepBy" width="200" />
-				<s:Label text="Checked By" width="75" textAlign="right"/>
-				<s:TextInput id="txtCheckBy" width="200"/>
-				<s:Spacer width="100%"/>
-				<s:Button id="btnAddItems" label="Add Items to Warehouse Receipt"/>
+			<s:HGroup width="100%" verticalAlign="middle" gap="5" paddingLeft="10">
+				<s:Label text="Prepared By" textAlign="right"/>
+				<s:TextInput id="txtPrepBy" width="45%" />
+				<s:Label text="Checked By" textAlign="right"/>
+				<s:TextInput id="txtCheckBy" width="45%"/>
+				<s:Spacer width="10%"/>
+				<s:Button id="btnAddItems" label="Add Items to Warehouse Receipt" click="addItemToWR(event)"/>
 			</s:HGroup>
 		</s:VGroup>		
 		<mx:HRule height="5" width="100%"/>
-		<s:HGroup id="hgControl" width="100%" height="50" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
-				  horizontalAlign="left" verticalAlign="middle">						
+		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
+				  horizontalAlign="left" verticalAlign="top">						
 			<s:Button id="btnCheckOut" label="Save WH Receipt" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
-			<s:Button id="btnPrintWR" label="Print WH Receipt" click="printPrevWR()" visible="false" includeInLayout="false"/>
+			
 			<s:Spacer width="100%"/>
 			<s:Button id="btnNew"  label="New WH Receipt" click="btnNewclickHandler(event)"/>
 			<s:Button id="btnEdit"  label="Edit WH Receipt" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnPrintWR" label="Print WH Receipt" click="printPrevWR()" visible="false" includeInLayout="false"/>
 			<s:Button id="btnView"  label="View Listings" visible="false" includeInLayout="false"/>
 		</s:HGroup>
 	</s:VGroup>
