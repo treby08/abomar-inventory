@@ -38,29 +38,41 @@
 			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}
 		
-		
 	}else if ($type == "edit"){
 		mysql_query("UPDATE purchaseReq SET purReq_branchID = '$purReq_branchID' , preparedBy='$preparedBy' , approvedBy='$approvedBy' , dateTrans='$dateTrans' , totalAmt = '$totalAmt' WHERE purReqID = $purReqID",$conn);
+		
+		mysql_query("UPDATE purchaseReq_details SET isRemove=1 WHERE prd_purReqID=$purReqID",$conn);
+		
+		for ($i=0; $i < count($arr_purReqDetails); $i++){
+			$arrDetails = explode("|",$arr_purReqDetails[$i]);
+			if ($arrDetails[3]=="undefined"){
+				$sql = "INSERT INTO purchaseReq_details (`prd_purReqID`, `prd_prodID`, `quantity`, `totalPurchase`, `prd_dateTrans`, `prd_timeTrans`,isRemove) VALUES ($purReqID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", NOW(), NOW(),0)";
+			}else{
+				$sql = "UPDATE purchaseReq_details SET quantity=".$arrDetails[1].", totalPurchase=".$arrDetails[2].", isRemove=0 
+				WHERE prdID=".$arrDetails[3];
+			}
+			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
+		}
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM purchaseReq WHERE purReqID = '$purReqID'",$conn);
 	}else if ($type == "search"){
-		$query = mysql_query("SELECT pr.*, b.bCode, b.branchID FROM purchaseReq pr
+		$query = mysql_query("SELECT pr.*, b.bCode, b.branchID, b.bLocation  FROM purchaseReq pr
 							INNER JOIN branches b ON b.branchID=pr.purReq_branchID
-							WHERE bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%'",$conn);
+							WHERE (bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%') AND onProcess=0",$conn); 
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>";
+				$xml .= "<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice 
+		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice,prodWeight 
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
-							WHERE prd_purReqID = $purReqID",$conn);
+							WHERE prd_purReqID = $purReqID AND (quantity-itemServed) <> 0 AND isRemove=0",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['srPrice']."\"/>";
+				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
@@ -71,10 +83,10 @@
 			
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['purReqID']?$row['purReqID']:1;
-		echo "REQ - ".number_pad($reqNum);
+		echo number_pad($reqNum);
 	}
 	
 	function number_pad($number) {
-		return str_pad($number,4,"0",STR_PAD_LEFT);
+		return str_pad($number,3,"0",STR_PAD_LEFT);
 	}
 ?>

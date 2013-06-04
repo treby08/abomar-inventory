@@ -187,7 +187,7 @@ package com.module.business
 		
 		public function quote_AED(params:Object):void{
 			_paramsQuote = params;
-			trace("quote_AED",_paramsQuote.type,_paramsQuote.quoteID);
+			trace("quote_AED",_paramsQuote.type,_paramsQuote.sqID);
 			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.QOUTE_SERVICE);
 			var token:AsyncToken = service.send(params);
 			var responder:mx.rpc.Responder = new mx.rpc.Responder(quote_AED_onResult, Main_onFault);
@@ -234,24 +234,27 @@ package com.module.business
 			}else if (_paramsQuote.type=="get_details"){
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				arrObj = {};
-					
+				var num:int = 1;
 				trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
-					arrObj = {}
-					//qdID,qd_quoteID,qd_prodID,quantity,totalPurchase,prodCode,prodName,prodDesc,stockCount,unitprice,branchName
-					arrObj.qdID = obj.@qdID;
-					arrObj.qd_quoteID = obj.@qd_quoteID;
-					arrObj.branchName = obj.@branchName;
-					arrObj.qd_prodID = obj.@qd_prodID;
+					arrObj = new Object()
+					//sqdID,sqd_sqID,sqd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice,weight
+					arrObj.sqdID = obj.@sqdID;
+					arrObj.sqd_sqID = obj.@sqd_sqID;
+					arrObj.sqd_prodID = obj.@sqd_prodID;
 					arrObj.qty = obj.@quantity;
 					arrObj.total = obj.@totalPurchase;
 					arrObj.prodID = obj.@prodCode;
-					arrObj.prodName = obj.@prodName;
-					arrObj.prodDesc = obj.@prodDesc;
-					arrObj.stockCount = obj.@stockCount;
-					arrObj.price = obj.@unitprice;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodDesc = obj.@desc;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.price = obj.@srPrice;
+					arrObj.num =num;
+					arrObj.oWeight = obj.@weight;
+					arrObj.weight = Number(obj.@weight)*Number(obj.@quantity);
 					arrCol.addItem(arrObj);
+					num++;
 				}
 				if (_paramsQuote.qBox){
 					_paramsQuote.itemRen.isDispatch = false;
@@ -262,17 +265,26 @@ package com.module.business
 			}else{
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				arrObj = {};
 				for each (obj in listXML.children()){
-					arrObj = {}
-					arrObj.quoteID = obj.@quoteID;
+					/*
+					 *<item sqID=\"".$row['sqID']."\" sq_quoteNo=\"".$row['sq_quoteNo']."\" quoteLabel=\"".number_pad($row['sqID'])."\" sq_custID=\"".$row['sq_custID']."\" 
+					acctno=\"".$row['acctno']."\" conPerson=\"".$row['conPerson']."\" sq_branchID=\"".$row['sq_branchID']."\" 
+					prepBy=\"".$row['prepBy']."\" apprBy=\"".$row['apprBy']."\" dateTrans=\"".$row['dateTrans']."\" sq_vat=\"".$row['sq_vat']."\" 
+					totalAmt=\"".$row['totalAmt']."\"/> 
+					*/
+					arrObj = new Object();
+					arrObj.sqID = obj.@sqID;
+					arrObj.sq_quoteNo = obj.@sq_quoteNo;
 					arrObj.quoteLabel = obj.@quoteLabel;
-					arrObj.branchName = obj.@branchName;
-					arrObj.customer = obj.@customer;
-					arrObj.businame = obj.@businame;
-					arrObj.baddress = obj.@baddress;
-					arrObj.bPhoneNum = obj.@bPhoneNum;
-					arrObj.bMobileNum = obj.@bMobileNum;
+					arrObj.sq_custID = obj.@sq_custID;
+					arrObj.acctno = obj.@acctno;
+					arrObj.conPerson = obj.@conPerson;
+					arrObj.sq_branchID = obj.@sq_branchID;
+					arrObj.prepBy = obj.@prepBy;
+					arrObj.apprBy = obj.@apprBy;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.sq_vat = obj.@sq_vat;
+					arrObj.totalAmt = obj.@totalAmt;
 					arrCol.addItem(arrObj);
 				}
 				if (_paramsQuote.qBox){					
@@ -301,7 +313,7 @@ package com.module.business
 			var strResult:String = String(evt.result);
 			trace("quote_No_onResult",strResult);
 			
-			if (_paramsUniqueID.type=="get_req_no"){
+			if (_paramsUniqueID.type=="get_sales_no"){
 				if (_paramsUniqueID.qBox){
 					_paramsUniqueID.qBox.salesNo = String(evt.result);
 					_paramsUniqueID.qBox.genReqNoCode();
