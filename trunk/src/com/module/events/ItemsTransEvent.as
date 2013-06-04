@@ -20,6 +20,7 @@ package com.module.events
 		public static var DELETE_QUOTE:String = "delete_quote";
 		public static var SEARCH_QUOTE:String = "search_quote";
 		public static var GET_QUOTE_DETAILS:String = "get_quote_details";
+		public static var GET_QUOTE_NUMBER:String = "get_quote_number";
 		
 		public static var ADD_REQUISITION:String = "add_requisition";
 		public static var EDIT_REQUISITION:String = "edit_requisition";

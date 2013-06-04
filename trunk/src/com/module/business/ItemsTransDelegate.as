@@ -286,6 +286,31 @@ package com.module.business
 				}
 			}
 		}
+		
+		public function quote_No(params:Object):void{
+			_paramsUniqueID = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("purchaseReq_ReqNo",params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.QOUTE_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(quote_No_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		private function quote_No_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("quote_No_onResult",strResult);
+			
+			if (_paramsUniqueID.type=="get_req_no"){
+				if (_paramsUniqueID.qBox){
+					_paramsUniqueID.qBox.salesNo = String(evt.result);
+					_paramsUniqueID.qBox.genReqNoCode();
+					_paramsUniqueID.qBox = null;
+					_paramsUniqueID = null;
+				}	
+			}
+		}
+		
 		public function purchaseReq_ReqNo(params:Object):void{
 			_paramsUniqueID = params;
 			if(params.sBox)

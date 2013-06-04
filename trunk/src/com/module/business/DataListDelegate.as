@@ -96,6 +96,28 @@ package com.module.business
 				case "userType":
 				break;
 				case "branches":
+					for each (var obj:XML in listXML.children()){
+					arrObj = new Object;
+					arrObj.bCode = obj.@bCode;
+					arrObj.branchID = obj.@branchID;
+					arrObj.bLocation = obj.@bLocation;
+					arrObj.bAddress = obj.@bAddress;
+					arrObj.bConPerson = obj.@bConPerson;
+					arrObj.bDesig = obj.@bDesig;
+					arrObj.bPhoneNum = obj.@bPhoneNum;
+					arrObj.bMobileNum = obj.@bMobileNum;
+					arrObj.bEmailAdd = obj.@bEmailAdd;
+					arrObj.bLocMap = obj.@bLocMap;
+					arrObj.label = obj.@bCode+" - "+obj.@bLocation;
+					
+					arrCol.addItem(arrObj)
+				}
+					AccessVars.instance().branches = arrCol;
+					if (_profPanel.pBox){
+						_profPanel.pBox.updateDataList();
+						_profPanel.pBox = null;
+						_profPanel = null;
+					}
 				break;
 				case "remarks":
 					for each (var obj:XML in listXML.children()){

@@ -48,6 +48,10 @@ package com.module.commands
 					obj.type = "search";
 					UserDelegate.instance().Customer_AED(obj);
 					break;
+				case UserEvent.GET_CUSTOMER_LIST:
+					obj.type = "get_list";
+					UserDelegate.instance().Customer_AED(obj);
+					break;
 				
 				case UserEvent.ADD_SUPPLIER:
 					obj.type = "add";

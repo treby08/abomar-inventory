@@ -36,8 +36,10 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log3:DataListEvent = new DataListEvent(DataListEvent.GET_REMARKS_LIST,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3); 
+				if (AccessVars.instance().remarks == null){
+					var log3:DataListEvent = new DataListEvent(DataListEvent.GET_REMARKS_LIST,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				}
 				
 				dfDate.selectedDate = new Date(); 
 			}

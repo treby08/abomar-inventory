@@ -72,6 +72,10 @@ package com.module.commands
 					obj.type = "get_details";
 					ItemsTransDelegate.instance().quote_AED(obj);
 				break;
+				case ItemsTransEvent.GET_QUOTE_NUMBER:
+					obj.type = "get_sales_no";
+					ItemsTransDelegate.instance().quote_No(obj);
+				break;
 				/*PURCHASE REQUISITION*/
 				case ItemsTransEvent.ADD_REQUISITION:
 					obj.type = "add";

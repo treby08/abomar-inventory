@@ -11,6 +11,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.views.PurchaseReqBox;
+			import com.module.views.SalesQuoteBox;
 			import com.module.views.UserPanel;
 			import com.variables.AccessVars;
 			
@@ -20,7 +21,7 @@
 			import mx.managers.PopUpManager;
 			
 			private var _data:Object;
-			private var _theBox:PurchaseReqBox;
+			private var _theBox:SalesQuoteBox;
 			public var isDispatch:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
@@ -29,7 +30,7 @@
 				_data = value
 			}
 			
-			public function set theBox(value:PurchaseReqBox):void{
+			public function set theBox(value:SalesQuoteBox):void{
 				_theBox = value
 			}
 			
@@ -37,50 +38,31 @@
 			{
 				var arr:Array = String(_data.dateTrans).split("-");
 				var yr:String = String( new Date(arr[0],(arr[1]-1),arr[2]).getFullYear());
-				txtReqNo.text = _data.bCode+"-"+yr.substr(2)+"-"+ _data.reqNo;
-				txtBranch.text = _data.bCode +" - "+_data.bLocation;
-				
+				txtSalesNo.text = _data.salesNo;
+				txtCustomer.text = _data.acctno +" "+_data.conPerson;
+				txtDate.text = _data.dateTrans;
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				/* _theBox.txtfname.text = _data.fname;
-				_theBox.txtmname.text = _data.mname;
-				_theBox.txtlname.text = _data.lname;
-				_theBox.txtAdd.text = _data.address;
-				_theBox.txtPhone.text = _data.pNum;
-				_theBox.txtMobile.text = _data.mNum;
-				_theBox.txtTin.text = _data.tin;
-				_theBox.txtEmail.text = _data.email;
-				_theBox.txtBname.text = _data.businame;
-				_theBox.txtBAdd.text = _data.baddress;
-				_theBox.txtBMobile.text = _data.bMobileNum;
-				_theBox.txtBPhone.text = _data.bPhoneNum;
-				_theBox.rbMale.selected = (_data.sex == "Male")
-				_theBox.rbFemale.selected = (_data.sex == "Female")
-				_theBox._type = 1;
-				_theBox._data = _data;
-				//_theBox.btnNewUser.visible = true;
-				_theBox.btnSave.label = "Update";
-				_theBox.btnSave.visible = true;
-				_theBox.btnClear.label = "Reset to Default"; */
+			
 				isDispatch = true;
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
 				/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" 
 				bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>*/
 				
-				var obj:Object = _theBox._data = _data;
+				var obj:Object = _data;
 				_theBox.txtPrepBy.text = obj.preparedBy;
 				_theBox.txtAppBy.text = obj.approvedBy;
 				_theBox.setSelectedBranch(String(obj.branchID));
-				_theBox.reqNo = String(obj.reqNo);
-				_theBox.genReqNoCode();
+				//_theBox.reqNo = String(obj.reqNo);
+				//_theBox.genReqNoCode();
 				var arr:Array = String(_data.dateTrans).split("-");
 				_theBox.dfDate.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
 				_theBox.txtGT.text = obj.totalAmt;
 				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{qdID:obj.qouteID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
@@ -109,8 +91,9 @@
 	</s:Rect>
 	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtReqNo" width="45%" textAlign="center"/>
-		<mx:Text id="txtBranch" width="55%" selectable="false"/>
+		<s:Label id="txtSalesNo" width="25%" textAlign="center" />
+		<s:Label id="txtCustomer" width="50%" textAlign="center"/>
+		<s:Label id="txtDate" width="25%" textAlign="center" />
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>-->
