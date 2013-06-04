@@ -15,6 +15,7 @@ package com.module.events
 		public static var EDIT_CUSTOMER:String = "edit_customer";
 		public static var DELETE_CUSTOMER:String = "delete_customer";
 		public static var SEARCH_CUSTOMER:String = "search_customer";
+		public static var GET_CUSTOMER_LIST:String = "get_customer_list";
 		
 		public static var ADD_SUPPLIER:String = "add_supplier";
 		public static var EDIT_SUPPLIER:String = "edit_supplier";

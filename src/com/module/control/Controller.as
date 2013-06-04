@@ -20,6 +20,7 @@ package com.module.control
 			
 			addCommand( DataListEvent.GET_USERTYPE_LIST, DataListCommand );
 			addCommand( DataListEvent.GET_BRANCH_LIST, DataListCommand );
+			addCommand( DataListEvent.GET_BRANCH_LIST2, DataListCommand );
 			addCommand( DataListEvent.GET_REMARKS_LIST, DataListCommand );
 			addCommand( DataListEvent.ADD_BRANCH, DataListCommand );
 			addCommand( DataListEvent.EDIT_BRANCH, DataListCommand );
@@ -35,6 +36,7 @@ package com.module.control
 			addCommand( UserEvent.EDIT_CUSTOMER, UserCommand );
 			addCommand( UserEvent.DELETE_CUSTOMER, UserCommand );
 			addCommand( UserEvent.SEARCH_CUSTOMER, UserCommand );
+			addCommand( UserEvent.GET_CUSTOMER_LIST, UserCommand );
 			
 			addCommand( UserEvent.ADD_SUPPLIER, UserCommand );
 			addCommand( UserEvent.EDIT_SUPPLIER, UserCommand );

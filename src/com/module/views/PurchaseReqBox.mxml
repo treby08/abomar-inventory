@@ -58,7 +58,7 @@
 			
 			public function genReqNoCode():void{
 				var yr:String = String(dfDate.selectedDate.getFullYear());
-				if (cmbBranch && txtReqNo && (cmbBranch.dataProvider as ArrayCollection).length > 0)
+				if (cmbBranch && txtReqNo && cmbBranch.dataProvider && (cmbBranch.dataProvider as ArrayCollection).length > 0)
 					txtReqNo.text = cmbBranch.selectedItem.bCode+"-"+yr.substr(2)+"-"+_reqNo;
 			}
 			
@@ -76,7 +76,8 @@
 					dg.validateDisplayList();
 					numItems.text = "0";
 					var vat:Number = 0;			
-					var _subTot:Number = 0;				
+					var _subTot:Number = 0;	
+					_totalQty = 0;
 					for each (var item:Object in arr){						
 						_subTot += Number(item.total);
 						vat += roundDec(Number(item.total)*0.12);
@@ -180,7 +181,7 @@
 					arrCol = dg.dataProvider as ArrayCollection;
 				
 				var obj:Object = cmbProd.selectedItem;
-				_totalQty +=txtQty.value;
+				
 				
 				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text,total:txtSub.text});
 				dg.dataProvider = arrCol;
@@ -188,6 +189,10 @@
 				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
 				txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
 				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
+				_totalQty =0;
+				for each (var items:Object in arrCol){
+					_totalQty += Number(items.qty);
+				}
 				numItems.text = String(_totalQty);
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";
@@ -224,15 +229,16 @@
 				obj.vat = txtVat.text;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total);
+					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.prdID);
 				}
 				obj.purReqDetails = strItem.join("||");
+				trace("obj.purReqDetails:",obj.purReqDetails)
 				var log2:ItemsTransEvent;
 				if (_type==0){
 					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_REQUISITION,obj)
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				}else if (_type==1){
-					obj.prodID = _data.prodID;
+					obj.purReqID = _data.purReqID;
 					obj.pBox = this;
 					_fromUpdate = true;
 					log2 = new ItemsTransEvent(ItemsTransEvent.EDIT_REQUISITION,obj)
@@ -326,10 +332,14 @@
 				var item:Object = event.column.grid.dataGrid.selectedItem;
 				item.total = roundDec(Number(item.qty * item.price)).toFixed(2)
 				dg.dataProvider.itemUpdated(item);
+				
+				_totalQty = 0;				
 				var subTot:Number = 0;
 				for each (var items:Object in dg.dataProvider){
 					subTot += Number(items.total)
+					_totalQty += Number(items.qty);
 				}
+				numItems.text = String(_totalQty);
 				txtSubtot.text = roundDec(subTot).toFixed(2)
 				updateTotal();
 			}

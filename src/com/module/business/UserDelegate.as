@@ -119,7 +119,9 @@ package com.module.business
 				Alert.show("Customer "+str+" Error: "+strResult,"Error");
 				return;
 			}
-			
+			var arrCol:ArrayCollection;
+			var obj:XML;
+			var arrObj:Object;
 			if (str){
 				Alert.show(str+" Customer Complete.", str+" Customer",4,null,function():void{
 					if (_params.cpnl){
@@ -132,13 +134,62 @@ package com.module.business
 					}
 					_params = null;
 				});
+			}else if (_params.type=="get_list"){
+				listXML =  XML(evt.result);
+				arrCol = new ArrayCollection()
+				for each (obj in listXML.children()){
+					/*
+					 *<root>
+					<item custID="1" acctno="001" branchId="1" creditLine="20000" address="inhouse sdfsdfasdf" pNum="(032)225-5566|101" mNum="09252956688" tin="333-121-556-111" term="2" conPerson="Customer 1" desig="my positions" email="customer.1@gmail.com" web="www.customer1.com" inactive="false"/>
+					<item custID="2" acctno="002" branchId="3" creditLine="20000" address="outsourcing" pNum="(032)225-2222|102" mNum="09252952222" tin="333-121-556-111" term="0" conPerson="Customer 2" desig="secret" email="customer.2@gmail.com" web="www.customer2.com" inactive="false"/>
+					<item custID="3" acctno="003" branchId="1" creditLine="250000" address="outsourcing" pNum="(032)225-2333|302" mNum="09252952333" tin="333-121-556-33" term="1" conPerson="Customer 3" desig="secret" email="customer.3@gmail.com" web="www.customer3.com" inactive="false"/>
+					<item custID="4" acctno="004" branchId="2" creditLine="12310.00" address="dsadasd" pNum="123123|213" mNum="13123" tin="12312312" term="4" conPerson="Customer 4" desig="CEO" email="dasda@sahdas.com" web="www.customer4.com" inactive="false"/>
+					</root> 
+					*/
+					arrObj = new Object();
+					arrObj.custID = obj.@custID;
+					arrObj.acctno = obj.@acctno;
+					arrObj.branchID = obj.@branchId;
+					arrObj.creditLine = obj.@creditLine;
+					arrObj.address = obj.@address;
+					arrObj.pNum = obj.@pNum;
+					arrObj.mNum = obj.@mNum;
+					arrObj.tin = obj.@tin;
+					arrObj.term = obj.@term;
+					arrObj.conPerson = obj.@conPerson;
+					arrObj.desig = obj.@desig;
+					arrObj.web = obj.@web;
+					arrObj.email = obj.@email;
+					arrObj.label = obj.@acctno+" - "+obj.@conPerson;		
+					arrCol.addItem(arrObj)
+				}
+				if (_params.qBox){ 
+					AccessVars.instance().customers = arrCol;
+					_params.qBox.updateDataList();//setDataProvider(arrCol,4);
+					_params.qBox = null;
+					_params = null;
+				}
 			}else{
 				var listXML:XML = XML(evt.result);
-				var arrCol:ArrayCollection = new ArrayCollection()
-				for each (var obj:XML in listXML.children()){
-					arrCol.addItem({custID:obj.@custID,acctno:obj.@acctno,branchID:obj.@branchId,creditLine:obj.@creditLine,address:obj.@address,
-						pNum:obj.@pNum,mNum:obj.@mNum,tin:obj.@tin, term:obj.@term,conPerson:obj.@conPerson,desig:obj.@desig,web:obj.@web,
-						email:obj.@email,inactive:obj.@inactive})
+				arrCol = new ArrayCollection()
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					arrObj.custID = obj.@custID;
+					arrObj.acctno = obj.@acctno;
+					arrObj.branchID = obj.@branchID;
+					arrObj.creditLine = obj.@creditLine;
+					arrObj.address = obj.@address;
+					arrObj.pNum = obj.@pNum;
+					arrObj.mNum = obj.@mNum;
+					arrObj.tin = obj.@tin;
+					arrObj.term = obj.@term;
+					arrObj.conPerson = obj.@conPerson;
+					arrObj.desig = obj.@desig;
+					arrObj.web = obj.@web;
+					arrObj.email = obj.@email;
+					arrObj.inactive = obj.@inactive;
+					arrObj.label = obj.@acctno+" - "+obj.@conPerson;
+					arrCol.addItem(arrObj)
 				}
 				if (_params.cBox){
 					(_params.cBox as CustomerListBox).dataCollection = arrCol;
