@@ -60,7 +60,7 @@
 				dfDate.selectedDate = new Date(); 
 				
 				cmbBranch.dataProvider = AccessVars.instance().branches;
-				
+				genReqNoCode();
 			}
 			
 			public function updateDataList():void{
@@ -72,8 +72,8 @@
 			
 			public function genReqNoCode():void{
 				var yr:String = String(dfDate.selectedDate.getFullYear());
-				if (cmbBranch && txtSalesNo && (cmbBranch.dataProvider as ArrayCollection).length > 0)
-					txtSalesNo.text = cmbBranch.selectedItem.bCode+"-"+yr.substr(2)+"-"+_salesNo;
+				if (txtSalesNo)
+					txtSalesNo.text = "QTN-"+yr.substr(2)+"-SSSS-"+_salesNo;
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -90,7 +90,8 @@
 					//dg.validateDisplayList();
 					numItems.text = "0";
 					var vat:Number = 0;			
-					var _subTot:Number = 0;				
+					var _subTot:Number = 0;		
+					_totalQty = 0;
 					for each (var item:Object in arr){						
 						_subTot += Number(item.total);
 						vat += roundDec(Number(item.total)*0.12);
@@ -98,7 +99,8 @@
 						
 					}
 					txtSubtot.text = roundDec(_subTot).toFixed(2);
-					txtVat.text = roundDec(_subTot*0.12).toFixed(2);
+					txtVat.text = _data.sq_vat;
+					//txtVat.text = roundDec(_subTot*0.12).toFixed(2);
 					txtGT.text = Number(_subTot+vat).toFixed(2);
 					
 					numItems.text = String(_totalQty);
@@ -131,6 +133,15 @@
 					trace(item.branchID," == ",bID)
 					if (item.branchID == bID){
 						cmbBranch.selectedItem = item;
+						break;
+					}	
+				}
+			}
+			public function setSelectedCustomer(cID:String):void{
+				for each (var item:Object in cmbCustomer.dataProvider as ArrayCollection){
+					trace(item.custID," == ",cID)
+					if (item.custID == cID){
+						cmbCustomer.selectedItem = item;
 						break;
 					}	
 				}
@@ -204,6 +215,10 @@
 				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
 				txtVat.text = roundDec(Number(txtSubtot.text)*0.12).toFixed(2);
 				txtGT.text = Number(Number(txtSubtot.text)+Number(txtVat.text)).toFixed(2);
+				_totalQty =0;
+				for each (var items:Object in arrCol){
+					_totalQty += Number(items.qty);
+				}
 				numItems.text = String(_totalQty);
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";
@@ -225,16 +240,24 @@
 					Alert.show("No Branch Selected","Submit Quote Error");
 					return;
 				}
+				
 				/*
-				$purReq_branchID = $_REQUEST['purReq_branchID'];
+				$sq_quoteNo = $_REQUEST['sq_quoteNo'];
+				$sq_branchID = $_REQUEST['sq_branchID'];
+				$sq_custID = $_REQUEST['sq_custID'];
 				$preparedBy = $_REQUEST['preparedBy'];
 				$approvedBy = $_REQUEST['approvedBy'];
 				$dateTrans = $_REQUEST['dateTrans'];
 				$totalAmt = $_REQUEST['totalAmt']; 
+				$vat = $_REQUEST['vat']; 
+				$sqDetails = $_REQUEST['sqDetails']; 
+				$sqID = $_REQUEST['sqID']; 
 				*/
+				
 				var obj:Object = {}
-				obj.quote_branchID = cmbBranch.selectedItem.branchID;
-				obj.quote_custID = cmbCustomer.selectedItem.custID;
+				obj.sq_quoteNo = txtSalesNo.text;
+				obj.sq_branchID = cmbBranch.selectedItem.branchID;
+				obj.sq_custID = cmbCustomer.selectedItem.custID;
 				obj.preparedBy = txtPrepBy.text;
 				obj.approvedBy = txtAppBy.text;
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
@@ -242,15 +265,16 @@
 				obj.vat = txtVat.text;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total);
+					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.sqdID);
 				}
-				obj.purReqDetails = strItem.join("||");
+				obj.sqDetails = strItem.join("||");
+				trace("obj.sqDetails",obj.sqDetails);
 				var log2:ItemsTransEvent;
 				if (_type==0){
 					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				}else if (_type==1){
-					obj.prodID = _data.prodID;
+					obj.sqID = _data.sqID;
 					obj.pBox = this;
 					_fromUpdate = true;
 					log2 = new ItemsTransEvent(ItemsTransEvent.EDIT_QUOTE,obj)
@@ -323,10 +347,13 @@
 				var item:Object = event.column.grid.dataGrid.selectedItem;
 				item.total = roundDec(Number(item.qty * item.price)).toFixed(2)
 				dg.dataProvider.itemUpdated(item);
+				_totalQty = 0;				
 				var subTot:Number = 0;
 				for each (var items:Object in dg.dataProvider){
 					subTot += Number(items.total)
+					_totalQty += Number(items.qty);
 				}
+				numItems.text = String(_totalQty);
 				txtSubtot.text = roundDec(subTot).toFixed(2)
 				updateTotal();
 			}
@@ -397,7 +424,7 @@
 			
 			protected function cmbBranchchangeHandler(event:Event):void
 			{
-				//genReqNoCode(); 
+				genReqNoCode();
 			}
 			
 			protected function cmbCuschangeHandler(event:IndexChangeEvent):void
@@ -471,7 +498,7 @@
 					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Sales Quote No." width="100" textAlign="right"/>
-							<s:TextInput id="txtSalesNo" width="100%" editable="false"/>
+							<s:TextInput id="txtSalesNo" width="100%"/>
 							<s:Label text="Date" textAlign="center"/>
 							<mx:DateField id="dfDate" width="140" showToday="true" change="cmbBranchchangeHandler(event)"/>
 						</s:HGroup>

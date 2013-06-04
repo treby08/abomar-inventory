@@ -38,8 +38,8 @@
 			{
 				var arr:Array = String(_data.dateTrans).split("-");
 				var yr:String = String( new Date(arr[0],(arr[1]-1),arr[2]).getFullYear());
-				txtSalesNo.text = _data.salesNo;
-				txtCustomer.text = _data.acctno +" "+_data.conPerson;
+				txtSalesNo.text = _data.sq_quoteNo;
+				txtCustomer.text = _data.acctno +" - "+_data.conPerson;
 				txtDate.text = _data.dateTrans;
 			}
 			
@@ -49,20 +49,22 @@
 				isDispatch = true;
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
-				/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" 
-				bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>*/
 				
-				var obj:Object = _data;
-				_theBox.txtPrepBy.text = obj.preparedBy;
-				_theBox.txtAppBy.text = obj.approvedBy;
-				_theBox.setSelectedBranch(String(obj.branchID));
-				//_theBox.reqNo = String(obj.reqNo);
-				//_theBox.genReqNoCode();
+				var obj:Object = _theBox._data = _data;
+								
+				_theBox.txtSalesNo.text = obj.sq_quoteNo;
+				_theBox.txtPrepBy.text = obj.prepBy;
+				_theBox.txtAppBy.text = obj.apprBy;
+				_theBox.txtVat.text = obj.sq_vat;
+				_theBox.setSelectedBranch(String(obj.sq_branchID));
+				_theBox.setSelectedCustomer(String(obj.sq_custID));
+				
 				var arr:Array = String(_data.dateTrans).split("-");
 				_theBox.dfDate.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
+				trace("obj.sqID:",obj.sqID)
 				_theBox.txtGT.text = obj.totalAmt;
 				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{qdID:obj.qouteID,qBox:_theBox,itemRen:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{sqID:obj.sqID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;

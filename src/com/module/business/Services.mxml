@@ -70,7 +70,7 @@
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="qoute_service"
-		url="{SecurityType.HTTP_HOST+'/quoteAED.php'}"
+		url="{SecurityType.HTTP_HOST+'/salesQuoteAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="purchase_req_service"
