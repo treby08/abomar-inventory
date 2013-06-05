@@ -32,9 +32,9 @@
 					<sub name="Warehouse Discrepancy" code="inv_wd"/>
 				</main>
 				<main icon="assets/icons/icon_sales.png" name="Sales">
-					<sub name="New Sales Quote" code="sal_nsq"/>
-					<sub name="New Sales Order" code="sal_nso"/>
-					<sub name="Sales Order List" code="sal_sol"/>
+					<sub name="New Quote" code="sal_nsq"/>
+					<sub name="New Invoice" code="sal_nsi"/>
+					<sub name="Payment" code="sal_pay"/>
 				</main>
 				
 				<main name="Customers" code="cus_lst"/>	
@@ -90,9 +90,9 @@
 					case "pur_pol":	
 						AccessVars.instance().mainApp.appChange(null,4,String(event.item.@code));
 					break;
-					case "sal_nso":	
+					case "sal_nsi":	
 					case "sal_nsq":
-					case "sal_sol":
+					case "sal_pay":
 						AccessVars.instance().mainApp.appChange(null,3,String(event.item.@code));
 					break;
 					case "cus_new":	

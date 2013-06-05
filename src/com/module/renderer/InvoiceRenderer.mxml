@@ -10,8 +10,8 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.views.PurchaseReqBox;
 			import com.module.views.InvoiceBox;
+			import com.module.views.PurchaseReqBox;
 			import com.module.views.UserPanel;
 			import com.variables.AccessVars;
 			
@@ -21,6 +21,7 @@
 			import mx.managers.PopUpManager;
 			
 			private var _data:Object;
+			private var _isSelected:Boolean = false;
 			private var _theBox:InvoiceBox;
 			public var isDispatch:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
@@ -29,9 +30,23 @@
 			public function set data(value:Object):void{
 				_data = value
 			}
+			public function get data():Object{
+				return _data;
+			}
 			
 			public function set theBox(value:InvoiceBox):void{
 				_theBox = value
+			}
+			
+			public function set isSelected(value:Boolean):void{
+				_isSelected = value
+				if (value)
+					sFill.color = AccessVars.instance().colBgColorOver
+				else
+					sFill.color=AccessVars.instance().colBgColor;
+			}
+			public function get isSelected():Boolean{
+				return _isSelected;
 			}
 			
 			public function creationCompleteHandler(event:FlexEvent):void
@@ -41,11 +56,18 @@
 				txtSalesNo.text = _data.sq_quoteNo;
 				txtCustomer.text = _data.acctno +" - "+_data.conPerson;
 				txtDate.text = _data.dateTrans;
+				
+				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
+				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-			
+				for (var i:int =0; i < _theBox.dgSearch.numElements; i++){
+					(_theBox.dgSearch.getElementAt(i) as InvoiceRenderer).isSelected = false;
+				}
+				isSelected = true;
+				
 				isDispatch = true;
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
@@ -71,6 +93,7 @@
 				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
 				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				_theBox.btnView.visible = _theBox.btnView.includeInLayout = false;
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void
@@ -86,12 +109,21 @@
 				}
 			}
 			
+			private function itemMouseOver(evt:MouseEvent):void{
+				if (!isSelected)
+					sFill.color = AccessVars.instance().colBgColorOver;
+			}
+			private function itemMouseOut(evt:MouseEvent):void{
+				if (!isSelected)
+					sFill.color=AccessVars.instance().colBgColor;
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Rect width="100%" height="100%">
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
+	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 		<s:Label id="txtSalesNo" width="25%" textAlign="center" />
 		<s:Label id="txtCustomer" width="50%" textAlign="center"/>

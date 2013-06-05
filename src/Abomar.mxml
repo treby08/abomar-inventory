@@ -12,6 +12,7 @@
 			import com.module.views.CustomerBox;
 			import com.module.views.CustomerListBox;
 			import com.module.views.InventoryBox;
+			import com.module.views.InvoiceBox;
 			import com.module.views.LoginPanel;
 			import com.module.views.ProductBox;
 			import com.module.views.ProductList;
@@ -134,11 +135,11 @@
 					case 3:
 						if (code == "sal_nsq"){
 							objBox = new SalesQuoteBox();
-							_cnv.label = "Sales Quote";
-						}/*else{
-							objBox = new SalesBox();
-							_cnv.label = "Sales";
-						}*/
+							_cnv.label = "Quote";
+						}else if (code == "sal_nsi"){
+							objBox = new InvoiceBox();
+							_cnv.label = "Invoice";
+						}
 						
 					break;
 					

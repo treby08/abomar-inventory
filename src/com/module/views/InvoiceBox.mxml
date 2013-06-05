@@ -49,7 +49,7 @@
 					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
-				
+				updateDataList();
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -180,7 +180,7 @@
 			
 			protected function txtQtychangeHandler(event:Event):void
 			{
-				if (txtQty.value == 0) return;
+				if (txtQty.value == 0 || cmbProd.selectedItem == null) return;
 				
 				
 				txtSub.text = roundDec(Number(cmbProd.selectedItem.srPrice)*int(txtQty.value)).toFixed(2);
@@ -262,15 +262,17 @@
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
 				obj.totalAmt = txtGT.text;
 				obj.vat = txtVat.text;
+				obj.salesQuoteID = _data.sqID;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					//strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.sqdID);
 					strItem.push(item.prodID+"|"+item.qty+"|"+item.price+"|"+item.total);
 				}
 				obj.sqDetails = strItem.join("||");
+				obj.pBox = this;
 				trace("obj.sqDetails",obj.sqDetails);
 				var log2:ItemsTransEvent;
-				log2 = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
+				log2 = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				/*if (_type==0){
 					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
@@ -314,6 +316,7 @@
 				}
 				txtAppBy.text = "";
 				txtPrepBy.text = "";
+				cmbCustomer.selectedIndex = -1;
 				cmbBranch.selectedIndex = 0;
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";				
@@ -329,6 +332,23 @@
 				
 				dfDate.selectedDate = new Date(); 
 			}
+			
+			public function updateCurrentInvoice():void{
+				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+				btnNew.label = "Clear Invoice";
+				btnEdit.visible = btnEdit.includeInLayout = false;
+				btnView.visible = btnView.includeInLayout = true;
+				var PO_renderer:InvoiceRenderer;
+				for (var i:int=dgSearch.numElements-1; i >= 0; i-- ){
+					PO_renderer = (dgSearch.getElementAt(i) as InvoiceRenderer);
+					if (PO_renderer.data == _data){
+						dgSearch.removeElementAt(i);
+						break;							
+					}
+				}
+				mainCont.enabled = false;
+			}
+			
 			
 			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
 			{
@@ -394,9 +414,11 @@
 				}else{
 					_type = 0;
 					mainCont.enabled = true;
+					btnNew.label = "New Invoice";
 					btnCheckOut.label = "Submit Invoice";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnView.visible = btnView.includeInLayout = false;
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -407,9 +429,11 @@
 				if (event.detail == Alert.YES){
 					_type = 0;
 					mainCont.enabled = true;
+					btnNew.label = "New Invoice";
 					btnCheckOut.label = "Submit Invoice";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnView.visible = btnView.includeInLayout = false;
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -421,6 +445,7 @@
 				_type = 1;
 				btnCheckOut.label = "Submit Invoice";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+				btnView.visible = btnView.includeInLayout = true;
 				mainCont.enabled = true;
 			}
 			
@@ -466,11 +491,11 @@
 					<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
 				</s:Scroller>
 			</s:Group>
-			<mx:HRule width="100%"/>
+			<!--<mx:HRule width="100%"/>
 			<s:HGroup width="100%" horizontalAlign="left" paddingLeft="10" paddingBottom="5">
 				<s:Label text="Total Quote: "/>
 				<s:Label id="totCount" text="0" width="50" textAlign="right" paddingRight="10"/>
-			</s:HGroup>
+			</s:HGroup>-->
 		</s:BorderContainer>
 	</s:VGroup>
 	<s:VGroup id="cont" minHeight="600" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
