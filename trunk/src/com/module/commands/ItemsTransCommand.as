@@ -50,6 +50,16 @@ package com.module.commands
 					obj.type = "search";
 					ItemsTransDelegate.instance().sales_AED(obj);
 				break;
+				case ItemsTransEvent.GET_SALES_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().sales_AED(obj);
+					break;
+				case ItemsTransEvent.GET_SALES_NUMBER:
+					obj.type = "get_sales_no";
+					ItemsTransDelegate.instance().sales_No(obj);
+					break;
+				
+				
 				/*QOUTATION*/
 				case ItemsTransEvent.ADD_QUOTE:
 					obj.type = "add";

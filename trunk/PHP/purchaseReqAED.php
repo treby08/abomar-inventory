@@ -66,13 +66,13 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice,prodWeight 
+		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,listPrice,prodWeight 
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
 							WHERE prd_purReqID = $purReqID AND (quantity-itemServed) <> 0 AND isRemove=0",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
+				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['listPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
