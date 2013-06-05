@@ -157,6 +157,37 @@ package com.module.business
 					}
 					_params = null;
 				});
+			}else if (_paramsQuote.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				var num:int = 1;
+				trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = new Object()
+					//sqdID,sqd_sqID,sqd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice,weight
+					arrObj.sqdID = obj.@sqdID;
+					arrObj.sqd_sqID = obj.@sqd_sqID;
+					arrObj.sqd_prodID = obj.@sqd_prodID;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodDesc = obj.@desc;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.price = obj.@srPrice;
+					arrObj.num =num;
+					arrObj.oWeight = obj.@weight;
+					arrObj.weight = Number(obj.@weight)*Number(obj.@quantity);
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				if (_paramsQuote.qBox){
+					_paramsQuote.itemRen.isDispatch = false;
+					_paramsQuote.qBox.setDataProvider(arrCol,3);
+					_paramsQuote.qBox = null;
+					_paramsQuote = null;
+				}
 			}else{
 				var listXML:XML = XML(evt.result);
 				var arrCol:ArrayCollection = new ArrayCollection()
@@ -182,6 +213,30 @@ package com.module.business
 					_params.sBox = null;
 					_params = null;
 				}
+			}
+		}
+		
+		public function sales_No(params:Object):void{
+			_paramsUniqueID = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("sales_No",params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.SALES_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(sales_No_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		private function sales_No_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("sales_No_onResult",strResult);
+			
+			if (_paramsUniqueID.type=="get_sales_no"){
+				if (_paramsUniqueID.qBox){
+					_paramsUniqueID.qBox.salesNo = String(evt.result);
+					_paramsUniqueID.qBox.genReqNoCode();
+					_paramsUniqueID.qBox = null;
+					_paramsUniqueID = null;
+				}	
 			}
 		}
 		
@@ -803,10 +858,10 @@ package com.module.business
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.remarks = obj.@remLabel;
 					if (obj.@isNew =="1"){
-						arrObj.diff = "New";
+						arrObj.diff = "+"+arrObj.qtyRec;
 					}else{
 						var diff:Number = Number(obj.@whrd_qty) - Number(obj.@whrd_qty_rec);
-						arrObj.diff = diff>0?"-"+diff:"+"+diff;
+						arrObj.diff = diff>0?"-"+int(diff):"+"+int(diff);
 					}
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);

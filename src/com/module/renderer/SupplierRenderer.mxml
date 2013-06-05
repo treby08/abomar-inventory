@@ -36,7 +36,7 @@
 			
 			public function creationCompleteHandler(event:FlexEvent):void
 			{
-				txtName.text = _data.conPerson;
+				txtName.text = _data.compName;
 				txtAcct.text = _data.supCode;
 				/* txtBname.text = _data.businame;
 				var contList:String = "";

@@ -43,7 +43,7 @@
 			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}
 		
-		$sql = "SELECT SUM(quantity)=SUM(itemServed) AS total FROM `purchaseReq_details` WHERE prd_purReqID=$purReqID";
+		$sql = "SELECT SUM(quantity)=SUM(itemServed) AS total FROM `purchaseReq_details` WHERE prd_purReqID=$purReqID AND isRemove=0";
 		$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		
 		$row = mysql_fetch_assoc($query);

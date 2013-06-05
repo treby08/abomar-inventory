@@ -53,6 +53,8 @@ package com.module.control
 			addCommand( ItemsTransEvent.EDIT_SALES, ItemsTransCommand );
 			addCommand( ItemsTransEvent.DELETE_SALES, ItemsTransCommand );
 			addCommand( ItemsTransEvent.SEARCH_SALES, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_SALES_DETAILS, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_SALES_NUMBER, ItemsTransCommand );
 			
 			addCommand( ItemsTransEvent.ADD_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_QUOTE, ItemsTransCommand );

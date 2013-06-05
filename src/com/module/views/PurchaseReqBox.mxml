@@ -145,7 +145,7 @@
 			{
 				if (cmbProd.selectedItem == null) return;
 				var obj:Object = cmbProd.selectedItem;
-				txtPrice.text = obj.srPrice;
+				txtPrice.text = obj.listPrice;
 				//txtStock.text =  obj.stockCnt;
 				txtQty.maximum = Number(obj.stockCnt);
 				if (txtQty.value !=0){
@@ -183,7 +183,7 @@
 				var obj:Object = cmbProd.selectedItem;
 				
 				
-				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text,total:txtSub.text});
+				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.listPrice,vat:txtVat.text,total:txtSub.text});
 				dg.dataProvider = arrCol;
 				
 				txtSubtot.text = roundDec(Number(txtSub.text)+Number(txtSubtot.text)).toFixed(2);
