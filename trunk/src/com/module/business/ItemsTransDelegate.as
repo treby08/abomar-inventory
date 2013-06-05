@@ -7,6 +7,8 @@ package com.module.business
 	import com.variables.AccessVars;
 	import com.variables.SecurityType;
 	
+	import flash.events.MouseEvent;
+	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.rpc.AsyncToken;
@@ -142,14 +144,17 @@ package com.module.business
 			}
 			
 			if (strResult != "" && str != null){
-				Alert.show(str+" Sales Error: "+strResult,"Error");
+				Alert.show(str+" Invoice Error: "+strResult,"Error");
 				return;
 			}
 			
 			if (str){
-				Alert.show(str+" Sales Complete.", str+" Sales",4,null,function():void{
+				Alert.show(str+" Invoice Complete.", str+" Invoice",4,null,function():void{
 					if (_params.pBox){
-						_params.pBox.clearFields(null);
+						if (str == "Adding")
+							_params.pBox.updateCurrentInvoice();
+						else
+							_params.pBox.clearFields(null);
 						_params.pBox = null;
 					}else if (_params.ppnl){
 						_params.ppnl.parent.removeElement(_params.ppnl);
@@ -278,12 +283,13 @@ package com.module.business
 			if (str){
 				Alert.show(str+" Quote Complete.", str+" Quote",4,null,function():void{
 					if (_paramsQuote.pBox){
-						_paramsQuote.pBox.clearFields(null);
+						if (str == "Adding")
+							_paramsQuote.pBox.clearFields(new MouseEvent(MouseEvent.CLICK));
+						else
+							_paramsQuote.pBox.clearFields(null);
 						_paramsQuote.pBox = null;
-					}else if (_paramsQuote.ppnl){
-						_paramsQuote.ppnl.parent.removeElement(_paramsQuote.ppnl);
-						_paramsQuote.ppnl = null;
 					}
+					
 					_paramsQuote = null;
 				});
 			}else if (_paramsQuote.type=="get_details"){

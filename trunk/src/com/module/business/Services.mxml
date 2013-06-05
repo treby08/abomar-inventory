@@ -66,7 +66,7 @@
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="sales_service"
-		url="{SecurityType.HTTP_HOST+'/salesAED.php'}"
+		url="{SecurityType.HTTP_HOST+'/salesInvoiceAED.php'}"
 		resultFormat="e4x"
 		showBusyCursor="true" />
 	<mx:HTTPService id="qoute_service"

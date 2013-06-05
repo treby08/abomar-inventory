@@ -50,7 +50,8 @@
 					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
-				
+					
+				updateDataList();
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -181,7 +182,7 @@
 			
 			protected function txtQtychangeHandler(event:Event):void
 			{
-				if (txtQty.value == 0) return;
+				if (txtQty.value == 0 || cmbProd.selectedItem == null) return;
 				
 				
 				txtSub.text = roundDec(Number(cmbProd.selectedItem.srPrice)*int(txtQty.value)).toFixed(2);
@@ -265,12 +266,13 @@
 				obj.vat = txtVat.text;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.sqdID);
+					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.price+"|"+item.total+"|"+item.sqdID);
 				}
 				obj.sqDetails = strItem.join("||");
 				trace("obj.sqDetails",obj.sqDetails);
 				var log2:ItemsTransEvent;
 				if (_type==0){
+					obj.pBox = this;
 					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				}else if (_type==1){
@@ -312,6 +314,7 @@
 				}
 				txtAppBy.text = "";
 				txtPrepBy.text = "";
+				cmbCustomer.selectedIndex = -1;
 				cmbBranch.selectedIndex = 0;
 				cmbProd.selectedIndex = -1;
 				cmbProd.textInput.text = "";				
@@ -326,6 +329,11 @@
 				
 				
 				dfDate.selectedDate = new Date(); 
+				
+				if (event){
+					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				}
 			}
 			
 			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
@@ -392,7 +400,7 @@
 				}else{
 					_type = 0;
 					mainCont.enabled = true;
-					btnCheckOut.label = "Submit Sales Quote";
+					btnCheckOut.label = "Submit Quote";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
@@ -405,7 +413,7 @@
 				if (event.detail == Alert.YES){
 					_type = 0;
 					mainCont.enabled = true;
-					btnCheckOut.label = "Submit Sales Quote";
+					btnCheckOut.label = "Submit Quote";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
@@ -417,7 +425,7 @@
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				_type = 1;
-				btnCheckOut.label = "Save Sales Quote Changes";
+				btnCheckOut.label = "Save Quote Changes";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 				mainCont.enabled = true;
 			}
@@ -557,7 +565,7 @@
 						<s:GridColumn dataField="price" headerText="Price" width="180"  editable="true">
 							<s:itemRenderer>
 								<fx:Component>
-									<s:DefaultGridItemRenderer textAlign="right" restrict="0-9."/>
+									<s:DefaultGridItemRenderer textAlign="right"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
