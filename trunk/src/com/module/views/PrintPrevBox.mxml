@@ -56,6 +56,7 @@
 	</s:HGroup>
 	<fx:Script>
 		<![CDATA[
+			import com.module.views.printViews.PrintInvoice;
 			import com.module.views.printViews.PrintPurchaseOrder;
 			import com.module.views.printViews.PrintWHReceipt;
 			
@@ -79,7 +80,8 @@
 			private var _orderTypeID:int = 0;
 			private var _salesBox:Object;
 			private var arrOrderType:ArrayCollection = new ArrayCollection(
-				[{name:"Purchase Order",type:0},{name:"Warehouse Receipt",type:1}])
+				[{name:"Purchase Order",type:0},{name:"Warehouse Receipt",type:1},
+				{name:"Invoice",type:2}])
 			
 			public function set boxType(value:Object):void{
 				_salesBox = value;
@@ -116,6 +118,12 @@
 						pntWHR.orderTypeText = String(arrOrderType.getItemAt(_orderTypeID).name).toUpperCase();
 						childCanvas.addElement(pntWHR);
 					break;
+					case 2:// Invoice
+						var pntInv:PrintInvoice = new PrintInvoice();
+						pntInv.salesBox = _salesBox as InvoiceBox;
+						pntInv.orderTypeText = String(arrOrderType.getItemAt(_orderTypeID).name).toUpperCase();
+						childCanvas.addElement(pntInv);
+						break;
 				}
 				
 				//childCanvas.y = parentCanvasHeight/2 - childCanvasHeight/2;
