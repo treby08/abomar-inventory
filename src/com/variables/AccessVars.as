@@ -20,6 +20,9 @@ package com.variables
 		public var branches:ArrayCollection;
 		public var customers:ArrayCollection;
 		
+		public var mainSupplier:String = "ABOMAR EQUIPMENT SALES CORP. \r4A Sapphire St. Gemsville Subd. Lahug" +
+			"\rCebu City 6000, Philippines\rTel/Fax:63(32) 2311411";
+		
 		public var headerBgColor:uint = 0x5e9940;
 		public var headerFontColor:uint = 0xecf7ab;
 		public var colBgColor:uint = 0xadde8c;

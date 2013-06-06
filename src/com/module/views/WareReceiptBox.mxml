@@ -144,7 +144,9 @@
 			public function setDateFormat(d:Date):String{
 				var strDate:String="";
 				//strDate = String(d.month+1)+"/"+d.date+"/"+d.fullYear;
-				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
+				var mon:String = (d.month+1)<10?"0"+String(d.month+1):String(d.month+1);
+				var dat:String = (d.date)<10?"0"+String(d.date):String(d.date);
+				strDate = d.fullYear+"-"+mon+"-"+dat;
 				return strDate;
 			}
 			
@@ -239,6 +241,7 @@
 			
 			protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
 			{
+				return;
 				trace("dg_gridItemEditorSessionSave",DataGrid(event.target).selectedItem.pkgNo)
 				trace("dg_gridItemEditorSessionSave",DataGrid(event.target).selectedItem.qtyRec)
 			}
@@ -247,6 +250,7 @@
 			
 			protected function dg_gridClickHandler(event:GridEvent):void
 			{
+				return;
 				trace("----------------------------");
 				trace("dg_gridClickHandler",dg.selectedItem.pkgNo);
 				trace("dg_gridClickHandler",dg.selectedItem.qtyRec);
