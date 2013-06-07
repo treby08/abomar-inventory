@@ -17,6 +17,7 @@
 			import com.module.views.ProductBox;
 			import com.module.views.ProductList;
 			import com.module.views.PurchaseOrderBox;
+			import com.module.views.PurchaseOrderListBox;
 			import com.module.views.PurchaseReqBox;
 			import com.module.views.ReportBox;
 			import com.module.views.SalesBox;
@@ -150,6 +151,9 @@
 						}else if (code == "pur_po"){
 							objBox = new PurchaseOrderBox();
 							_cnv.label = "Purchase Order";
+						}else if (code == "pur_pol"){
+							objBox = new PurchaseOrderListBox();
+							_cnv.label = "Purchase Order List";
 						}
 					break;
 					case 5:

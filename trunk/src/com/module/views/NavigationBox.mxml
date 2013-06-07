@@ -31,7 +31,7 @@
 					<sub name="Warehouse Receipt" code="inv_wr"/>
 					<sub name="Warehouse Discrepancy" code="inv_wd"/>
 				</main>
-				<main icon="assets/icons/icon_sales.png" name="Sales">
+				<main icon="assets/icons/icon_sales.png" name="Invoice">
 					<sub name="New Quote" code="sal_nsq"/>
 					<sub name="New Invoice" code="sal_nsi"/>
 					<sub name="Payment" code="sal_pay"/>
