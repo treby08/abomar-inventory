@@ -589,7 +589,7 @@ package com.module.business
 					arrObj.prodDesc = obj.@prodDesc;
 					arrObj.prodComModUse = obj.@prodComModUse;
 					arrObj.weight = obj.@weight;
-					arrObj.srPrice = obj.@srPrice;
+					arrObj.price = obj.@srPrice;
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);
 					num++;

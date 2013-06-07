@@ -150,7 +150,7 @@
 				printJob.send();*/
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 2;
+				_printBox.orderTypeID = 3;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
@@ -334,8 +334,7 @@
 			<s:DataGrid id="dg" width="100%" height="100%"  minHeight="250"  sortableColumns="false" fontSize="12" editable="false" >
 				<s:columns>
 					<s:ArrayList>
-						<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>
-						
+						<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>						
 						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="120"  editable="false">
 							<s:itemRenderer>
 								<fx:Component>
@@ -343,64 +342,43 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="prodDesc" headerText="Description" editable="false">
+						<s:GridColumn dataField="prodDesc" headerText="Description" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="left"/>
 								</fx:Component>
 							</s:itemRenderer>
-							<s:headerRenderer>
-								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
-								</fx:Component>
-							</s:headerRenderer>
 						</s:GridColumn>
 						
-						<s:GridColumn dataField="qty" headerText="Qty Order" width="75"  editable="false">
-							<s:headerRenderer>
-								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
-								</fx:Component>
-							</s:headerRenderer>
+						<s:GridColumn dataField="qty" headerText="Qty Order" width="75"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="center"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="false">
+						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="center"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="diff" headerText="Over/Short" width="90"  editable="false">
-							<s:headerRenderer>
-								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
-								</fx:Component>
-							</s:headerRenderer>
+						<s:GridColumn dataField="diff" headerText="Over/Short" width="80"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">							
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="center"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="pkgNo" headerText="Package No." width="100"  editable="false">
-							<s:headerRenderer>
-								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="left"/>
-								</fx:Component>
-							</s:headerRenderer>
-						</s:GridColumn>
+						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="80"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
 						
-						<s:GridColumn dataField="remarks" headerText="Remarks" editable="false" >
-							<s:headerRenderer>
+						<s:GridColumn dataField="remarks" headerText="Remarks" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:itemRenderer>
 								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
+									<s:DefaultGridItemRenderer textAlign="left" wordWrap="true" width="120"/>
 								</fx:Component>
-							</s:headerRenderer>
+							</s:itemRenderer>
 						</s:GridColumn>
 						
 					</s:ArrayList>

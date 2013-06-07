@@ -81,7 +81,7 @@
 			private var _salesBox:Object;
 			private var arrOrderType:ArrayCollection = new ArrayCollection(
 				[{name:"Purchase Order",type:0},{name:"Warehouse Receipt",type:1},
-				{name:"Invoice",type:2}])
+				{name:"Invoice",type:2},{name:"Warehouse Discrepancy",type:2}])
 			
 			public function set boxType(value:Object):void{
 				_salesBox = value;
@@ -108,7 +108,7 @@
 				switch(_orderTypeID){
 					case 0:// PO
 						var pntPO:PrintPurchaseOrder = new PrintPurchaseOrder();
-						pntPO.salesBox = _salesBox as PurchaseOrderBox;
+						pntPO.salesBox = _salesBox as Object;
 						pntPO.orderTypeText = String(arrOrderType.getItemAt(_orderTypeID).name).toUpperCase();
 						childCanvas.addElement(pntPO);
 					break;

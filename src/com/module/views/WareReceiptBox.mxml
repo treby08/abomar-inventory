@@ -362,50 +362,38 @@
 						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
 				<s:columns>
 					<s:ArrayList>
-						<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>
-						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="false">
-							<s:headerRenderer>
-								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
-								</fx:Component>
-							</s:headerRenderer>
-						</s:GridColumn>
-						<s:GridColumn dataField="unit" headerText="Unit" width="40"  editable="false"/>
-						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="150"  editable="false">
-							<s:itemRenderer>
-								<fx:Component>
-									<s:DefaultGridItemRenderer textAlign="left"/>
-								</fx:Component>
-							</s:itemRenderer>
-						</s:GridColumn>
-						<s:GridColumn dataField="prodDesc" headerText="Description" editable="false">
-							<s:itemRenderer>
-								<fx:Component>
-									<s:DefaultGridItemRenderer textAlign="left"/>
-								</fx:Component>
-							</s:itemRenderer>
-						</s:GridColumn>
-						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="true">
-							<s:headerRenderer>
-								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="left"/>
-								</fx:Component>
-							</s:headerRenderer>
-						</s:GridColumn>
-						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="true">
+						<s:GridColumn width="40" dataField="num" headerText="No." editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="center"/>
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="remark" headerText="Remarks" editable="false" itemRenderer="com.module.renderer.RemarksRenderer">
-							<s:headerRenderer>
+						<s:GridColumn dataField="unit" headerText="Unit" width="40"  editable="false"/>
+						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="120"  editable="false">
+							<s:itemRenderer>
 								<fx:Component>
-									<s:DefaultGridHeaderRenderer textAlign="center"/>
+									<s:DefaultGridItemRenderer textAlign="left"/>
 								</fx:Component>
-							</s:headerRenderer>
+							</s:itemRenderer>
 						</s:GridColumn>
+						<s:GridColumn dataField="prodDesc" headerText="Description" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="left"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="center"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="remark" headerText="Remarks" editable="false" itemRenderer="com.module.renderer.RemarksRenderer" headerRenderer="com.module.renderer.GridHeadRenderer"/>
 						
 					</s:ArrayList>
 				</s:columns>

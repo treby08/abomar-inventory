@@ -18,10 +18,10 @@
 			
 			import spark.utils.TextFlowUtil;
 			
-			private var _salesBox:PurchaseOrderBox;
+			private var _salesBox:Object;
 			private var _orderTypeText:String;
 			
-			public function set salesBox(value:PurchaseOrderBox):void{
+			public function set salesBox(value:Object):void{
 				_salesBox = value;
 			}
 			public function set orderTypeText(value:String):void{
@@ -73,6 +73,13 @@
 			{
 				orderType.text = _orderTypeText;
 				setData()
+			}
+			
+			private function formatAmtTotal(item:Object, column:GridColumn):String{
+				return numFmttr.format(item.total);
+			}
+			private function formatAmtPrice(item:Object, column:GridColumn):String{
+				return numFmttr.format(item.price);
 			}
 			
 		]]>
@@ -185,42 +192,37 @@
 							sortableColumns="false" textAlign="center" borderVisible="false">
 					<s:columns >
 						<s:ArrayList>
-							<s:GridColumn width="40" dataField="num" headerText="No."/>
-							<s:GridColumn dataField="qty" headerText="Qty" width="40"/>
-							<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="130"  editable="false">
+							<s:GridColumn width="40" dataField="num" headerText="No." headerRenderer="com.module.renderer.GridHeadRenderer"/>
+								
+							<s:GridColumn dataField="qty" headerText="Qty" width="40" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+							<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="120"  editable="false">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="left"/>
 									</fx:Component>
 								</s:itemRenderer>
 							</s:GridColumn>
-							<s:GridColumn dataField="prodDesc" headerText="Description" editable="false">
+							<s:GridColumn dataField="prodDesc" headerText="Description" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="left"/>
 									</fx:Component>
 								</s:itemRenderer>
 							</s:GridColumn>
-							<s:GridColumn dataField="weight" headerText="WT" width="40"  editable="false">
-								<s:headerRenderer>
-									<fx:Component>
-										<s:DefaultGridHeaderRenderer textAlign="center"/>
-									</fx:Component>
-								</s:headerRenderer>
-							</s:GridColumn>
-							<s:GridColumn dataField="price" headerText="Price" width="120"  editable="false">
+							<s:GridColumn dataField="weight" headerText="WT" width="40"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+							<s:GridColumn dataField="price" headerText="Price" width="120"  editable="false" labelFunction="formatAmtPrice" headerRenderer="com.module.renderer.GridHeadRenderer">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="right"/>
 									</fx:Component>
 								</s:itemRenderer>
 							</s:GridColumn>
-							<s:GridColumn dataField="total" headerText="Extend" width="120" editable="false">
+							<s:GridColumn dataField="total" headerText="Extend" width="120" editable="false" labelFunction="formatAmtTotal" headerRenderer="com.module.renderer.GridHeadRenderer">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="right" fontSize="14"/>
 									</fx:Component>
-								</s:itemRenderer>
+								</s:itemRenderer>								
 							</s:GridColumn>
 						</s:ArrayList>
 					</s:columns>

@@ -70,8 +70,10 @@
 				isDispatch = true;
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
-				/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" 
-				bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>*/
+				/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad($row['purReqID'])."\" 
+				preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
+				branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" 
+				totalAmt=\"".$row['totalAmt']."\"/>*/
 				
 				var obj:Object = _theBox._tempData = _data;
 				//_theBox.txtInvoice.text = obj.invTo;
@@ -83,7 +85,9 @@
 				_theBox.setSelectedDelivery(String(obj.branchID));//_theBox.cmbDeliver.selectedItem = 
 				_theBox.purReqID = obj.purReqID;
 				_theBox.txtGT.text = obj.totalAmt;
-				_theBox.txtInvoice.text = obj.bCode;//setSelectedBranch(String(obj.branchID));
+				var branchItem:Object = _theBox.getSelectedInvoice(String(_data.branchID));
+				_theBox.txtInvoice.text = branchItem.bCode+" - "+branchItem.bLocation+"\r"+	branchItem.bAddress
+					+"\r"+String(branchItem.bPhoneNum).replace("|"," Ext. ")+"\r"+branchItem.bMobileNum;//obj.bCode;//setSelectedBranch(String(obj.branchID));
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
@@ -129,7 +133,7 @@
 	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 		<s:Label id="txtReqNo" width="45%" textAlign="center"/>
-		<mx:Text id="txtBranch" width="55%" selectable="false"/>
+		<s:Label id="txtBranch" width="55%" textAlign="center"/>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>-->

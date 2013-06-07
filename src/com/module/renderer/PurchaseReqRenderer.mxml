@@ -110,7 +110,7 @@
 	<s:HGroup paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" mouseOver="{sFill.color = AccessVars.instance().colBgColorOver}" mouseOut="{sFill.color=AccessVars.instance().colBgColor}"
 			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 		<s:Label id="txtReqNo" width="45%" textAlign="center"/>
-		<mx:Text id="txtBranch" width="55%" selectable="false"/>
+		<s:Label id="txtBranch" width="55%" textAlign="center"/>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>-->

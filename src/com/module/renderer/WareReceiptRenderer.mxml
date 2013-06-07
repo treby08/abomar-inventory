@@ -128,9 +128,9 @@
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
 	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
-			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
+			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)" height="30">
 		<s:Label id="txtPoNo" width="20%" textAlign="center"/>
-		<mx:Text id="txtVendor" width="50%" selectable="false"/>
+		<s:Label id="txtVendor" width="50%" textAlign="center"/>
 		<s:Label id="txtDate" width="30%" textAlign="center"/>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
