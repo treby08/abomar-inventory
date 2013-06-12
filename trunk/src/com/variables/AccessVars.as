@@ -17,6 +17,7 @@ package com.variables
 		public var mainApp:Abomar;
 		public var userType:ArrayCollection;
 		public var remarks:ArrayCollection;
+		public var invoiceList:ArrayCollection;
 		public var branches:ArrayCollection;
 		public var customers:ArrayCollection;
 		
