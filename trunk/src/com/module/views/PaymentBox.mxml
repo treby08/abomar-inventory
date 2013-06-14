@@ -8,14 +8,14 @@
 			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
-			import com.module.renderer.PurchaseReqRenderer;
-			import com.module.renderer.SalesQuoteRenderer;
+			import com.module.renderer.PaymentRenderer;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
 			import mx.managers.PopUpManager;
 			import mx.printing.FlexPrintJob;
 			import mx.printing.FlexPrintJobScaleType;
@@ -45,16 +45,25 @@
 					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
+				
 					
 				updateDataList();
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
 				dfDate.selectedDate = new Date(); 
-				
+				dg.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE,propChange);
+			}
+
+			private function propChange(evt:PropertyChangeEvent):void{
+				var _totAmt:Number = 0;
+				for each(var item:Object in dg.dataProvider as ArrayCollection){
+					_totAmt +=Number(item.totalAmt);
+				}
+				txtTotAmt.text = numFmttr.format(_totAmt);
 			}
 			
 			public function updateDataList():void{
@@ -96,9 +105,9 @@
 				}
 				
 				if (arrCol.length > 0){
-					var itemUser:SalesQuoteRenderer;
+					var itemUser:PaymentRenderer;
 					for each (var obj:Object in arrCol){
-						itemUser = new SalesQuoteRenderer()
+						itemUser = new PaymentRenderer()
 						itemUser.data = obj;
 						itemUser.theBox = this
 						dgSearch.addElement(itemUser);
@@ -134,6 +143,20 @@
 			
 			protected function btnAddclickHandler(event:MouseEvent):void
 			{	
+				var arrCol:ArrayCollection;
+				if (dg.dataProvider == null)
+					arrCol = new ArrayCollection();
+				else
+					arrCol = dg.dataProvider as ArrayCollection;
+				
+				var obj:Object = new Object();
+				obj.num = arrCol.length+1;
+				obj.invID = -1;
+				obj.amt = "0.00";
+				obj.credit = "0.00";
+				obj.totalAmt = "0.00";
+				arrCol.addItem(obj);
+				dg.dataProvider = arrCol;
 				/*if (cmbProd.selectedItem == null || txtQty.value == 0) return;
 				var arrCol:ArrayCollection;
 				if (dg.dataProvider == null)
@@ -186,30 +209,27 @@
 				*/
 				
 				var obj:Object = {}
-				/*obj.sq_quoteNo = txtSalesNo.text;
-				obj.sq_branchID = cmbBranch.selectedItem.branchID;
-				obj.sq_custID = cmbCustomer.selectedItem.custID;
+				obj.pay_ORNo = txtORNo.text;
+				obj.pay_custID = cmbCustomer.selectedItem.custID;
 				obj.preparedBy = txtPrepBy.text;
-				obj.approvedBy = txtAppBy.text;
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
-				obj.totalAmt = txtGT.text;
-				obj.vat = txtVat.text;*/
+				obj.totalAmt = txtTotAmt.text;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.price+"|"+item.total+"|"+item.sqdID);
+					strItem.push(item.invID+"|"+item.amt+"|"+item.credit+"|"+item.totalAmt);
 				}
-				obj.sqDetails = strItem.join("||");
-				trace("obj.sqDetails",obj.sqDetails);
+				obj.payDetails = strItem.join("||");
+				trace("obj.payDetails",obj.payDetails);
 				var log2:ItemsTransEvent;
 				if (_type==0){
 					obj.pBox = this;
-					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
+					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_PAYMENT,obj)
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				}else if (_type==1){
-					obj.sqID = _data.sqID;
+					obj.payID = _data.payID;
 					obj.pBox = this;
 					_fromUpdate = true;
-					log2 = new ItemsTransEvent(ItemsTransEvent.EDIT_QUOTE,obj)
+					log2 = new ItemsTransEvent(ItemsTransEvent.EDIT_PAYMENT,obj)
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				}
 				
@@ -238,8 +258,8 @@
 				if (_fromUpdate){
 					_fromUpdate = false;
 					
-					(theOwner as SalesQuoteRenderer).data = _data;
-					(theOwner as SalesQuoteRenderer).creationCompleteHandler(null);
+					(theOwner as PaymentRenderer).data = _data;
+					(theOwner as PaymentRenderer).creationCompleteHandler(null);
 					return;
 				}
 				txtAddress.text = "";
@@ -250,9 +270,9 @@
 				txtAmtPaid.text= "0.00";
 				txtCheckNo.text = "";
 				txtDrawBank.text = "";
-				txtCheckAmt.text = "";
-				txtCash.text = "";
-				txtPayTotal.text = "";
+				txtCheckAmt.text = "0.00";
+				txtCash.text = "0.00";
+				txtPayTotal.text = "0.00";
 				txtTotAmt.text = "0.00";
 				dg.dataProvider = null;
 				
@@ -293,8 +313,8 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
 				}
 			}
 			
@@ -319,15 +339,27 @@
 			
 			protected function cmbCuschangeHandler(event:IndexChangeEvent):void
 			{
-				// TODO Auto-generated method stub
+				txtAddress.text = event.target.selectedItem.address;
+				txtTin.text = event.target.selectedItem.tin;
+				btnAdd.toolTip="";
+				btnAdd.enabled=true;
 				
+				if (AccessVars.instance().invoiceList == null){
+					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_INVOICE_LIST,{pBox:this,custID:event.target.selectedItem.custID})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				}
 			}
 			
 			private function formatAmtTotal(item:Object, column:GridColumn):String{
-				return numFmttr.format(item.total);
+				return numFmttr.format(item.totalAmt);
 			}
 			private function formatAmtPrice(item:Object, column:GridColumn):String{
-				return numFmttr.format(item.price);
+				return numFmttr.format(item.credit);
+			}
+			
+			protected function computefocusOutHandler(event:FocusEvent):void
+			{
+				txtPayTotal.text = numFmttr.format(Number(txtCheckAmt.text) + Number(txtCash.text));
 			}
 			
 		]]>
@@ -389,7 +421,7 @@
 							<s:Label text="OR No." width="100" textAlign="right"/>
 							<s:TextInput id="txtORNo" width="100%"/>
 							<s:Label text="Date" textAlign="center"/>
-							<mx:DateField id="dfDate" width="140" showToday="true" change="cmbBranchchangeHandler(event)"/>
+							<mx:DateField id="dfDate" width="140" showToday="true"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="TIN No." width="100" textAlign="right"/>
@@ -397,8 +429,8 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Amount Paid" width="100" textAlign="right"/>
-							<s:TextInput id="txtAmtPaid" width="100%" value="0" textAlign="right" text="0.00" restrict="0-9."/>
-							<s:Button id="btnAdd" label="Add Payment" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
+							<s:TextInput id="txtAmtPaid" width="100%" textAlign="right" text="0.00" restrict="0-9."/>
+							<s:Button id="btnAdd" label="Add Payment" click="btnAddclickHandler(event)" enabled="false" toolTip="Select Customer First"/>
 						</s:HGroup>	
 					</s:VGroup>
 				</s:HGroup>
@@ -412,7 +444,7 @@
 							weight="2"/> 
 					</s:borderStroke> 
 					<s:layout>
-						<s:VerticalLayout paddingRight="3" paddingLeft="3"/>
+						<s:VerticalLayout paddingRight="3" paddingLeft="3" paddingTop="3"/>
 					</s:layout>
 					<s:HGroup width="100%">
 						<s:VGroup width="50%">
@@ -426,11 +458,11 @@
 					</s:HGroup>
 					<s:VGroup width="100%">
 						<s:Label text="Check Amount"/>
-						<s:TextInput id="txtCheckAmt" width="100%" restrict="0-9." textAlign="right"/>
+						<s:TextInput id="txtCheckAmt" width="100%" restrict="0-9." textAlign="right" focusOut="computefocusOutHandler(event)" text="0.00"/>
 					</s:VGroup>
 					<s:VGroup width="100%">
 						<s:Label text="Cash"/>
-						<s:TextInput id="txtCash" width="100%" restrict="0-9." textAlign="right"/>
+						<s:TextInput id="txtCash" width="100%" restrict="0-9." textAlign="right" focusOut="computefocusOutHandler(event)" text="0.00"/>
 					</s:VGroup>
 					<s:HGroup width="100%" height="100%" verticalAlign="middle">
 						<s:Label text="TOTAL" width="50" textAlign="center"/>
@@ -440,22 +472,22 @@
 				<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12">
 					<s:columns>
 						<s:ArrayList>
-							<s:GridColumn dataField="docID" headerText="Document" headerRenderer="com.module.renderer.GridHeadRenderer" editable="false"/>
-							<s:GridColumn dataField="amount" headerText="Amount" width="150" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:GridColumn dataField="invID" headerText="Document" width="120" headerRenderer="com.module.renderer.GridHeadRenderer" editable="false" itemRenderer="com.module.renderer.InvoiceListRenderer"/>
+							<s:GridColumn dataField="amt" headerText="Amount" width="120" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="right"/>
 									</fx:Component>
 								</s:itemRenderer>
 							</s:GridColumn>
-							<s:GridColumn dataField="credit" headerText="Credit" width="150"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer" labelFunction="formatAmtPrice">
+							<s:GridColumn dataField="credit" headerText="Credit" width="120" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer" labelFunction="formatAmtPrice">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="right"/>
 									</fx:Component>
 								</s:itemRenderer>
 							</s:GridColumn>
-							<s:GridColumn dataField="netAmt" headerText="Net Amount" width="150" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer" labelFunction="formatAmtTotal">
+							<s:GridColumn dataField="totalAmt" headerText="Net Amount" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer" labelFunction="formatAmtTotal">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="right"/>
@@ -475,7 +507,7 @@
 				</s:HGroup>
 				<s:HGroup width="60%" verticalAlign="middle" horizontalAlign="right">
 					<s:Label text="TOTAL AMOUNT" width="120" textAlign="right"/>
-					<s:Label id="txtTotAmt" width="50%"/>
+					<s:Label id="txtTotAmt" width="50%" textAlign="right" fontSize="14" fontWeight="bold"/>
 				</s:HGroup>
 			</s:HGroup>
 		</s:VGroup>		

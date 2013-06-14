@@ -198,16 +198,18 @@ package com.module.business
 				var arrCol:ArrayCollection = new ArrayCollection()
 				var arrObj:Object = {}
 				for each (var obj:XML in listXML.children()){
-					arrObj = {}
-					arrObj.qouteID = obj.@qouteID;
-					arrObj.fname = obj.@fname;
-					arrObj.mname = obj.@mname;
-					arrObj.lname = obj.@lname;
-					arrObj.businame = obj.@businame;
-					arrObj.baddress = obj.@baddress;
-					arrObj.bPhoneNum = obj.@bPhoneNum;
-					arrObj.bMobileNum = obj.@bMobileNum;
+					arrObj = new Object();
+					arrObj.sqID = obj.@sqID;
+					arrObj.sq_quoteNo = obj.@sq_quoteNo;
+					arrObj.sq_custID = obj.@sq_custID;
+					arrObj.sq_branchID = obj.@sq_branchID;
+					arrObj.prepBy = obj.@prepBy;
+					arrObj.apprBy = obj.@apprBy;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.sq_vat = obj.@sq_vat;
+					arrObj.totalAmt = obj.@totalAmt;
 					arrCol.addItem(arrObj);
+					
 				}
 				if (_params.qBox){
 					_params.qBox.setDataProvider(arrCol,1);
@@ -943,6 +945,104 @@ package com.module.business
 				_paramsUniqueID.qBox = null;
 				_paramsUniqueID = null;
 			}	
+		}
+		
+		public function payment_AED(params:Object):void{
+			_params = params;
+			if(params.sBox)
+				params.sBox = null;
+			trace("payment_AED",_params.type);
+			var service:HTTPService =  AccessVars.instance().mainApp.httpService.getHTTPService(Services.PAYMENT_SERVICE);
+			var token:AsyncToken = service.send(params);
+			var responder:mx.rpc.Responder = new mx.rpc.Responder(payment_AED_onResult, Main_onFault);
+			token.addResponder(responder);
+		}
+		
+		private function payment_AED_onResult(evt:ResultEvent):void{
+			var strResult:String = String(evt.result);
+			trace("payment_AED_onResult",strResult);
+			if(_params == null)
+				return;
+			var str:String;
+			switch(_params.type){
+				case "add":
+					str="Adding";
+					break;
+				case "edit":
+					str="Updating";
+					break;
+				case "delete":
+					str="Deleting";
+					break;
+			}
+			
+			if (strResult != "" && str != null){
+				Alert.show(str+" Payment Error: "+strResult,"Error");
+				return;
+			}
+			var listXML:XML = XML(evt.result);
+			var arrCol:ArrayCollection = new ArrayCollection()
+			var arrObj:Object = {}
+			var obj:XML;
+			if (str){
+				Alert.show(str+" Payment Complete.", str+" Payment",4,null,function():void{
+					if (_params.pBox){
+						_params.pBox.clearFields(null);
+						_params.pBox = null;
+					}else if (_params.ppnl){
+						_params.ppnl.parent.removeElement(_params.ppnl);
+						_params.ppnl = null;
+					}
+					_params = null;
+				});
+			}else if (_params.type=="get_details"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				var num:int = 1;
+				trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					arrObj.pdID = obj.@pdID;
+					arrObj.pd_payID = obj.@pd_payID;
+					arrObj.pd_invID = obj.@pd_invID;
+					arrObj.amt = obj.@pd_amt;
+					arrObj.credit = obj.@pd_credit;
+					arrObj.totalAmt = obj.@pd_totalAmt;
+					arrObj.num = num;
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				if (_params.qBox){
+					_params.itemRen.isDispatch = false;
+					_params.qBox.setDataProvider(arrCol,3);
+					_params.qBox = null;
+					_params = null;
+				}
+			}else{
+				
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
+					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
+					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
+					arrObj.payID = obj.@payID;
+					arrObj.pay_ORNo = obj.@pay_ORNo;
+					arrObj.pay_custID = obj.@pay_custID;
+					arrObj.pay_prepBy = obj.@pay_prepBy;					
+					arrObj.pay_totalAmt = obj.@pay_totalAmt;					
+					arrObj.dateTrans = obj.@dateTrans;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){					
+					_params.qBox.dataCollection = arrCol;
+					_params.qBox = null;
+					_params = null;
+				}
+			}
 		}
 		
 		private function Main_onFault(evt:FaultEvent):void{

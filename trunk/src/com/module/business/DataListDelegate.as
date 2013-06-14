@@ -135,12 +135,12 @@ package com.module.business
 						arrObj = new Object;
 						arrObj.invID = obj.@invID;
 						arrObj.totalAmt = obj.@totalAmt;
-						arrObj.invNo = obj.@invNo;
+						arrObj.invIDLabel = obj.@invIDLabel;
 						
 						arrCol.addItem(arrObj)
 					}
 					trace("getDatalist_onResult:",arrCol.length)
-					AccessVars.instance().remarks = arrCol;
+					AccessVars.instance().invoiceList = arrCol;
 					break;
 			}
 			

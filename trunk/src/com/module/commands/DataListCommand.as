@@ -33,6 +33,10 @@ package com.module.commands
 					obj.type = "remarks";
 					DataListDelegate.instance().getDatalist((event as DataListEvent).params);
 				break;
+				case DataListEvent.GET_INVOICE_LIST:
+					obj.type = "invoice";
+					DataListDelegate.instance().getDatalist((event as DataListEvent).params);
+				break;
 				
 				case DataListEvent.ADD_BRANCH:
 					obj.type = "add";

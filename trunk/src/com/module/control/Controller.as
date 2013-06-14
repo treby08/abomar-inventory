@@ -22,6 +22,7 @@ package com.module.control
 			addCommand( DataListEvent.GET_BRANCH_LIST, DataListCommand );
 			addCommand( DataListEvent.GET_BRANCH_LIST2, DataListCommand );
 			addCommand( DataListEvent.GET_REMARKS_LIST, DataListCommand );
+			addCommand( DataListEvent.GET_INVOICE_LIST, DataListCommand );
 			addCommand( DataListEvent.ADD_BRANCH, DataListCommand );
 			addCommand( DataListEvent.EDIT_BRANCH, DataListCommand );
 			addCommand( DataListEvent.DELETE_BRANCH, DataListCommand );
@@ -87,6 +88,12 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_WH_DISCREPANCY, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_WH_DISCREPANCY_NUMBER, ItemsTransCommand );
+			
+			addCommand( ItemsTransEvent.ADD_PAYMENT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.EDIT_PAYMENT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.DELETE_PAYMENT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.SEARCH_PAYMENT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_PAYMENT_DETAILS, ItemsTransCommand );
 		}
 	}
 }
