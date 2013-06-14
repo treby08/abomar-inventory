@@ -1,7 +1,7 @@
 <?php
 	require("config.php");
 	$type = $_REQUEST['type'];
-	$xml = "<root>";
+	$xml = "<root type=\"".$type."\">";
 	if ($type == "branches"){
 		$query = mysql_query('SELECT * FROM branches',$conn);
 		while($row = mysql_fetch_assoc($query)){
@@ -19,7 +19,16 @@
 		while($row = mysql_fetch_assoc($query)){
 			$xml .= "<item userTypeID=\"".$row['userTypeID']."\" userTypeName=\"".$row['name']."\" remark=\"".$row['remarks']."\" />";
 		}
+	}else if ($type=="invoice"){
+		$custID = $_REQUEST['custID'];
+		if ($custID)
+			$add = " AND sq_custID=".$custID;
+		$query = mysql_query('SELECT * FROM salesInvoice WHERE onProcess=0'.$add,$conn);
+		while($row = mysql_fetch_assoc($query)){
+			$xml .= "<item invID=\"".$row['sqID']."\" totalAmt=\"".$row['totalAmt']."\" invIDLabel=\"".$row['sq_quoteNo']."\" />";
+		}
 	}
 	$xml .= "</root>";
 	echo $xml;
+	
 ?>

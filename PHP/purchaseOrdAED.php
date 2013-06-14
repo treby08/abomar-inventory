@@ -70,13 +70,26 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice 
+		/*$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice 
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
 							WHERE prd_purReqID = $purReqID",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" prodDesc=\"".$row['prodDescrip']."\" srPrice=\"".$row['srPrice']."\"/>";
+			}
+		$xml .= "</root>";
+		echo $xml;*/
+		$query = mysql_query("SELECT podID,pod_purOrdID,pod_prodID,prodDescrip,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice,prodWeight 
+								FROM purchaseOrd_details pr 
+								INNER JOIN products p ON pr.pod_prodID=p.prodID
+								WHERE pod_purOrdID = $purReqID",$conn);
+		$xml = "<root>";
+			while($row = mysql_fetch_assoc($query)){
+				$xml .= "<item podID=\"".$row['podID']."\" pod_purOrdID=\"".$row['pod_purOrdID']."\" pod_prodID=\"".$row['pod_prodID']."\" prodDesc=\"".$row['prodDescrip']."\" 
+				prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" 
+				prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" 
+				srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
