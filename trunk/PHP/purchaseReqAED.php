@@ -15,9 +15,10 @@
 			$purReqID = $_REQUEST['purReqID'];
 	}else if ($type == "delete")
 		$purReqID = $_REQUEST['purReqID'];
-	else if ($type == "search")
+	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-	else if ($type == "get_details")
+		
+	}else if ($type == "get_details")
 		$purReqID = $_REQUEST['purReqID'];
 	
 		
@@ -51,7 +52,7 @@
 				$sql = "UPDATE purchaseReq_details SET quantity=".$arrDetails[1].", totalPurchase=".$arrDetails[2].", isRemove=0 
 				WHERE prdID=".$arrDetails[3];
 			}
-			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
+			mysql_query($sql,$conn) or die(mysql_error().' '.$sql.' '. __LINE__);
 		}
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM purchaseReq WHERE purReqID = '$purReqID'",$conn);
