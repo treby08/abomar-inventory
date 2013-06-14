@@ -10,6 +10,7 @@ package com.module.events
 		public static var GET_BRANCH_LIST:String = "get_branch_list";
 		public static var GET_BRANCH_LIST2:String = "get_branch_list2";
 		public static var GET_REMARKS_LIST:String = "get_remark_list";
+		public static var GET_INVOICE_LIST:String = "get_invoice_list";
 		
 		public static var ADD_BRANCH:String = "add_branch";
 		public static var EDIT_BRANCH:String = "edit_branch";

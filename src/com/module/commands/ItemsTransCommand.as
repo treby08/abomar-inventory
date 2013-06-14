@@ -180,6 +180,29 @@ package com.module.commands
 					obj.type = "get_whd_no";
 					ItemsTransDelegate.instance().warehouseDiscrepancy_WDNo(obj);
 					break;
+				
+				/* PAYMENT*/
+				case ItemsTransEvent.ADD_PAYMENT:
+					obj.type = "add";
+					ItemsTransDelegate.instance().payment_AED(obj);
+					break;
+				case ItemsTransEvent.EDIT_PAYMENT:
+					obj.type = "edit";
+					ItemsTransDelegate.instance().payment_AED(obj);
+					break;
+				case ItemsTransEvent.DELETE_PAYMENT:
+					obj.type = "delete";
+					ItemsTransDelegate.instance().payment_AED(obj);
+					break;
+				
+				case ItemsTransEvent.SEARCH_PAYMENT:
+					obj.type = "search";
+					ItemsTransDelegate.instance().payment_AED(obj);
+					break;
+				case ItemsTransEvent.GET_PAYMENT_DETAILS:
+					obj.type = "get_details";
+					ItemsTransDelegate.instance().payment_AED(obj);
+					break;
 			}
 		}
 	}

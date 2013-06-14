@@ -48,6 +48,13 @@ package com.module.events
 		public static var SEARCH_WH_DISCREPANCY:String = "search_wh_discrepancy";
 		public static var GET_WH_DISCREPANCY_DETAILS:String = "get_wh_discrepancy_details";
 		public static var GET_WH_DISCREPANCY_NUMBER:String = "get_wh_discrepancy_number";
+		
+		public static var ADD_PAYMENT:String = "add_payment";
+		public static var EDIT_PAYMENT:String = "edit_payment";
+		public static var DELETE_PAYMENT:String = "delete_payment";
+		public static var SEARCH_PAYMENT:String = "search_payment";
+		public static var GET_PAYMENT_DETAILS:String = "get_payment_details";
+		
 		public var params:Object;
 		
 		public function ItemsTransEvent(type:String, _params:Object = null,bubbles:Boolean=false, cancelable:Boolean=false)
