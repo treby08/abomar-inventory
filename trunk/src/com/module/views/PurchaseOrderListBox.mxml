@@ -379,11 +379,11 @@
 				<s:VGroup width="50%">
 					<s:HGroup width="100%">
 						<s:Label text="Subtotal" width="90"/>
-						<mx:Text id="txtSubtot" width="100%" text="0.00" textAlign="right"/>
+						<s:Label id="txtSubtot" width="100%" text="0.00" textAlign="right"  fontSize="14"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
 						<s:Label text="VAT" width="90"/>
-						<s:Label id="txtVat" width="100%" text="0.00" textAlign="right" />
+						<s:Label id="txtVat" width="100%" text="0.00" textAlign="right"  fontSize="14"/>
 					</s:HGroup>
 					<s:HGroup width="100%">
 						<s:Label text="TOTAL" fontSize="16"/>

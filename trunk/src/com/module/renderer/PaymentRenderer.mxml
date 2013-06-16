@@ -47,10 +47,8 @@
 			
 			public function creationCompleteHandler(event:FlexEvent):void
 			{
-				var arr:Array = String(_data.dateTrans).split("-");
-				var yr:String = String( new Date(arr[0],(arr[1]-1),arr[2]).getFullYear());
-				txtORNo.text = _data.sq_quoteNo;
-				txtCustomer.text = _data.acctno +" - "+_data.conPerson;
+				txtORNo.text = _data.pay_ORNo;
+				txtCustomer.text = _data.acctno;
 				txtDate.text = _data.dateTrans;
 				
 				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
@@ -60,7 +58,7 @@
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				for (var i:int =0; i < _theBox.dgSearch.numElements; i++){
-					(_theBox.dgSearch.getElementAt(i) as SalesQuoteRenderer).isSelected = false;
+					(_theBox.dgSearch.getElementAt(i) as PaymentRenderer).isSelected = false;
 				}
 				isSelected = true;
 				
@@ -68,19 +66,36 @@
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
 				
-				var obj:Object = _theBox._data = _data;
-								
-				_theBox.txtORNo.text = obj.sq_quoteNo;
-				_theBox.txtPrepBy.text = obj.prepBy;
-				//_theBox.setSelectedBranch(String(obj.sq_branchID));
-				_theBox.setSelectedCustomer(String(obj.sq_custID));
+				/*arrObj.payID = obj.@payID;
+				arrObj.pay_ORNo = obj.@pay_ORNo;
+				arrObj.pay_custID = obj.@pay_custID;
+				arrObj.preparedBy = obj.@preparedBy;					
+				arrObj.totalAmt = obj.@totalAmt;					
+				arrObj.dateTrans = obj.@dateTrans;
+				arrObj.checkNo = obj.@checkNo;
+				arrObj.draweeBank = obj.@draweeBank;
+				arrObj.checkAmt = obj.@checkAmt;
+				arrObj.cashAmt = obj.@cashAmt;
+				arrObj.acctno = obj.@acctno;*/
+				
+				var obj:Object = _theBox._data = _data;								
+				_theBox.txtORNo.text = obj.pay_ORNo;
+				_theBox.txtPrepBy.text = obj.preparedBy;
+				_theBox.setSelectedCustomer(String(obj.pay_custID));
+				_theBox.txtTotAmt.text = obj.totalAmt;
+				_theBox.txtCheckNo.text = obj.checkNo;
+				_theBox.txtDrawBank.text = obj.draweeBank;
+				_theBox.txtCheckAmt.text = obj.checkAmt;
+				_theBox.txtCash.text = obj.cashAmt;
+				_theBox.txtTotAmt.text = obj.totalAmt;
+				_theBox.txtCash.dispatchEvent(new FocusEvent(FocusEvent.FOCUS_OUT));
 				
 				var arr:Array = String(_data.dateTrans).split("-");
 				_theBox.dfDate.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
-				trace("obj.sqID:",obj.sqID)
-				_theBox.txtTotAmt.text = obj.totalAmt;
+				trace("obj.payID:",obj.payID)
 				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{sqID:obj.sqID,qBox:_theBox,itemRen:this})
+				
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PAYMENT_DETAILS,{payID:obj.payID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
