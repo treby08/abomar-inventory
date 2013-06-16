@@ -868,8 +868,8 @@ package com.module.business
 					if (obj.@isNew =="1"){
 						arrObj.diff = "+"+arrObj.qtyRec;
 					}else{
-						var diff:Number = Number(obj.@whrd_qty) - Number(obj.@whrd_qty_rec);
-						arrObj.diff = diff>0?"-"+int(diff):"+"+int(diff);
+						var diff:int = int(obj.@whrd_qty) - int(obj.@whrd_qty_rec);
+						arrObj.diff = diff>0?"-"+String(diff):"+"+String(diff*-1);
 					}
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);
@@ -1002,10 +1002,11 @@ package com.module.business
 				trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
-					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					//pdID,pd_payID,pd_invID,pd_amt,pd_credit,pd_totalAmt 			
 					arrObj.pdID = obj.@pdID;
 					arrObj.pd_payID = obj.@pd_payID;
 					arrObj.pd_invID = obj.@pd_invID;
+					arrObj.acctNo = obj.@acctNo;
 					arrObj.amt = obj.@pd_amt;
 					arrObj.credit = obj.@pd_credit;
 					arrObj.totalAmt = obj.@pd_totalAmt;
@@ -1026,15 +1027,21 @@ package com.module.business
 				//arrObj = {};
 				for each (obj in listXML.children()){
 					arrObj = new Object();
-					/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
-					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
-					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
+					/*<item payID=\"".$row['payID']."\" pay_ORNo=\"".$row['pay_ORNo']."\" preparedBy=\"".$row['pay_prepBy']."\" 
+					pay_custID=\"".$row['pay_custID']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['pay_totalAmt']."\" 
+					checkNo=\"".$row['checkNo']."\" draweeBank=\"".$row['draweeBank']."\" checkAmt=\"".$row['checkAmt']."\" 
+					cashAmt=\"".$row['cashAmt']."\" acctno=\"".$row['acctno']."\"/>*/
 					arrObj.payID = obj.@payID;
 					arrObj.pay_ORNo = obj.@pay_ORNo;
 					arrObj.pay_custID = obj.@pay_custID;
-					arrObj.pay_prepBy = obj.@pay_prepBy;					
-					arrObj.pay_totalAmt = obj.@pay_totalAmt;					
+					arrObj.preparedBy = obj.@preparedBy;					
+					arrObj.totalAmt = obj.@totalAmt;					
 					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.checkNo = obj.@checkNo;
+					arrObj.draweeBank = obj.@draweeBank;
+					arrObj.checkAmt = obj.@checkAmt;
+					arrObj.cashAmt = obj.@cashAmt;
+					arrObj.acctno = obj.@acctno;
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					

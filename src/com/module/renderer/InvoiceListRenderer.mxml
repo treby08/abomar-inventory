@@ -14,17 +14,27 @@
 			import spark.events.IndexChangeEvent;
 			override public function prepare(hasBeenRecycled:Boolean):void {
 				cmbInvoice.dataProvider = AccessVars.instance().invoiceList;
+				if (data) 
+					trace("prepare", data.invID, data.acctNo)
+				acctNo.visible = acctNo.includeInLayout = false;
+				cmbInvoice.visible = cmbInvoice.includeInLayout = true;
 				
-				if (data && data.invID == ""){
-					cmbInvoice.selectedIndex =-1;
-				}else if (data && data.remarks != ""){
-					
+				if (data && data.invID != "" && data.invID != undefined){					
 					for each(var item:Object in AccessVars.instance().invoiceList){
 						if (item.invID == data.invID){
 							cmbInvoice.selectedItem = item;
 							break;
 						}
 					}
+				}else if (data && data.acctNo != "" && data.acctNo != undefined){
+					trace("prepare: acctNo_", data.invID, data.acctNo)
+					acctNo.text = data.acctNo;
+					acctNo.visible = acctNo.includeInLayout = true;
+					cmbInvoice.visible = cmbInvoice.includeInLayout = false;
+					
+				}else{
+					cmbInvoice.selectedIndex =-1;
+					
 				}
 				
 			}
@@ -33,23 +43,49 @@
 			protected function cmbRemarks_changeHandler(event:IndexChangeEvent):void
 			{
 				data.invID = cmbInvoice.selectedItem.invID;
-				data.totalAmt = cmbInvoice.selectedItem.totalAmt;
+				data.credit = "0.00";
+				data.totalAmt = "0.00";
+				data.amt = cmbInvoice.selectedItem.totalAmt;
+				data.tempAcctNo = cmbInvoice.selectedItem.invIDLabel;
 				var dg:DataGrid = (parent.parent.parent.parent.parent.parent.parent.parent.parent as DataGrid);
+				
 				dg.dataProvider.itemUpdated(data);
 				dg.dispatchEvent(new PropertyChangeEvent(PropertyChangeEvent.PROPERTY_CHANGE));
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
+				if (AccessVars.instance().invoiceList && AccessVars.instance().invoiceList.length == 0){
+					var dg:DataGrid = (parent.parent.parent.parent.parent.parent.parent.parent.parent as DataGrid);
+					if (dg.dataProvider)
+						dg.dataProvider.removeAll();
+					dg.dataProvider = null;
+					return;
+				}
+				acctNo.visible = acctNo.includeInLayout = false;
+				cmbInvoice.visible = cmbInvoice.includeInLayout = true;
 				
-				if (data && data.invID != ""){
-					
+				if (data) 
+					trace("creationCompleteHandler", data.invID, data.acctNo)
+				acctNo.visible = acctNo.includeInLayout = false;
+				cmbInvoice.visible = cmbInvoice.includeInLayout = true;
+				
+				if (data && data.invID != "" && data.invID != undefined){					
 					for each(var item:Object in AccessVars.instance().invoiceList){
 						if (item.invID == data.invID){
 							cmbInvoice.selectedItem = item;
 							break;
 						}
 					}
+				}else if (data && data.acctNo != "" && data.acctNo != undefined){
+					trace("creationCompleteHandler: acctNo_", data.invID, data.acctNo)
+					acctNo.text = data.acctNo;
+					acctNo.visible = acctNo.includeInLayout = true;
+					cmbInvoice.visible = cmbInvoice.includeInLayout = false;
+					
+				}else{
+					cmbInvoice.selectedIndex =-1;
+					
 				}
 				
 			}
@@ -58,5 +94,6 @@
 	</fx:Script>
 	<s:HGroup width="95%" height="100%" horizontalAlign="center" verticalAlign="middle" paddingLeft="5" paddingRight="2">
 		<s:DropDownList id="cmbInvoice" width="100%" labelField="invIDLabel" change="cmbRemarks_changeHandler(event)"/>
+		<s:Label id="acctNo" width="100%" visible="false" includeInLayout="false"/>
 	</s:HGroup>	
 </s:GridItemRenderer>

@@ -180,7 +180,7 @@
 					/* btnCheckOut.label = "Save WH Receipt";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
 					btnEdit.visible = btnEdit.includeInLayout = false;
-					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
+					//btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
 					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
@@ -192,7 +192,7 @@
 				_type = 1;
 				/* btnCheckOut.label = "Save WH Receipt";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
-				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
+				//btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				mainCont.enabled = true;
 			}
 			
@@ -202,7 +202,7 @@
 					mainCont.enabled = true;
 					/* btnCheckOut.label = "Save WH Receipt";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
-					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
+					//btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					//btnPrint.enabled = false;
@@ -243,11 +243,10 @@
 				trace("dg_gridClickHandler",dg.selectedItem.remarks);
 			}
 			
-			public function updateWR():void{
-				/* btnCheckOut.visible = btnCheckOut.includeInLayout = false;
-				btnNew.label = "Clear WH Receipt"; */
+			/*public function updateWR():void{
+				
 				btnEdit.visible = btnEdit.includeInLayout = true;
-				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
+				//btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				var PO_renderer:WareReceiptRenderer;
 				for (var i:int=dgSearch.numElements-1; i >= 0; i-- ){
 					PO_renderer = (dgSearch.getElementAt(i) as WareReceiptRenderer);
@@ -257,7 +256,7 @@
 					}
 				}
 				mainCont.enabled = false;
-			}
+			}*/
 			
 			public function updateWDID(value:String):void{
 				txtWDNo.text = value;
@@ -398,7 +397,7 @@
 			
 			<s:Spacer width="100%"/>
 			<s:Button id="btnEdit"  label="Edit Discrepancy Report" click="editClickHandler(event)" enabled="false"/>
-			<s:Button id="btnPrintWR" label="Print Discrepancy Report" click="printPrevWR()" visible="false" includeInLayout="false"/>
+			<!--<s:Button id="btnPrintWR" label="Print Discrepancy Report" click="printPrevWR()" visible="false" includeInLayout="false"/>-->
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>

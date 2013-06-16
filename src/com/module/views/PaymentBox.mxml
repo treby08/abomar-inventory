@@ -39,8 +39,8 @@
 			}
 			
 			private function init():void{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				/*var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log);*/
 				if (AccessVars.instance().customers == null){
 					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -82,14 +82,26 @@
 					cmbBranch.selectedIndex = 0;
 					genReqNoCode(); */
 				}else if (type == 3){
-					dg.dataProvider = arr;
-					var vat:Number = 0;			
+					dg.dataProvider = arr;	
 					var _subTot:Number = 0;	
+					/*
+					arrObj.pdID = obj.@pdID;
+					arrObj.pd_payID = obj.@pd_payID;
+					arrObj.pd_invID = obj.@pd_invID;
+					arrObj.invID = "";
+					arrObj.acctNo = obj.@acctNo;
+					arrObj.amt = obj.@pd_amt;
+					arrObj.credit = obj.@pd_credit;
+					arrObj.totalAmt = obj.@pd_totalAmt;
+					arrObj.num = num;
+					*/
 					for each (var item:Object in arr){						
-						_subTot += Number(item.netAmt);
+						_subTot += Number(item.totalAmt);
 						
 					}
 					txtTotAmt.text = numFmttr.format(_subTot);
+					
+					addPayItem()
 					
 				}else if (type == 4){
 					cmbCustomer.dataProvider = AccessVars.instance().customers = arr;
@@ -120,6 +132,7 @@
 					trace(item.custID," == ",cID)
 					if (item.custID == cID){
 						cmbCustomer.selectedItem = item;
+						cmbCustomer.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE));
 						break;
 					}	
 				}
@@ -138,74 +151,39 @@
 				var nExp:int = Math.pow(10,decimalPlaces) ; 
 				var nRetVal:Number = Math.round(numIn * nExp) / nExp
 				return nRetVal;
-			}		
+			}
 			
-			
-			protected function btnAddclickHandler(event:MouseEvent):void
-			{	
-				var arrCol:ArrayCollection;
-				if (dg.dataProvider == null)
-					arrCol = new ArrayCollection();
-				else
-					arrCol = dg.dataProvider as ArrayCollection;
-				
-				var obj:Object = new Object();
-				obj.num = arrCol.length+1;
-				obj.invID = -1;
-				obj.amt = "0.00";
-				obj.credit = "0.00";
-				obj.totalAmt = "0.00";
-				arrCol.addItem(obj);
-				dg.dataProvider = arrCol;
-				/*if (cmbProd.selectedItem == null || txtQty.value == 0) return;
-				var arrCol:ArrayCollection;
-				if (dg.dataProvider == null)
-					arrCol = new ArrayCollection();
-				else
-					arrCol = dg.dataProvider as ArrayCollection;
-				
-				var obj:Object = cmbProd.selectedItem;
-				_totalQty +=txtQty.value;
-				
-				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
-				dg.dataProvider = arrCol;
-				
-				txtSubtot.text = numFmttr.format(Number(txtSub.text.replace(/\b,\b/g,""))+Number(txtSubtot.text.replace(/\b,\b/g,"")));
-				txtVat.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))*0.12);
-				txtGT.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))+Number(txtVat.text.replace(/\b,\b/g,"")));
-				_totalQty =0;
-				for each (var items:Object in arrCol){
-					_totalQty += Number(items.qty);
+			private function errorTrap():Boolean{
+				if (dg.dataProviderLength == 0){
+					Alert.show("Item List is Empty","Submit Payment Error");
+					return false;
 				}
-				numItems.text = String(_totalQty);
-				cmbProd.selectedIndex = -1;
-				cmbProd.textInput.text = "";
-				txtQty.value = 0;
-				//txtPrice.text = 
-				txtSub.text = "0.00";
-				txtQtychangeHandler(null);
-				//txtStock.text = "0";
-				cmbProd.setFocus();*/
+				if (cmbCustomer.selectedIndex == -1){
+					Alert.show("Sold To Field is Empty","Submit Payment Error");
+					return false;
+				}
+				if (txtORNo.text == ""){
+					Alert.show("OR No. is Empty","Submit Payment Error");
+					return false;
+				}
+				
+				return true;
 			}
 			
 			protected function CheckOutclickHandler(event:MouseEvent):void
 			{
-				if (dg.dataProviderLength == 0){
-					Alert.show("Item List is Empty","Submit Quote Error");
+				if(errorTrap() == false)
 					return;
-				}
-				
 				/*
-				$sq_quoteNo = $_REQUEST['sq_quoteNo'];
-				$sq_branchID = $_REQUEST['sq_branchID'];
-				$sq_custID = $_REQUEST['sq_custID'];
+				$pay_ORNo = $_REQUEST['pay_ORNo'];
+				$pay_custID = $_REQUEST['pay_custID'];
 				$preparedBy = $_REQUEST['preparedBy'];
-				$approvedBy = $_REQUEST['approvedBy'];
 				$dateTrans = $_REQUEST['dateTrans'];
-				$totalAmt = $_REQUEST['totalAmt']; 
-				$vat = $_REQUEST['vat']; 
-				$sqDetails = $_REQUEST['sqDetails']; 
-				$sqID = $_REQUEST['sqID']; 
+				$totalAmt = $_REQUEST['totalAmt'];
+				$checkNo = $_REQUEST['checkNo'];
+				$draweeBank = $_REQUEST['draweeBank'];
+				$checkAmt = $_REQUEST['checkAmt'];
+				$cashAmt = $_REQUEST['cashAmt']; 
 				*/
 				
 				var obj:Object = {}
@@ -213,10 +191,16 @@
 				obj.pay_custID = cmbCustomer.selectedItem.custID;
 				obj.preparedBy = txtPrepBy.text;
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
-				obj.totalAmt = txtTotAmt.text;
+				obj.totalAmt = txtTotAmt.text.replace(/\b,\b/g,"");
+				obj.checkNo = txtCheckNo.text;
+				obj.draweeBank = txtDrawBank.text;
+				obj.checkAmt = txtCheckAmt.text.replace(/\b,\b/g,"");
+				obj.cashAmt = txtCash.text.replace(/\b,\b/g,"");
+				
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.invID+"|"+item.amt+"|"+item.credit+"|"+item.totalAmt);
+					if (item.invID != undefined && item.invID != -1 && item.amt != "0.00")
+						strItem.push(item.invID+"|"+item.amt+"|"+item.credit+"|"+item.totalAmt+"|"+item.pdID);
 				}
 				obj.payDetails = strItem.join("||");
 				trace("obj.payDetails",obj.payDetails);
@@ -236,18 +220,22 @@
 				//printPrevPO()
 			}
 			
-			private function setDateFormat(d:Date):String{
+			public function setDateFormat(d:Date):String{
 				var strDate:String="";
-				//strDate = String(d.month+1)+"/"+d.date+"/"+d.fullYear;
-				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
+				var mon:String = (d.month+1)<10?"0"+String(d.month+1):String(d.month+1);
+				var dat:String = (d.date)<10?"0"+String(d.date):String(d.date);
+				strDate = d.fullYear+"-"+mon+"-"+dat;
 				return strDate;
 			}
 			
 			protected function printPrevPO():void
 			{
+				if(errorTrap() == false)
+					return;
+				
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 2;
+				_printBox.orderTypeID = 4;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
@@ -274,29 +262,20 @@
 				txtCash.text = "0.00";
 				txtPayTotal.text = "0.00";
 				txtTotAmt.text = "0.00";
+				if (dg.dataProvider)
+				dg.dataProvider.removeAll();
 				dg.dataProvider = null;
 				
 				
 				dfDate.selectedDate = new Date();
 			}
-			
-			
-			
-			private function updateTotal(editVat:Boolean =true):void{
-				/*if (txtVat.text.indexOf(".")==-1)
-					txtVat.text +=".00";
-				
-				txtSubtot.text = numFmttr.format(Number(txtSub.text.replace(/\b,\b/g,""))+Number(txtSubtot.text.replace(/\b,\b/g,"")));
-				if(editVat)
-					txtVat.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))*0.12);
-				txtGT.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))+Number(txtVat.text.replace(/\b,\b/g,"")));*/
-			}
-			
+						
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:txtSearchStr.text,qBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PAYMENT,{searchstr:txtSearchStr.text,qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+				btnView.visible = btnView.includeInLayout = false;
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				mainCont.enabled = false;
 			}
@@ -311,6 +290,7 @@
 					mainCont.enabled = true;
 					btnCheckOut.label = "Submit Payment";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					btnView.visible = btnView.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
@@ -324,6 +304,7 @@
 					mainCont.enabled = true;
 					btnCheckOut.label = "Submit Payment";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					btnView.visible = btnView.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 				}
@@ -334,7 +315,10 @@
 				_type = 1;
 				btnCheckOut.label = "Save Payment Changes";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+				btnView.visible = btnView.includeInLayout = true;
 				mainCont.enabled = true;
+				
+				checkIfPrintable()
 			}
 			
 			protected function cmbCuschangeHandler(event:IndexChangeEvent):void
@@ -344,12 +328,82 @@
 				btnAdd.toolTip="";
 				btnAdd.enabled=true;
 				
-				if (AccessVars.instance().invoiceList == null){
-					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_INVOICE_LIST,{pBox:this,custID:event.target.selectedItem.custID})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				}
+				
+				txtAmtPaid.text= "0.00";
+				txtCheckNo.text = "";
+				txtDrawBank.text = "";
+				txtCheckAmt.text = "0.00";
+				txtCash.text = "0.00";
+				txtPayTotal.text = "0.00";
+				txtTotAmt.text = "0.00";
+				if (dg.dataProvider)
+					dg.dataProvider.removeAll();
+				dg.dataProvider = null;
+				
+				//if (AccessVars.instance().invoiceList == null){
+				trace("event.target.selectedItem.custID",event.target.selectedItem.custID)
+				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_INVOICE_LIST,{pBox:this,custID:event.target.selectedItem.custID})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				//}
+				btnView.visible = btnView.includeInLayout = false;
 			}
 			
+			public function addPayItem():void{
+				var arrCol:ArrayCollection;
+				if (dg.dataProvider)
+					arrCol = dg.dataProvider as ArrayCollection;
+				else
+					arrCol = new ArrayCollection();
+				
+				var obj:Object = new Object();
+				obj.num = arrCol.length+1;
+				obj.invID = -1;
+				obj.amt = "0.00";
+				obj.credit = "0.00";
+				obj.totalAmt = "0.00";
+				arrCol.addItem(obj);
+				dg.dataProvider = arrCol;
+			}
+			
+			protected function btnAddclickHandler(event:MouseEvent):void
+			{	
+				if (dg.dataProvider == null)
+					return;
+				
+				var arrCol:ArrayCollection;
+				arrCol = dg.dataProvider as ArrayCollection;
+				
+				
+				if (dg.selectedIndex == dg.dataProviderLength-1 && AccessVars.instance().invoiceList.length > 0){
+					var obj:Object = new Object();
+					obj.num = arrCol.length+1;
+					obj.invID = -1;
+					obj.amt = "0.00";
+					obj.credit = "0.00";
+					obj.totalAmt = "0.00";
+					arrCol.addItem(obj);
+					dg.dataProvider = arrCol;
+				}
+				
+				dg.selectedItem.credit=txtAmtPaid.text;
+				dg.selectedItem.totalAmt=txtAmtPaid.text;
+				
+				dg.dataProvider.itemUpdated(dg.selectedItem);
+				
+				txtAmtPaid.text = "0.00";
+				var _totAmt:Number = 0;
+				for each (var item:Object in dg.dataProvider){
+					if (item.invID != -1)
+						_totAmt += Number(item.totalAmt);
+				}
+				txtTotAmt.text = numFmttr.format(_totAmt);
+				
+				checkIfPrintable()
+			}
+			
+			private function formatAmt(item:Object, column:GridColumn):String{
+				return numFmttr.format(item.amt);
+			}
 			private function formatAmtTotal(item:Object, column:GridColumn):String{
 				return numFmttr.format(item.totalAmt);
 			}
@@ -360,6 +414,34 @@
 			protected function computefocusOutHandler(event:FocusEvent):void
 			{
 				txtPayTotal.text = numFmttr.format(Number(txtCheckAmt.text) + Number(txtCash.text));
+				checkIfPrintable()				
+			}
+			
+			private function checkIfPrintable():void{
+				if (txtPayTotal.text != "0.00" && txtPayTotal.text == txtTotAmt.text)
+					btnCheckOut.enabled = true;
+				else
+					btnCheckOut.enabled = false;
+				
+				if(btnCheckOut.enabled)
+					btnView.visible = btnView.includeInLayout = true;
+				else
+					btnView.visible = btnView.includeInLayout = false;
+			}
+			
+			protected function gridClickHandler(event:GridEvent):void
+			{
+				if(event.item.totalAmt == "0.00"){
+					txtAmtPaid.text = event.item.amt;
+				}
+			}
+			
+			protected function selectAllfocusInHandler(event:FocusEvent):void
+			{
+				/*trace("event.currentTarget",event.currentTarget)
+				return;*/
+				if ((event.currentTarget as TextInput).text == "0.00")
+					(event.currentTarget as TextInput).selectAll();
 			}
 			
 		]]>
@@ -425,11 +507,11 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="TIN No." width="100" textAlign="right"/>
-							<s:TextInput id="txtTin" width="100%"/>
+							<s:TextInput id="txtTin" width="100%" editable="false"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Amount Paid" width="100" textAlign="right"/>
-							<s:TextInput id="txtAmtPaid" width="100%" textAlign="right" text="0.00" restrict="0-9."/>
+							<s:TextInput id="txtAmtPaid" width="100%" textAlign="right" text="0.00" restrict="0-9." focusIn="selectAllfocusInHandler(event)"/>
 							<s:Button id="btnAdd" label="Add Payment" click="btnAddclickHandler(event)" enabled="false" toolTip="Select Customer First"/>
 						</s:HGroup>	
 					</s:VGroup>
@@ -458,22 +540,23 @@
 					</s:HGroup>
 					<s:VGroup width="100%">
 						<s:Label text="Check Amount"/>
-						<s:TextInput id="txtCheckAmt" width="100%" restrict="0-9." textAlign="right" focusOut="computefocusOutHandler(event)" text="0.00"/>
+						<s:TextInput id="txtCheckAmt" width="100%" restrict="0-9." textAlign="right" focusOut="computefocusOutHandler(event)" text="0.00" focusIn="selectAllfocusInHandler(event)"/>
 					</s:VGroup>
 					<s:VGroup width="100%">
 						<s:Label text="Cash"/>
-						<s:TextInput id="txtCash" width="100%" restrict="0-9." textAlign="right" focusOut="computefocusOutHandler(event)" text="0.00"/>
+						<s:TextInput id="txtCash" width="100%" restrict="0-9." textAlign="right" focusOut="computefocusOutHandler(event)" text="0.00" focusIn="selectAllfocusInHandler(event)"/>
 					</s:VGroup>
 					<s:HGroup width="100%" height="100%" verticalAlign="middle">
 						<s:Label text="TOTAL" width="50" textAlign="center"/>
 						<s:TextInput id="txtPayTotal" width="100%" editable="false" borderVisible="false" textAlign="right"/>
 					</s:HGroup>
 				</s:BorderContainer>
-				<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12">
+				<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12"
+							gridClick="gridClickHandler(event)">
 					<s:columns>
 						<s:ArrayList>
 							<s:GridColumn dataField="invID" headerText="Document" width="120" headerRenderer="com.module.renderer.GridHeadRenderer" editable="false" itemRenderer="com.module.renderer.InvoiceListRenderer"/>
-							<s:GridColumn dataField="amt" headerText="Amount" width="120" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:GridColumn dataField="amt" headerText="Amount" width="120" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer" labelFunction="formatAmt">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="right"/>
@@ -514,11 +597,11 @@
 		<mx:HRule height="5" width="100%"/>
 		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
 				  horizontalAlign="left" verticalAlign="top">						
-			<s:Button id="btnCheckOut" label="Submit Payment" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnCheckOut" label="Submit Payment" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false" enabled="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnNew"  label="New Payment" click="btnNewclickHandler(event)"/>
 			<s:Button id="btnEdit"  label="Edit Payment" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
-			<!--<s:Button id="btnView"  label="View Payment" click="printPrevPO()" visible="false" includeInLayout="false"/>-->
+			<s:Button id="btnView"  label="View Payment" click="printPrevPO()" visible="false" includeInLayout="false"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>

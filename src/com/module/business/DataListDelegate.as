@@ -92,11 +92,12 @@ package com.module.business
 			var listXML:XML = XML(evt.result);
 			var arrCol:ArrayCollection = new ArrayCollection();
 			var arrObj:Object;
+			var obj:XML
 			switch(_profPanel.type){
 				case "userType":
 				break;
 				case "branches":
-					for each (var obj:XML in listXML.children()){
+					for each (obj in listXML.children()){
 					arrObj = new Object;
 					arrObj.bCode = obj.@bCode;
 					arrObj.branchID = obj.@branchID;
@@ -120,7 +121,7 @@ package com.module.business
 					}
 				break;
 				case "remarks":
-					for each (var obj:XML in listXML.children()){
+					for each (obj in listXML.children()){
 						arrObj = new Object;
 						arrObj.remID = obj.@remID;
 						arrObj.remLabel = obj.@remLabel;
@@ -131,7 +132,7 @@ package com.module.business
 					AccessVars.instance().remarks = arrCol;
 				break;
 				case "invoice":
-					for each (var obj:XML in listXML.children()){
+					for each (obj in listXML.children()){
 						arrObj = new Object;
 						arrObj.invID = obj.@invID;
 						arrObj.totalAmt = obj.@totalAmt;
@@ -141,6 +142,10 @@ package com.module.business
 					}
 					trace("getDatalist_onResult:",arrCol.length)
 					AccessVars.instance().invoiceList = arrCol;
+					if(_profPanel && _profPanel.pBox){
+						if (arrCol.length != 0)
+							_profPanel.pBox.addPayItem();
+					}
 					break;
 			}
 			
