@@ -602,6 +602,33 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}
+			}else if (_params.type=="get_exist"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				var num:int = 1;
+				//trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					arrObj.prdID = obj.@prdID;
+					arrObj.prd_purReqID = obj.@prd_purReqID;
+					arrObj.prd_prodID = obj.@prd_prodID;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodDesc = obj.@prodDesc;
+					arrObj.prodComModUse = obj.@prodComModUse;
+					arrObj.weight = obj.@weight;
+					arrObj.price = obj.@srPrice;
+					arrObj.num = num;					
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				
 			}else{
 				
 				listXML = XML(evt.result);
