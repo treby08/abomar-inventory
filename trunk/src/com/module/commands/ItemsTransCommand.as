@@ -139,6 +139,10 @@ package com.module.commands
 					obj.type = "get_req_no";
 					ItemsTransDelegate.instance().purchaseOrd_ReqNo(obj);
 					break;
+				case ItemsTransEvent.GET_EXIST_PO:
+					obj.type = "get_existing";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
 				
 				/*WareHouse Reciept*/
 				case ItemsTransEvent.ADD_WH_RECEIPT:

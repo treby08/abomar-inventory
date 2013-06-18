@@ -77,6 +77,7 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_PURORD, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_PURORD_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_PURORD_NUMBER, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_EXIST_PO, ItemsTransCommand );
 			
 			addCommand( ItemsTransEvent.ADD_WH_RECEIPT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_WH_RECEIPT, ItemsTransCommand );
