@@ -10,6 +10,7 @@
 			import com.module.events.UserEvent;
 			import com.module.renderer.WareReceiptRenderer;
 			import com.module.views.panels.AddProductPanel;
+			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -29,7 +30,6 @@
 			private var _totalQty:int = 0;
 			public var _tempData:Object;
 			public var _type:int = 0; 
-			public var _data:Object;
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
 			public var tempWRID:String="";
@@ -77,9 +77,18 @@
 						dgSearch.addElement(itemUser);
 					}
 				}
+				
 			}
 			
-			
+			public function updateData():void{
+				if (_tempData && _tempData.purOrdID){
+					trace(_tempData.purOrdID)
+					txtPONo.addEventListener(MouseEvent.CLICK,showExistPO);
+					txtPONo.buttonMode = true;
+					txtPONo.useHandCursor = true;
+					txtPONo.setStyle("color","blue");
+				}
+			}
 			
 			
 			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
@@ -166,10 +175,22 @@
 				PopUpManager.addPopUp(_printBox,this,true);
 			}
 			
+			private function showExistPO(event:MouseEvent):void{
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.popView = 0;
+				popPnl.mainID = _tempData.purOrdID;
+				PopUpManager.addPopUp(popPnl,this,true);
+				PopUpManager.centerPopUp(popPnl);
+			}
+			
 			public function clearFields(event:MouseEvent):void{
 				
 				txtBranch.text = "";
 				txtPONo.text = "[No PO Selected]";
+				txtPONo.removeEventListener(MouseEvent.CLICK,showExistPO);
+				txtPONo.buttonMode = false;
+				txtPONo.useHandCursor = false;
+				txtPONo.setStyle("color",0x000000);
 				txtSupInvNo.text = "";
 				txtWRNo.text = "";
 				dfDate.selectedDate = new Date();
@@ -331,7 +352,7 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="PO No." width="50" textAlign="right"/>
-							<s:Label id="txtPONo" width="100%" fontSize="16" text="[No PO selected]"/>
+							<s:Label id="txtPONo" width="100%" fontSize="16" text="[No PO Selected]"/>
 						</s:HGroup>
 					</s:VGroup>
 					

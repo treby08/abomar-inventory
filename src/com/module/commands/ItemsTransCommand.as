@@ -140,7 +140,7 @@ package com.module.commands
 					ItemsTransDelegate.instance().purchaseOrd_ReqNo(obj);
 					break;
 				case ItemsTransEvent.GET_EXIST_PO:
-					obj.type = "get_existing";
+					obj.type = "get_exist_po";
 					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
 					break;
 				

@@ -602,10 +602,22 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}
-			}else if (_params.type=="get_exist"){
+			}else if (_params.type=="get_exist_po"){
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
-				//arrObj = {};
+				/*<main poID=\"".$row['poID']."\" supplier=\"".$row['supplier']."\" invoiceTo=\"".$row['invoiceTo']."\" 
+				deliverTo=\"".$row['deliverTo']."\" totalWeight=\"".$row['totalWeight']."\"  dateTrans=\"".$row['dateTrans']."\"  
+				totalAmt=\"".$row['totalAmt']."\">*/
+				arrObj = new Object();
+				arrObj.supplier = listXML.@supplier;
+				arrObj.deliverTo = listXML.@deliverTo; 
+				arrObj.dateTrans = listXML.@dateTrans;
+				arrObj.totalAmt = listXML.@totalAmt;
+				arrObj.totalWeight = listXML.@totalWeight;
+				arrObj.invoiceTo = listXML.@invoiceTo;
+				arrObj.poID_label = listXML.@poID_label;
+				
+				_params.popBox.updateFields(arrObj);
 				var num:int = 1;
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
@@ -628,7 +640,7 @@ package com.module.business
 					arrCol.addItem(arrObj);
 					num++;
 				}
-				
+				_params.popBox.updateGrid(arrCol);
 			}else{
 				
 				listXML = XML(evt.result);
@@ -636,18 +648,23 @@ package com.module.business
 				//arrObj = {};
 				for each (obj in listXML.children()){
 					arrObj = new Object();
-					/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy'].
-					"\" bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans'].
-					"\" totalAmt=\"".$row['totalAmt']."\"/>*/
-					arrObj.purReqID = obj.@purReqID;
-					arrObj.reqNo = obj.@reqNo;
-					arrObj.bCode = obj.@bCode;				
-					arrObj.bLocation = obj.@bLocation;				
-					arrObj.branchID = obj.@branchID;
-					arrObj.preparedBy = obj.@preparedBy;
-					arrObj.approvedBy = obj.@approvedBy;
-					arrObj.dateTrans = obj.@dateTrans;
-					arrObj.totalAmt = obj.@totalAmt;
+					/*<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" 
+					purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
+					purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" 
+					totalAmt=\"".$row['totalAmt']."\" />*/		
+					arrObj.podID = obj.@podID;
+					arrObj.pod_purOrdID = obj.@pod_purOrdID;
+					arrObj.pod_prodID = obj.@pod_prodID;
+					arrObj.prodDesc = obj.@prodDescrip;
+					arrObj.qty = obj.@quantity;
+					arrObj.total = obj.@totalPurchase;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.prodSubNum = obj.@prodSubNum;
+					arrObj.prodComModUse = obj.@prodComModUse;
+					arrObj.srPrice = obj.@srPrice;
+					arrObj.prodWeight = obj.@prodWeight;
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					

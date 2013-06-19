@@ -8,16 +8,42 @@
 	<fx:Script>
 		<![CDATA[
 			import com.variables.AccessVars;
+			
+			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
 			public var poID:String = "";
 			
-			public function updateFields(){
-				
+			public function updateFields(_data:Object):void{
+				txtSupplier.text = _data.supplier;
+				txtDeliver.text = _data.deliverTo; 
+				dfDate.text = _data.dateTrans;
+				txtGT.text = _data.totalAmt;
+				totWeight.text = _data.totalWeight;
+				var branchItem:Array = String(_data.invoiceTo).split("||");
+				txtInvoice.text = branchItem[0]+"\r"+	branchItem[1]
+					+"\r"+String(branchItem[2]).replace("|"," Ext. ")+"\r"+branchItem[3];
+				txtReqNo.text = _data.poID_label;
 			}
 			
-			public function updateGrid(){
-				
+			public function updateGrid(arr:ArrayCollection):void{
+				dg.dataProvider = arr;
+				numItems.text = arr.length as String;
+				var vat:Number = 0;			
+				var _subTot:Number = 0;
+				var _totWeight:Number = 0;
+				var _totalQty:Number = 0;
+				for each (var item:Object in arr){						
+					_subTot += Number(item.total);
+					_totWeight += Number(item.weight);
+					vat += Number(Number(item.total)*0.12);
+					_totalQty+=Number(item.qty);
+					
+				}
+				txtSubtot.text = numFmttr.format(_subTot);
+				txtVat.text = numFmttr.format(vat);
+				totWeight.text = String(_totWeight);
+				numItems.text = String(_totalQty);
 			}
 			
 			private function formatAmtTotal(item:Object, column:GridColumn):String{
@@ -40,7 +66,7 @@
 		<mx:NumberFormatter id="numFmttr" precision="2" useThousandsSeparator="true"  />
 	</fx:Declarations>
 	
-	<s:VGroup id="cont" minHeight="600" width="70%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false">
 			<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 				<s:borderStroke> 
@@ -62,11 +88,11 @@
 						</s:HGroup>
 						<s:HGroup  width="100%" verticalAlign="middle">
 							<s:Label text="Supplier" width="60" textAlign="right"/>
-							<s:TextInput id="cmbSupplier" width="100%" editable="false" borderVisible="false" selectable="false"/>
+							<s:TextInput id="txtSupplier" width="100%" editable="false" borderVisible="false" selectable="false"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Deliver To" width="60" textAlign="right"/>
-							<s:TextInput id="cmbDeliver" width="100%" editable="false" borderVisible="false" selectable="false"/>
+							<s:TextInput id="txtDeliver" width="100%" editable="false" borderVisible="false" selectable="false"/>
 						</s:HGroup>
 					</s:VGroup>
 				</s:HGroup>
@@ -135,12 +161,6 @@
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
-		</s:VGroup>		
-		<mx:HRule height="5" width="100%"/>
-		<s:HGroup id="hgControl" width="100%" height="80" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
-				  horizontalAlign="center" verticalAlign="middle">						
-			<s:Button id="btnClose" label="Close" />
-			
-		</s:HGroup>
+		</s:VGroup>	
 	</s:VGroup>
 </s:Group>

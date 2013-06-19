@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" title="Profile" initialize="initHandler(event)"
 		 xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="creationCompleteHandler(event)"
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="450">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="470" mouseDown="startDrag()" mouseUp="stopDrag()">
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
