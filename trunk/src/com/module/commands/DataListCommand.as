@@ -17,7 +17,7 @@ package com.module.commands
 			var obj:Object = (event as DataListEvent).params
 			switch(event.type){
 				case DataListEvent.GET_USERTYPE_LIST:
-					obj.type = "userType";
+					//obj.type = "userType";
 					DataListDelegate.instance().getUserlist((event as DataListEvent).params);
 				break;
 				
