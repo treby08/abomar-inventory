@@ -205,7 +205,7 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,qBox:this,onProcess:1})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,qBox:this,onProcess:"0,1"})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 						

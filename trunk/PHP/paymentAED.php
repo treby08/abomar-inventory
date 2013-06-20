@@ -15,7 +15,10 @@
 		$cashAmt = $_REQUEST['cashAmt'];
 		
 		$payDetails = $_REQUEST['payDetails'];
-		$arr_payDetails = explode("||",$payDetails);
+		$arr_payDetails = array();
+		if ($payDetails != "")
+			$arr_payDetails = explode("||",$payDetails);
+			
 		if ($type == "edit")
 			$payID = $_REQUEST['payID'];
 	}else if ($type == "delete")

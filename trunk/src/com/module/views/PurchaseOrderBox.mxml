@@ -310,7 +310,7 @@
 				}
 				setDataProvider((dg.dataProvider as ArrayCollection),3);
 				if ((dg.dataProvider as ArrayCollection).length==0){
-					//clearFields(null);
+					clearFields(null);
 					mainCont.enabled = false;
 					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnView.visible = btnView.includeInLayout = true;

@@ -108,7 +108,7 @@
 					}else if (item.pkgNo == ""){
 						Alert.show("Item No."+item.num+", Package No. is empty","Package No. Empty");
 						return;
-					}else if (item.remarks == ""){
+					}else if (item.qtyRec != item.qty && item.remarks == ""){
 						Alert.show("Item No."+item.num+", Remarks is empty","Remarks Empty");
 						return;
 					}

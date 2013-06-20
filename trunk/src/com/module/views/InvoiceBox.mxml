@@ -59,7 +59,7 @@
 				dfDate.selectedDate = new Date(); 
 				
 				cmbBranch.dataProvider = AccessVars.instance().branches;
-				genReqNoCode();
+				//genReqNoCode();
 			}
 			
 			public function updateDataList():void{
@@ -83,7 +83,7 @@
 					cmbBranch.dataProvider = arr;
 					cmbBranch.labelFunction = mycmbBraLabelFunction;
 					cmbBranch.selectedIndex = 0;
-					genReqNoCode();
+					//genReqNoCode();
 				}else if (type == 3){
 					dg.dataProvider = arr;
 					//dg.validateDisplayList();

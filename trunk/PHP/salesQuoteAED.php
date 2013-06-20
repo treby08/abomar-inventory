@@ -9,8 +9,8 @@
 		$preparedBy = $_REQUEST['preparedBy'];
 		$approvedBy = $_REQUEST['approvedBy'];
 		$dateTrans = $_REQUEST['dateTrans'];
-		$totalAmt = $_REQUEST['totalAmt']; 
-		$vat = $_REQUEST['vat']; 
+		$totalAmt = preg_replace('/,/','',$_REQUEST['totalAmt']);//$_REQUEST['totalAmt']; 
+		$vat = preg_replace('/,/','',$_REQUEST['vat']);//$_REQUEST['vat']; 
 		$sqDetails = $_REQUEST['sqDetails']; 
 		 
 		$arr_sqDetails = explode("||",$sqDetails);
