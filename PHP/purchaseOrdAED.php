@@ -22,7 +22,8 @@
 		$searchSTR = $_REQUEST['searchstr'];
 	else if ($type == "get_details")
 		$purReqID = $_REQUEST['purReqID'];
-	
+	else if ($type == "get_exist_po")
+		$poID = $_REQUEST['poID'];
 		
 	if ($type == "add"){
 		$sql = "INSERT INTO purchaseOrd (purOrd_purReqID, purOrd_supID, purOrd_branchID, purOrd_delID, totalWeight, dateTrans, timeTrans, totalAmt) VALUES ($purReqID,$supID, $branchID, $delID, $totalWeight,'$dateTrans', NOW(), $totalAmt)";
@@ -92,6 +93,35 @@
 				srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
+		echo $xml;
+	}else if ($type == "get_exist_po"){	
+		$sql='SELECT po.*, CONCAT(s.supCode," - ",s.supCompName) AS supplier , CONCAT(inv.bCode," - ",inv.bLocation,"||",inv.bAddress,"||",inv.bPhoneNum,"||",inv.`bMobileNum`) AS invoiceTo, CONCAT(d.bCode," - ",d.bLocation) AS deliverTo
+		 FROM purchaseOrd po
+		INNER JOIN supplier s ON purOrd_supID = supID
+		INNER JOIN branches inv ON purOrd_branchID = inv.branchID
+		INNER JOIN branches d ON purOrd_delID = d.branchID
+		WHERE purOrdID = '.$poID;
+		
+		$query = mysql_query($sql,$conn);
+		$row = mysql_fetch_assoc($query);
+		
+		//$xml = "<root>";
+		$xml = "<main poID=\"".$row['purOrdID']."\" supplier=\"".$row['supplier']."\" invoiceTo=\"".$row['invoiceTo']."\" deliverTo=\"".$row['deliverTo']."\" totalWeight=\"".$row['totalWeight']."\"  dateTrans=\"".$row['dateTrans']."\"  totalAmt=\"".$row['totalAmt']."\" poID_label=\"".number_pad($row['purOrdID'])."\">";
+		
+		$query = mysql_query("SELECT podID,pod_purOrdID,pod_prodID,prodDescrip,quantity,totalPurchase,
+							prodModel,prodCode,prodSubNum,prodComModUse,srPrice,prodWeight 
+							FROM purchaseOrd_details pr 
+							INNER JOIN products p ON pr.pod_prodID=p.prodID
+							WHERE pod_purOrdID = $poID",$conn);
+		
+			while($row = mysql_fetch_assoc($query)){
+				$xml .= "<item podID=\"".$row['podID']."\" pod_purOrdID=\"".$row['pod_purOrdID']."\" pod_prodID=\"".$row['pod_prodID']."\" prodDesc=\"".$row['prodDescrip']."\" 
+				prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" 
+				prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" 
+				srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
+			}
+		$xml .= "</main>";
+		//$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_req_no"){
 		$sql = "SELECT MAX(purOrdID)+1 as purOrdID FROM purchaseOrd";

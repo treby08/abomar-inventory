@@ -72,7 +72,7 @@
 							,s.supCompName, s.address AS supAddress, s.phoneNum AS supPhoneNum,s.mobileNum AS supMobileNum, s.sup_term AS term FROM purchaseOrd po
 							LEFT JOIN branches b ON b.branchID=po.purOrd_branchID
 							LEFT JOIN supplier s ON s.supID=po.purOrd_supID
-							WHERE (purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%') AND onProcess=$onProcess",$conn);
+							WHERE (purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%') AND onProcess IN ($onProcess)",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\" branchPNum=\"".$row['branchPNum']."\"  branchMNum=\"".$row['branchMNum']."\" supAddress=\"".$row['supAddress']."\" supPhoneNum=\"".$row['supPhoneNum']."\" supMobileNum=\"".$row['supMobileNum']."\" branchAdd=\"".$row['branchAdd']."\" term=\"".$row['term']."\"/>";

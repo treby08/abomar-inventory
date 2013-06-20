@@ -7,7 +7,7 @@
 		$preparedBy = $_REQUEST['preparedBy'];
 		$approvedBy = $_REQUEST['approvedBy'];
 		$dateTrans = $_REQUEST['dateTrans'];
-		$totalAmt = $_REQUEST['totalAmt'];
+		$totalAmt = preg_replace('/,/','',$_REQUEST['totalAmt']);//$_REQUEST['totalAmt'];
 		
 		$purReqDetails = $_REQUEST['purReqDetails'];
 		$arr_purReqDetails = explode("||",$purReqDetails);

@@ -9,8 +9,8 @@
 		$preparedBy = $_REQUEST['preparedBy'];
 		$approvedBy = $_REQUEST['approvedBy'];
 		$dateTrans = $_REQUEST['dateTrans'];
-		$totalAmt = $_REQUEST['totalAmt']; 
-		$vat = $_REQUEST['vat']; 
+		$totalAmt = preg_replace('/,/','',$_REQUEST['totalAmt']); 
+		$vat = preg_replace('/,/','',$_REQUEST['vat']); 
 		$sqDetails = $_REQUEST['sqDetails']; 
 		 
 		$arr_sqDetails = explode("||",$sqDetails);
@@ -27,7 +27,7 @@
 			
 	if ($type == "add"){
 		$sql = "INSERT INTO salesInvoice (sq_quoteNo, sq_custID, sq_branchID, prepBy, apprBy, dateTrans, timeTrans, sq_vat, totalAmt) VALUES ('$sq_quoteNo', $sq_custID, $sq_branchID, '$preparedBy', '$approvedBy', '$dateTrans', NOW(), $vat, $totalAmt)";
-		mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
+		mysql_query($sql,$conn) or die(mysql_error().' '.$sql .' '. __LINE__);
 		
 		$sql = "SELECT MAX(sqID) as sqID FROM salesInvoice";
 		$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
