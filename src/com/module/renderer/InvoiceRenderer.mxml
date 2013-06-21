@@ -74,7 +74,7 @@
 				
 				var obj:Object = _theBox._data = _data;
 								
-				//_theBox.txtInvoiceNo.text = obj.sq_quoteNo;
+				_theBox.txtInvoiceNo.text = "";
 				_theBox.txtPrepBy.text = obj.prepBy;
 				_theBox.txtAppBy.text = obj.apprBy;
 				_theBox.txtVat.text = obj.sq_vat;

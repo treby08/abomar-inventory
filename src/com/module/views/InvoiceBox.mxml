@@ -54,8 +54,8 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				/* var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
 				dfDate.selectedDate = new Date(); 
 				
 				cmbBranch.dataProvider = AccessVars.instance().branches;
@@ -234,8 +234,16 @@
 					Alert.show("Item List is Empty","Submit Invoice Error");
 					return;
 				}
+				if (txtInvoiceNo.text == ""){
+					Alert.show("Invoice No. is Empty","Submit Invoice Error");
+					return;
+				}
 				if (cmbBranch.selectedIndex == -1){
 					Alert.show("No Branch Selected","Submit Invoice Error");
+					return;
+				}
+				if (cmbCustomer.selectedIndex == -1){
+					Alert.show("No Custoemr Selected","Submit Invoice Error");
 					return;
 				}
 				
@@ -259,8 +267,8 @@
 				obj.preparedBy = txtPrepBy.text;
 				obj.approvedBy = txtAppBy.text;
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
-				obj.totalAmt = txtGT.text;
-				obj.vat = txtVat.text;
+				obj.totalAmt = txtGT.text.replace(/\b,\b/g,"");
+				obj.vat = txtVat.text.replace(/\b,\b/g,"");
 				obj.salesQuoteID = _data.sqID;
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
@@ -317,6 +325,7 @@
 				}
 				txtAppBy.text = "";
 				txtPrepBy.text = "";
+				txtInvoiceNo.text = "";
 				cmbCustomer.selectedIndex = -1;
 				cmbBranch.selectedIndex = 0;
 				cmbProd.selectedIndex = -1;
@@ -422,8 +431,8 @@
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					btnView.visible = btnView.includeInLayout = false;
 					clearFields(null);
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					/* var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
 				}
 			}
 			
@@ -437,8 +446,8 @@
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					btnView.visible = btnView.includeInLayout = false;
 					clearFields(null);
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					/* var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
 				}
 			}
 			

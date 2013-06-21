@@ -124,7 +124,7 @@
 			}
 			
 			private function updateClickHandler(event:MouseEvent):void{
-				_type=1;
+				//_type=1;
 				saveClickHandler(event);
 			}
 			
@@ -221,7 +221,7 @@
 					txtDesc.text = "";
 					txtComModUse.text = "";	
 					txtFactor.text = "";
-					dfDate.selectedDate = null;
+					dfDate.selectedDate = new Date();
 					imgProd.unloadAndStop();
 					imgProd.source = DEF_IMG;
 					
@@ -612,11 +612,11 @@
 									<s:VGroup paddingLeft="5" paddingRight="5">
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Weight" textAlign="right"/>
-											<s:TextInput id="txtWeight" width="100%" restrict="0-9."/>
+											<s:TextInput id="txtWeight" width="100%" restrict="0-9." textAlign="right"/>
 										</s:HGroup>
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Size" textAlign="right"/>
-											<s:TextInput id="txtSize" width="100%"/>
+											<s:TextInput id="txtSize" width="100%" textAlign="right"/>
 										</s:HGroup>
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Initial Stock"
