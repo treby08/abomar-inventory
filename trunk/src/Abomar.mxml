@@ -50,6 +50,7 @@
 			protected function configLoadComp(event:Event):void
 			{
 				var configXML:XML = XML(event.target.data);
+				trace("configXML:",configXML.toXMLString())
 				/* SecurityType.HOST = configXML.@host;
 				SecurityType.DBUSER = configXML.@user;
 				SecurityType.DBPASS = configXML.@pass;

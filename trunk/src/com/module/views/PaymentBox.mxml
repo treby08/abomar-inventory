@@ -199,6 +199,7 @@
 				
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
+					trace("item.invID",item.invID);
 					if (item.invID != undefined && item.invID != -1 && item.amt != "0.00")
 						strItem.push(item.invID+"|"+item.amt+"|"+item.credit+"|"+item.totalAmt+"|"+item.pdID);
 				}

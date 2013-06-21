@@ -225,8 +225,8 @@
 				obj.preparedBy = txtPrepBy.text;
 				obj.approvedBy = txtAppBy.text;
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
-				obj.totalAmt = txtGT.text;
-				obj.vat = txtVat.text;
+				obj.totalAmt = txtGT.text.replace(/\b,\b/g,"");
+				obj.vat = txtVat.text.replace(/\b,\b/g,"");
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.prdID);
