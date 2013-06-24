@@ -10,6 +10,7 @@
 			import com.module.events.UserEvent;
 			import com.module.renderer.WareDiscrepRenderer;
 			import com.module.renderer.WareReceiptRenderer;
+			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -260,6 +261,37 @@
 			
 			public function updateWDID(value:String):void{
 				txtWDNo.text = value;
+			}
+			
+			public function updateData():void{
+				if (_tempData && _tempData.purOrdID){
+					trace(_tempData.purOrdID)
+					txtPONo.addEventListener(MouseEvent.CLICK,showExistPO);
+					txtPONo.buttonMode = true;
+					txtPONo.useHandCursor = true;
+					txtPONo.setStyle("color","blue");
+				}
+				if (_tempData && _tempData.whrID){
+					trace(_tempData.whrID)
+					txtWRNo.addEventListener(MouseEvent.CLICK,showExistWR);
+					txtWRNo.buttonMode = true;
+					txtWRNo.useHandCursor = true;
+					txtWRNo.setStyle("color","blue");
+				}
+			}
+			private function showExistPO(event:MouseEvent):void{
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.popView = 0;
+				popPnl.mainID = _tempData.purOrdID;
+				PopUpManager.addPopUp(popPnl,this,true);
+				PopUpManager.centerPopUp(popPnl);
+			}
+			private function showExistWR(event:MouseEvent):void{
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.popView = 1;
+				popPnl.mainID = _tempData.whrID;
+				PopUpManager.addPopUp(popPnl,this,true);
+				PopUpManager.centerPopUp(popPnl);
 			}
 			
 		]]>

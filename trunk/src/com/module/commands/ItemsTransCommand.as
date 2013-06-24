@@ -157,6 +157,10 @@ package com.module.commands
 					obj.type = "delete";
 					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
 					break;
+				case ItemsTransEvent.GET_EXIST_WR:
+					obj.type = "get_exist_wr";
+					ItemsTransDelegate.instance().warehouseReceipt_AED(obj);
+					break;
 				
 				case ItemsTransEvent.SEARCH_WH_RECEIPT:
 					obj.type = "search";
