@@ -622,7 +622,8 @@ package com.module.business
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
-					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
+					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice
+					
 					arrObj.prdID = obj.@prdID;
 					arrObj.prd_purReqID = obj.@prd_purReqID;
 					arrObj.prd_prodID = obj.@prd_prodID;
@@ -651,20 +652,22 @@ package com.module.business
 					/*<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" 
 					purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
 					purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" 
-					totalAmt=\"".$row['totalAmt']."\" />*/		
-					arrObj.podID = obj.@podID;
-					arrObj.pod_purOrdID = obj.@pod_purOrdID;
-					arrObj.pod_prodID = obj.@pod_prodID;
-					arrObj.prodDesc = obj.@prodDescrip;
-					arrObj.qty = obj.@quantity;
-					arrObj.total = obj.@totalPurchase;
-					arrObj.prodID = obj.@prodCode;
-					arrObj.modelNo = obj.@prodModel;
-					arrObj.prodCode = obj.@prodCode;
-					arrObj.prodSubNum = obj.@prodSubNum;
-					arrObj.prodComModUse = obj.@prodComModUse;
-					arrObj.srPrice = obj.@srPrice;
-					arrObj.prodWeight = obj.@prodWeight;
+					totalAmt=\"".$row['totalAmt']."\" />*/	
+					/*
+					<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad_req($row['purReqID'])."\" 
+					preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
+					branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" 
+					totalAmt=\"".$row['totalAmt']."\"/>
+					*/
+					arrObj.purReqID = obj.@purReqID;
+					arrObj.reqNo = obj.@reqNo;
+					arrObj.bCode = obj.@bCode;
+					arrObj.bLocation = obj.@bLocation;
+					arrObj.branchID = obj.@branchID;
+					arrObj.approvedBy = obj.@approvedBy;
+					arrObj.dateTrans = obj.@dateTrans;
+					arrObj.preparedBy = obj.@preparedBy;
+					arrObj.totalAmt = obj.@totalAmt;					
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					
@@ -794,6 +797,7 @@ package com.module.business
 				poID_label=\"".number_pad($row['whr_purOrdID'])."\" prepBy=\"".$row['whr_preparedBy']."\" checkBy=\"".$row['whr_checkedBy']."\">*/
 				arrObj = new Object();
 				arrObj.whrID = listXML.@whrID;
+				arrObj.purOrdID = listXML.@whr_purOrdID;
 				arrObj.whrID_label = listXML.@whrID_label;
 				arrObj.branch = listXML.@branch;
 				arrObj.poID_label = listXML.@poID_label;
@@ -802,6 +806,7 @@ package com.module.business
 				arrObj.dateTrans = listXML.@dateTrans;
 				arrObj.prepBy = listXML.@prepBy;
 				arrObj.checkBy = listXML.@checkBy;
+				arrObj.bCode = listXML.@bCode;
 				
 				_params.popBox.updateFields(arrObj);
 				
@@ -954,10 +959,12 @@ package com.module.business
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.remarks = obj.@remLabel;
+					trace("obj.@isNew",obj.@isNew);
 					if (obj.@isNew =="1"){
 						arrObj.diff = "+"+arrObj.qtyRec;
 					}else{
 						var diff:int = int(obj.@whrd_qty) - int(obj.@whrd_qty_rec);
+						trace("diff:",diff)
 						arrObj.diff = diff>0?"-"+String(diff):"+"+String(diff*-1);
 					}
 					arrObj.num = num;					
@@ -986,6 +993,7 @@ package com.module.business
 					arrObj.whrID = obj.@whrID;
 					arrObj.whrID_label = obj.@whrID_label;
 					arrObj.whdID_label = obj.@whdID_label;
+					arrObj.purOrdID = obj.@whr_purOrdID;
 					arrObj.whr_purOrdID = obj.@whr_purOrdID;
 					arrObj.whr_supID = obj.@whr_supID;
 					arrObj.supCompName = obj.@supCompName;

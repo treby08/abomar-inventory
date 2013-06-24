@@ -162,7 +162,7 @@
 				txtBranch.text = "";
 				txtPONo.text = "[No PO Selected]";
 				txtWRNo.text = "[No WH Receipt Selected]";
-				txtWRNo.text = "";
+				txtWDNo.text = "";
 				dfDate.selectedDate = new Date();
 				
 				
@@ -288,7 +288,9 @@
 			}
 			private function showExistWR(event:MouseEvent):void{
 				var popPnl:PopupPanel = new PopupPanel();
-				popPnl.popView = 1;
+				popPnl.width = cont.width;
+				popPnl.height = cont.height-50;
+				popPnl.popView = 1
 				popPnl.mainID = _tempData.whrID;
 				PopUpManager.addPopUp(popPnl,this,true);
 				PopUpManager.centerPopUp(popPnl);
