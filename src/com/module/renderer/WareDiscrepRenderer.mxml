@@ -81,6 +81,7 @@
 				_theBox.txtWRNo.text = updateWRID(_data.whrID_label);
 				_theBox.txtWDNo.text = _data.whdID_label;
 				_theBox.txtBranch.text = obj.bCode+ " - "+obj.bLocation ;//setSelectedBranch(String(obj.branchID));
+				_theBox.updateData();
 				//_theBox.txtPrepBy.text = obj.whr_preparedBy;
 				//_theBox.txtCheckBy.text = obj.whr_checkedBy;
 				

@@ -45,6 +45,7 @@ package com.module.events
 		public static var SEARCH_WH_RECEIPT:String = "search_wh_receipt";
 		public static var GET_WH_RECEIPT_DETAILS:String = "get_wh_receipt_details";
 		public static var GET_WH_RECEIPT_NUMBER:String = "get_wh_receipt_number";
+		public static var GET_EXIST_WR:String = "get_exist_wr";
 		
 		public static var SEARCH_WH_DISCREPANCY:String = "search_wh_discrepancy";
 		public static var GET_WH_DISCREPANCY_DETAILS:String = "get_wh_discrepancy_details";

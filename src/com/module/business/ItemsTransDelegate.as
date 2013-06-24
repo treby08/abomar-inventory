@@ -785,6 +785,51 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}
+			}else if (_params.type=="get_exist_wr"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				/*<main whrID=\"".$row['whrID']."\" whr_purOrdID=\"".$row['whr_purOrdID']."\" whr_supID=\"".$row['whr_supID']."\" 
+				branch=\"".$row['branch']."\" whr_supInvNo=\"".$row['whr_supInvNo']."\"  dateTrans=\"".$row['whr_date']."\" 
+				whr_supInvDate=\"".$row['whr_supInvDate']."\" whrID_label=\"".number_pad($row['whrID'])."\" 
+				poID_label=\"".number_pad($row['whr_purOrdID'])."\" prepBy=\"".$row['whr_preparedBy']."\" checkBy=\"".$row['whr_checkedBy']."\">*/
+				arrObj = new Object();
+				arrObj.whrID = listXML.@whrID;
+				arrObj.whrID_label = listXML.@whrID_label;
+				arrObj.branch = listXML.@branch;
+				arrObj.poID_label = listXML.@poID_label;
+				arrObj.supInvNo = listXML.@whr_supInvNo;
+				arrObj.supInvDate = listXML.@whr_supInvDate;
+				arrObj.dateTrans = listXML.@dateTrans;
+				arrObj.prepBy = listXML.@prepBy;
+				arrObj.checkBy = listXML.@checkBy;
+				
+				_params.popBox.updateFields(arrObj);
+				
+				var num:int = 1;
+				//trace("get_details",XML(evt.result).toXMLString())
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					/*<item whrdID=\"".$row['whrdID']."\" whrd_whrID=\"".$row['whrd_whrID']."\" whrd_podID=\"".$row['whrd_podID']."\" 
+					whrd_prodID=\"".$row['whrd_prodID']."\" prodDescrip=\"".$row['prodDescrip']."\" prodModel=\"".$row['prodModel']."\" 
+					whrd_qty=\"".$row['whrd_qty']."\" whrd_qty_rec=\"".$row['whrd_qty_rec']."\" prodCode=\"".$row['prodCode']."\" 
+					whrd_pkgNo=\"".$row['whrd_pkgNo']."\" remLabel=\"".$row['remLabel']."\" isNew=\"".$row['isNew']."\"/>*/		
+					arrObj.whrdID = obj.@whrdID;
+					arrObj.whrd_whrID = obj.@whrd_whrID;
+					arrObj.whrd_podID = obj.@whrd_podID;
+					arrObj.whrd_prodID = obj.@whrd_prodID;
+					arrObj.prodDesc = obj.@prodDescrip;
+					arrObj.qty = obj.@whrd_qty;
+					arrObj.qtyRec = obj.@whrd_qty_rec;
+					arrObj.pkgNo = obj.@whrd_pkgNo;
+					arrObj.prodID = obj.@prodCode;
+					arrObj.modelNo = obj.@prodModel;
+					arrObj.prodCode = obj.@prodCode;
+					arrObj.remarks = obj.@remLabel;
+					arrObj.num = num;					
+					arrCol.addItem(arrObj);
+					num++;
+				}
+				_params.popBox.updateGrid(arrCol);
 			}else{
 				
 				listXML = XML(evt.result);
