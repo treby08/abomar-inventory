@@ -85,7 +85,7 @@
 		</s:HGroup>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Quantity" width="115" textAlign="right"/>
-			<s:NumericStepper id="txtQty" width="150" value="0" textAlign="right" tabIndex="3"/>		
+			<s:NumericStepper id="txtQty" width="150" value="0" textAlign="right" tabIndex="3" change="{txtQtyRecv.value = txtQty.value}"/>		
 		</s:HGroup>		
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Package No." width="115" textAlign="right"/>
@@ -93,7 +93,7 @@
 		</s:HGroup>		
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Quantity Received" width="115" textAlign="right"/>
-			<s:NumericStepper id="txtQtyRecv" width="150" value="0" textAlign="right" tabIndex="5"/>		
+			<s:NumericStepper id="txtQtyRecv" width="150" value="0" textAlign="right" tabIndex="5" enabled="false"/>		
 		</s:HGroup>		
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Remarks" width="115" textAlign="right"/>

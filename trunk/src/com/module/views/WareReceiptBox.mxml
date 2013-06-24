@@ -256,7 +256,11 @@
 			protected function dg_gridDoubleClickHandler(event:GridEvent):void
 			{
 				if (event.column.columnIndex == 6 || event.column.columnIndex == 5){
-					event.grid.dataGrid.startItemEditorSession(event.rowIndex, event.columnIndex);
+					trace("event.grid.dataGrid.selectedItem.isNew:",event.grid.dataGrid.selectedItem.isNew);
+					if (event.grid.dataGrid.selectedItem.hasOwnProperty("isNew") && event.grid.dataGrid.selectedItem.isNew == "1")
+						event.grid.dataGrid.endItemEditorSession(true);
+					else
+						event.grid.dataGrid.startItemEditorSession(event.rowIndex, event.columnIndex);
 				}
 			}
 			
@@ -407,7 +411,7 @@
 							</s:itemRenderer>
 						</s:GridColumn>
 						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer"/>
-						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer">
+						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:DefaultGridItemRenderer textAlign="center"/>

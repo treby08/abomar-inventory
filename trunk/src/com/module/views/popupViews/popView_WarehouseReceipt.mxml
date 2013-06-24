@@ -25,14 +25,19 @@
 				arrObj.checkBy = listXML.@checkBy;
 				arrObj.dateTrans = listXML.@dateTrans;*/
 				
-				txtBranch.text = _data.supplier;
+				txtBranch.text = _data.branch;
 				txtPONo.text = _data.poID_label; 
 				txtSupInvNo.text = _data.supInvNo;
-				dfInvDate.text = _data.supInvNo;
-				txtWRNo.text = _data.whrID_label;
+				dfInvDate.text = _data.supInvDate;
+				txtWRNo.text = updateWRID(_data);
 				dfDate.text = _data.dateTrans;
 				txtPrepBy.text = _data.prepBy;
 				txtCheckBy.text = _data.checkBy;
+			}
+			
+			public function updateWRID(_data:Object):String{
+				var yr:String = String(_data.dateTrans).split("-")[0];
+				return "WR-"+_data.bCode+"-"+yr.substr(2)+"-"+_data.whrID_label;
 			}
 			
 			public function updateGrid(arr:ArrayCollection):void{
@@ -68,8 +73,8 @@
 	</fx:Declarations>
 	
 	<s:VGroup id="cont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
-		<s:VGroup id="mainCont" width="100%" height="100%" enabled="false" minWidth="600">
-			<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset" >
+		<s:VGroup id="mainCont" width="100%" height="100%" minWidth="600">
+			<s:BorderContainer width="100%" cornerRadius="10" borderStyle="inset" >
 				<s:borderStroke> 
 					<mx:SolidColorStroke 
 						color="{AccessVars.instance().borderStrokeColor}" 
@@ -110,7 +115,7 @@
 				</s:HGroup>
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
-			<s:DataGrid id="dg" width="100%" height="100%" minHeight="250" sortableColumns="false" fontSize="12" editable="false" >
+			<s:DataGrid id="dg" width="100%" height="100%" sortableColumns="false" fontSize="12" editable="false" >
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="40" dataField="num" headerText="No." editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
@@ -144,7 +149,13 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="remarks" headerText="Remarks" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+						<s:GridColumn dataField="remarks" headerText="Remarks" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="left" wordWrap="true" width="120"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
 						
 					</s:ArrayList>
 				</s:columns>

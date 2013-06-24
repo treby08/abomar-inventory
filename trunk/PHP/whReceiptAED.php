@@ -25,6 +25,8 @@
 		$onProcess = $_REQUEST['onProcess']?$_REQUEST['onProcess']:0;
 	}else if ($type == "get_details")
 		$purOrdID = $_REQUEST['purOrdID'];
+	else if ($type == "get_exist_wr")
+		$whrID = $_REQUEST['whrID'];
 	
 		
 	if ($type == "add"){
@@ -92,6 +94,32 @@
 				srPrice=\"".$row['srPrice']."\" prodWeight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
+		echo $xml;
+	}else if ($type == "get_exist_wr"){
+		$sql='SELECT wr.*, CONCAT(d.bCode," - ",d.bLocation) AS branch, d.bCode
+		 FROM wh_receipt wr
+		INNER JOIN branches d ON whr_branchID = d.branchID
+		WHERE whrID = '.$whrID;
+		
+		$query = mysql_query($sql,$conn);
+		$row = mysql_fetch_assoc($query);
+		
+		//$xml = "<root>";
+		$xml = "<main whrID=\"".$row['whrID']."\" whr_purOrdID=\"".$row['whr_purOrdID']."\" whr_supID=\"".$row['whr_supID']."\" branch=\"".$row['branch']."\" whr_supInvNo=\"".$row['whr_supInvNo']."\"  dateTrans=\"".$row['whr_date']."\"  whr_supInvDate=\"".$row['whr_supInvDate']."\" whrID_label=\"".number_pad_req($row['whrID'])."\" poID_label=\"".number_pad($row['whr_purOrdID'])."\" prepBy=\"".$row['whr_preparedBy']."\" checkBy=\"".$row['whr_checkedBy']."\" bCode=\"".$row['bCode']."\">";
+		
+		$query = mysql_query("SELECT whrdID,whrd_whrID, whrd_podID, whrd_prodID,whrd_qty,whrd_qty_rec, 		
+							whrd_pkgNo,prodDescrip,prodModel,prodCode,remLabel,isNew
+							FROM wh_receipt_details whd 
+							INNER JOIN products p ON whd.whrd_prodID=p.prodID
+							INNER JOIN whr_remarks rem ON whd.whrd_remarks = rem.remID
+							WHERE whrd_whrID = $whrID",$conn);
+		
+			while($row = mysql_fetch_assoc($query)){
+				$xml .= "<item whrdID=\"".$row['whrdID']."\" whrd_whrID=\"".$row['whrd_whrID']."\" whrd_podID=\"".$row['whrd_podID']."\" whrd_prodID=\"".$row['whrd_prodID']."\" prodDescrip=\"".$row['prodDescrip']."\" prodModel=\"".$row['prodModel']."\" whrd_qty=\"".$row['whrd_qty']."\" whrd_qty_rec=\"".$row['whrd_qty_rec']."\" prodCode=\"".$row['prodCode']."\" whrd_pkgNo=\"".$row['whrd_pkgNo']."\" remLabel=\"".$row['remLabel']."\" isNew=\"".$row['isNew']."\"/>";
+			}
+		
+		$xml .= "</main>";
+		//$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_req_no"){
 		$sql = "SELECT MAX(whrID)+1 as whrID FROM wh_receipt";

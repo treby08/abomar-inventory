@@ -10,6 +10,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.ItemsTransEvent;
 			import com.module.views.popupViews.popView_PurchaseOrder;
+			import com.module.views.popupViews.popView_WarehouseReceipt;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
@@ -34,13 +35,21 @@
 			
 			protected function initHandler(event:FlexEvent):void
 			{
+				var log3:ItemsTransEvent;
 				switch(popView){
 					case 0:
-					var pop:popView_PurchaseOrder = new popView_PurchaseOrder();
-					pop.poID = mainID;
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_PO,{popBox:pop,poID:mainID})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-					mainCont.addElement(pop);
+						var pop:popView_PurchaseOrder = new popView_PurchaseOrder();
+						pop.poID = mainID;
+						log3 = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_PO,{popBox:pop,poID:mainID})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+						mainCont.addElement(pop);
+					break;
+					case 1:
+						var popWr:popView_WarehouseReceipt = new popView_WarehouseReceipt();
+						popWr.poID = mainID;
+						log3 = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_WR,{popBox:popWr,whrID:mainID})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+						mainCont.addElement(popWr);
 					break;
 				}
 			}
