@@ -74,6 +74,29 @@ package com.module.business
 					}
 					_paramsItems = null;
 				});
+			}else if (_paramsItems.type == "get_price_list"){
+				var listXML:XML = XML(evt.result);
+				var arrCol:ArrayCollection = new ArrayCollection();
+				var arrObj:Object;
+				for each (var obj:XML in listXML.children()){
+					/*<item prodp_ID=\"".$row['prodp_ID']."\" prodID=\"".$row['prodp_prodID']."\" prodDate=\"".$row['prodp_date']."\" 
+					listPrice=\"".$row['prodp_listPrice']."\" dealPrice=\"".$row['prodp_dealPrice']."\" srPrice=\"".$row['prodp_srPrice']."\" 
+					factor=\"".$row['prodp_factor']."\"/>*/
+					arrObj = new Object();
+					arrObj.prodp_ID = obj.@prodp_ID;
+					arrObj.prodID = obj.@prodID;
+					arrObj.prodDate = obj.@prodDate;
+					arrObj.listPrice = obj.@listPrice;
+					arrObj.dealPrice = obj.@dealPrice;
+					arrObj.srPrice = obj.@srPrice;
+					arrObj.factor = obj.@factor;
+					arrCol.addItem(arrObj);
+				}
+				if (_paramsItems.pBox){
+					(_paramsItems.pBox).dataCollection = arrCol;;
+					_paramsItems.pBox = null;
+					_paramsItems = null;
+				}
 			}else{
 				var listXML:XML = XML(evt.result);
 				var arrCol:ArrayCollection = new ArrayCollection();
@@ -583,14 +606,14 @@ package com.module.business
 					arrObj.prd_purReqID = obj.@prd_purReqID;
 					arrObj.prd_prodID = obj.@prd_prodID;
 					arrObj.qty = obj.@quantity;
-					arrObj.total = obj.@totalPurchase;
+					arrObj.total = Number(obj.@quantity)*Number(obj.@srPrice);//obj.@totalPurchase;
 					arrObj.prodID = obj.@prodCode;
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodDesc = obj.@prodDesc;
 					arrObj.prodComModUse = obj.@prodComModUse;
-					arrObj.weight = obj.@weight;
+					arrObj.weight = Number(obj.@weight)*Number(obj.@quantity);
 					arrObj.price = obj.@srPrice;
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);
@@ -628,14 +651,14 @@ package com.module.business
 					arrObj.prd_purReqID = obj.@prd_purReqID;
 					arrObj.prd_prodID = obj.@prd_prodID;
 					arrObj.qty = obj.@quantity;
-					arrObj.total = obj.@totalPurchase;
+					arrObj.total = Number(obj.@quantity)*Number(obj.@srPrice);//obj.@totalPurchase;
 					arrObj.prodID = obj.@prodCode;
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.prodSubNum = obj.@prodSubNum;
 					arrObj.prodDesc = obj.@prodDesc;
 					arrObj.prodComModUse = obj.@prodComModUse;
-					arrObj.weight = obj.@weight;
+					arrObj.weight = Number(obj.@weight)*Number(obj.@quantity);
 					arrObj.price = obj.@srPrice;
 					arrObj.num = num;					
 					arrCol.addItem(arrObj);

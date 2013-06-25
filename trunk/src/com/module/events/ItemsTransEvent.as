@@ -16,6 +16,7 @@ package com.module.events
 		public static var SEARCH_SALES:String = "search_sales";
 		public static var GET_SALES_DETAILS:String = "get_sales_details";
 		public static var GET_SALES_NUMBER:String = "get_sales_number";
+		public static var GET_PRICE_LIST:String = "get_price_list";
 		
 		public static var ADD_QUOTE:String = "add_quote";
 		public static var EDIT_QUOTE:String = "edit_quote";

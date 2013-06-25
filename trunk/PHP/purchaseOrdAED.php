@@ -38,9 +38,9 @@
 		for ($i=0; $i < count($arr_purOrdDetails); $i++){
 			$arrDetails = explode("|",$arr_purOrdDetails[$i]);
 			
-			$sql = "INSERT INTO purchaseOrd_details (`pod_purOrdID`, `pod_prodID`, `quantity`, `totalPurchase`, `pod_dateTrans`, `pod_timeTrans`) VALUES ($pur_purOrdID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", '$dateTrans', NOW())";
+			$sql = "INSERT INTO purchaseOrd_details (`pod_purOrdID`, `pod_prodID`, `quantity`, pod_price, `totalPurchase`, `pod_dateTrans`, `pod_timeTrans`) VALUES ($pur_purOrdID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", ".$arrDetails[3].", '$dateTrans', NOW())";
 			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
-			$sql = "UPDATE purchaseReq_details SET itemServed=".$arrDetails[1]." WHERE prdID=".$arrDetails[3];
+			$sql = "UPDATE purchaseReq_details SET itemServed=".$arrDetails[1]." WHERE prdID=".$arrDetails[4];
 			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}
 		
@@ -81,7 +81,8 @@
 			}
 		$xml .= "</root>";
 		echo $xml;*/
-		$query = mysql_query("SELECT podID,pod_purOrdID,pod_prodID,prodDescrip,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice,prodWeight 
+		$query = mysql_query("SELECT podID,pod_purOrdID,pod_prodID,prodDescrip,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodWeight,
+								IF(pod_price=0.00,listPrice,pod_price) AS listPrice
 								FROM purchaseOrd_details pr 
 								INNER JOIN products p ON pr.pod_prodID=p.prodID
 								WHERE pod_purOrdID = $purReqID",$conn);
@@ -90,7 +91,7 @@
 				$xml .= "<item podID=\"".$row['podID']."\" pod_purOrdID=\"".$row['pod_purOrdID']."\" pod_prodID=\"".$row['pod_prodID']."\" prodDesc=\"".$row['prodDescrip']."\" 
 				prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" 
 				prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" 
-				srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
+				srPrice=\"".$row['listPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
@@ -109,7 +110,8 @@
 		$xml = "<main poID=\"".$row['purOrdID']."\" supplier=\"".$row['supplier']."\" invoiceTo=\"".$row['invoiceTo']."\" deliverTo=\"".$row['deliverTo']."\" totalWeight=\"".$row['totalWeight']."\"  dateTrans=\"".$row['dateTrans']."\"  totalAmt=\"".$row['totalAmt']."\" poID_label=\"".number_pad($row['purOrdID'])."\">";
 		
 		$query = mysql_query("SELECT podID,pod_purOrdID,pod_prodID,prodDescrip,quantity,totalPurchase,
-							prodModel,prodCode,prodSubNum,prodComModUse,srPrice,prodWeight 
+							prodModel,prodCode,prodSubNum,prodComModUse,prodWeight,
+							IF(pod_price=0.00,listPrice,pod_price) AS listPrice
 							FROM purchaseOrd_details pr 
 							INNER JOIN products p ON pr.pod_prodID=p.prodID
 							WHERE pod_purOrdID = $poID",$conn);
@@ -118,7 +120,7 @@
 				$xml .= "<item podID=\"".$row['podID']."\" pod_purOrdID=\"".$row['pod_purOrdID']."\" pod_prodID=\"".$row['pod_prodID']."\" prodDesc=\"".$row['prodDescrip']."\" 
 				prodModel=\"".$row['prodModel']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" 
 				prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" 
-				srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
+				srPrice=\"".$row['listPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</main>";
 		//$xml .= "</root>";

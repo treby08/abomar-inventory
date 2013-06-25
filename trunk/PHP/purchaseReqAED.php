@@ -7,7 +7,7 @@
 		$preparedBy = $_REQUEST['preparedBy'];
 		$approvedBy = $_REQUEST['approvedBy'];
 		$dateTrans = $_REQUEST['dateTrans'];
-		$totalAmt = preg_replace('/,/','',$_REQUEST['totalAmt']);//$_REQUEST['totalAmt'];
+		$totalAmt = $_REQUEST['totalAmt'];
 		
 		$purReqDetails = $_REQUEST['purReqDetails'];
 		$arr_purReqDetails = explode("||",$purReqDetails);
@@ -35,7 +35,7 @@
 		for ($i=0; $i < count($arr_purReqDetails); $i++){
 			$arrDetails = explode("|",$arr_purReqDetails[$i]);
 			
-			$sql = "INSERT INTO purchaseReq_details (`prd_purReqID`, `prd_prodID`, `quantity`, `totalPurchase`, `prd_dateTrans`, `prd_timeTrans`) VALUES ($prd_purReqID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", NOW(), NOW())";
+			$sql = "INSERT INTO purchaseReq_details (`prd_purReqID`, `prd_prodID`, `quantity`, prd_price, `totalPurchase`, `prd_dateTrans`, `prd_timeTrans`) VALUES ($prd_purReqID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", ".$arrDetails[3].", NOW(), NOW())";
 			mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}
 		
@@ -46,11 +46,11 @@
 		
 		for ($i=0; $i < count($arr_purReqDetails); $i++){
 			$arrDetails = explode("|",$arr_purReqDetails[$i]);
-			if ($arrDetails[3]=="undefined"){
-				$sql = "INSERT INTO purchaseReq_details (`prd_purReqID`, `prd_prodID`, `quantity`, `totalPurchase`, `prd_dateTrans`, `prd_timeTrans`,isRemove) VALUES ($purReqID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", NOW(), NOW(),0)";
+			if ($arrDetails[4]=="undefined"){
+				$sql = "INSERT INTO purchaseReq_details (`prd_purReqID`, `prd_prodID`, `quantity`,  prd_price, `totalPurchase`, `prd_dateTrans`, `prd_timeTrans`,isRemove) VALUES ($purReqID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", ".$arrDetails[3].", NOW(), NOW(),0)";
 			}else{
-				$sql = "UPDATE purchaseReq_details SET quantity=".$arrDetails[1].", totalPurchase=".$arrDetails[2].", isRemove=0 
-				WHERE prdID=".$arrDetails[3];
+				$sql = "UPDATE purchaseReq_details SET quantity=".$arrDetails[1].", prd_price=".$arrDetails[2].", totalPurchase=".$arrDetails[3].", isRemove=0 
+				WHERE prdID=".$arrDetails[4];
 			}
 			mysql_query($sql,$conn) or die(mysql_error().' '.$sql.' '. __LINE__);
 		}
@@ -67,7 +67,8 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,listPrice,prodWeight 
+		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,prodWeight,
+							IF(prd_price=0.00,listPrice,prd_price) AS listPrice
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
 							WHERE prd_purReqID = $purReqID AND (quantity-itemServed) <> 0 AND isRemove=0",$conn);

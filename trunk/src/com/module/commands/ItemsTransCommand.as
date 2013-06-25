@@ -32,6 +32,10 @@ package com.module.commands
 					obj.type = "search";
 					ItemsTransDelegate.instance().Items_AED(obj);
 				break;
+				case ItemsTransEvent.GET_PRICE_LIST:
+					obj.type = "get_price_list";
+					ItemsTransDelegate.instance().Items_AED(obj);
+				break;
 				/* PURCHASE ORDER*/
 				case ItemsTransEvent.ADD_SALES:
 					obj.type = "add";

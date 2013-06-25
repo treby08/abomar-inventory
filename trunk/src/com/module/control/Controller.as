@@ -49,6 +49,7 @@ package com.module.control
 			addCommand( ItemsTransEvent.EDIT_PRODUCT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.DELETE_PRODUCT, ItemsTransCommand );
 			addCommand( ItemsTransEvent.SEARCH_PRODUCT, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_PRICE_LIST, ItemsTransCommand );
 			
 			addCommand( ItemsTransEvent.ADD_SALES, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_SALES, ItemsTransCommand );
