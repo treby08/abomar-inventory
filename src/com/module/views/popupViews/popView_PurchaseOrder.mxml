@@ -42,6 +42,7 @@
 				}
 				txtSubtot.text = numFmttr.format(_subTot);
 				txtVat.text = numFmttr.format(vat);
+				txtGT.text = numFmttr.format(_subTot+vat);
 				totWeight.text = String(_totWeight);
 				numItems.text = String(_totalQty);
 			}

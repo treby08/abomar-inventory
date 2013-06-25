@@ -269,7 +269,7 @@
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					if (item.isSelected=="1")
-						strItem.push(item.prd_prodID+"|"+item.qty+"|"+item.total+"|"+item.prdID);
+						strItem.push(item.prd_prodID+"|"+item.qty+"|"+item.price+"|"+item.total+"|"+item.prdID);
 				}
 				obj.purOrdDetails = strItem.join("||");
 				obj.pBox = this;

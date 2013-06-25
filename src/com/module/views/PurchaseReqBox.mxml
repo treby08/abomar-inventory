@@ -9,6 +9,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.PurchaseReqRenderer;
+			import com.module.views.panels.ProductPricePanel;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -30,6 +31,7 @@
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
 			public var _reqNo:String = "000";
+			//private var _prodID:String;
 			
 			public function set reqNo(val:String):void{
 				_reqNo = val;
@@ -146,6 +148,7 @@
 				if (cmbProd.selectedItem == null) return;
 				var obj:Object = cmbProd.selectedItem;
 				txtPrice.text = obj.listPrice;
+				//_prodID = obj.prodID
 				//txtStock.text =  obj.stockCnt;
 				txtQty.maximum = Number(obj.stockCnt);
 				if (txtQty.value !=0){
@@ -182,8 +185,8 @@
 				
 				var obj:Object = cmbProd.selectedItem;
 				
-				
-				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.listPrice,vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
+				trace("txtPrice.text",txtPrice.text)
+				arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:txtPrice.text.replace(/\b,\b/g,""),vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
 				dg.dataProvider = arrCol;
 				
 				txtSubtot.text = numFmttr.format(Number(txtSub.text.replace(/\b,\b/g,""))+Number(txtSubtot.text.replace(/\b,\b/g,"")));
@@ -229,7 +232,7 @@
 				obj.vat = txtVat.text.replace(/\b,\b/g,"");
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.prdID);
+					strItem.push(item.prodDBID+"|"+item.qty+"|"+item.price+"|"+item.total+"|"+item.prdID);
 				}
 				obj.purReqDetails = strItem.join("||");
 				trace("obj.purReqDetails:",obj.purReqDetails)
@@ -419,6 +422,18 @@
 			private function formatAmtPrice(item:Object, column:GridColumn):String{
 				return numFmttr.format(item.price);
 			}
+			
+			protected function pricelist_clickHandler(event:MouseEvent):void
+			{
+				if (cmbProd.selectedItem){
+					var prodPricePnl:ProductPricePanel = new ProductPricePanel();
+					prodPricePnl.txtPrice = txtPrice;
+					prodPricePnl.prodID = cmbProd.selectedItem.prodID;
+					PopUpManager.addPopUp(prodPricePnl,this,true);
+					PopUpManager.centerPopUp(prodPricePnl);
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -495,7 +510,7 @@
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Selling Price" width="90" textAlign="right"/>
 							<s:TextInput id="txtPrice" width="100" text="0.00" textAlign="right" selectable="false"/>
-							<s:Button label="View Historical Pricing"/>
+							<s:Button label="View Historical Pricing" click="pricelist_clickHandler(event)"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Quantity" width="90" textAlign="right"/>
