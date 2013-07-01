@@ -18,6 +18,10 @@ global{
 //  AccordionHeader
 //------------------------------
 */
+
+.required{
+	borderColor: #ec3838;
+}
 AccordionHeader
 {
 

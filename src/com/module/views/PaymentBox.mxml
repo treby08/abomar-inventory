@@ -502,7 +502,7 @@
 					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="OR No." width="100" textAlign="right"/>
-							<s:TextInput id="txtORNo" width="100%"/>
+							<s:TextInput id="txtORNo" width="100%" styleName="required" keyUp="{txtORNo.styleName = txtORNo.text==''?'required':''}"/>
 							<s:Label text="Date" textAlign="center"/>
 							<mx:DateField id="dfDate" width="140" showToday="true"/>
 						</s:HGroup>
@@ -587,7 +587,7 @@
 			<s:HGroup width="100%" verticalAlign="bottom" fontSize="14">
 				<s:HGroup width="40%" verticalAlign="middle">
 					<s:Label text="Prepared By" width="90" textAlign="right"/>
-					<s:TextInput id="txtPrepBy" width="100%"/>
+					<s:TextInput id="txtPrepBy" width="100%" styleName="required" keyUp="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 				</s:HGroup>
 				<s:HGroup width="60%" verticalAlign="middle" horizontalAlign="right">
 					<s:Label text="TOTAL AMOUNT" width="120" textAlign="right"/>

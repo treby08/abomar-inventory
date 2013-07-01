@@ -89,8 +89,8 @@
 				//_theBox.txtInvoice.text = obj.invTo;
 				//_theBox.txtAppBy.text = obj.approvedBy;
 				//_theBox.txtReqNo.text = obj.reqNo;
-				//var arr:Array = String(_data.dateTrans).split("-");
-				_theBox.dfDate.text = _data.dateTrans;//.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
+				var arr:Array = String(_data.dateTrans).split("-");
+				_theBox.dfDate..selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
 				_theBox.setSelectedSupplier(_data.purOrd_supID);
 				_theBox.setSelectedDelivery(String(obj.purOrd_branchID));
 				var branchItem:Object = _theBox.getSelectedInvoice(String(_data.purOrd_delID));

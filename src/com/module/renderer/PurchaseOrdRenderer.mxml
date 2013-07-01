@@ -86,8 +86,9 @@
 				_theBox.purReqID = obj.purReqID;
 				_theBox.txtGT.text = obj.totalAmt;
 				var branchItem:Object = _theBox.getSelectedInvoice(String(_data.branchID));
+				var bPhone:String = String(branchItem.bPhoneNum).length>3?String(branchItem.bPhoneNum).replace("|"," Ext. "):'';
 				_theBox.txtInvoice.text = branchItem.bCode+" - "+branchItem.bLocation+"\r"+	branchItem.bAddress
-					+"\r"+String(branchItem.bPhoneNum).replace("|"," Ext. ")+"\r"+branchItem.bMobileNum;//obj.bCode;//setSelectedBranch(String(obj.branchID));
+					+"\r"+bPhone+"\r"+branchItem.bMobileNum;//obj.bCode;//setSelectedBranch(String(obj.branchID));
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
