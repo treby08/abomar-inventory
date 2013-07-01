@@ -27,6 +27,7 @@
 			import spark.events.TextOperationEvent;
 			private var _totalQty:int = 0;
 			public var _tempData:Object;
+			private var _origData:ArrayCollection;
 			public var purReqID:String = "";
 			public var _type:int = 0; 
 			public var theOwner:Object;
@@ -59,7 +60,7 @@
 					cmbDeliver.selectedIndex = 0;
 					//cmbDeliver.validateNow();
 				}else if (type == 3){
-					dg.dataProvider = arr;
+					dg.dataProvider = _origData = arr;
 					numItems.text = "0";
 					_totalQty = 0
 					var vat:Number = 0;			
@@ -267,9 +268,19 @@
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
 				//obj.vat = txtVat.text;
 				var strItem:Array = new Array();
+				var i:int=0;
 				for each (var item:Object in dg.dataProvider){
-					if (item.isSelected=="1")
+					if (item.isSelected=="1"){
 						strItem.push(item.prd_prodID+"|"+item.qty+"|"+item.price+"|"+item.total+"|"+item.prdID);
+						trace(_origData.getItemAt(i).qty," != ",item.qty)
+						if(_origData.getItemAt(i).qty != item.qty){
+							item.qty=int(_origData.getItemAt(i).qty) -int(item.qty);
+							item.isSelected=="0";
+							dg.dataProvider.itemUpdated(item);
+						}
+							
+					}
+					i++;
 				}
 				obj.purOrdDetails = strItem.join("||");
 				obj.pBox = this;
@@ -527,7 +538,7 @@
 				<s:HGroup  width="100%" height="100%" fontSize="16">					
 					<s:HGroup width="50%" verticalAlign="top" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="15" paddingRight="15">
 						<s:Label text="Invoice To" width="90" textAlign="right"/>
-						<s:TextArea id="txtInvoice" width="100%" height="90"/>
+						<s:TextArea id="txtInvoice" width="100%" height="90" keyUp="{txtInvoice.styleName = txtInvoice.text==''?'required':''}"/>
 					</s:HGroup>
 					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">

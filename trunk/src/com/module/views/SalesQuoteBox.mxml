@@ -507,7 +507,7 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Prepared By" width="90" textAlign="right"/>
-							<s:TextInput id="txtPrepBy" width="100%"/>
+							<s:TextInput id="txtPrepBy" width="100%" styleName="required" keyUp="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 						</s:HGroup>
 					</s:VGroup>
 					
@@ -591,7 +591,7 @@
 				<s:VGroup width="40%" height="100%">
 					<s:HGroup width="100%" verticalAlign="middle">
 						<s:Label text="Approved By" width="90" textAlign="right"/>
-						<s:TextInput id="txtAppBy" width="100%"/>
+						<s:TextInput id="txtAppBy" width="100%" styleName="required" keyUp="{txtAppBy.styleName = txtAppBy.text==''?'required':''}"/>
 					</s:HGroup>
 					<s:Spacer height="100%"/>
 					<s:HGroup width="100%" >

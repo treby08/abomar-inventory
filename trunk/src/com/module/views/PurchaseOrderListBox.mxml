@@ -296,7 +296,7 @@
 							<s:Label text="PO No." width="60" textAlign="right"/>
 							<s:TextInput id="txtReqNo" width="100%" editable="false" selectable="false"/>
 							<s:Label text="Date" textAlign="center"/>
-							<s:TextInput id="dfDate" width="150" editable="false"  selectable="false" borderVisible="false"/>
+							<mx:DateField id="dfDate" width="150" editable="false" enabled="false"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle" visible="false" includeInLayout="false">
 							<s:Label text="Item / Model No." width="115" textAlign="right"/>
