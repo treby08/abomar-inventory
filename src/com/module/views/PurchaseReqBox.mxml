@@ -9,6 +9,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.PurchaseReqRenderer;
+			import com.module.views.panels.PopupPanel;
 			import com.module.views.panels.ProductPricePanel;
 			import com.variables.AccessVars;
 			
@@ -31,6 +32,7 @@
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
 			public var _reqNo:String = "000";
+			public var isProcess:Boolean = false;
 			//private var _prodID:String;
 			
 			public function set reqNo(val:String):void{
@@ -41,9 +43,10 @@
 			}
 			
 			private function init():void{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-				
+				if (!isProcess){
+					var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				}
 				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
@@ -52,16 +55,32 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				dfDate.selectedDate = new Date(); 
+				if (!isProcess){
+					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					dfDate.selectedDate = new Date();
+				}else{
+					prodBox.visible = false;
+					dg.editable = false;
+					dg.doubleClickEnabled = false;
+					hgControl.visible = false;
+					txtPrepBy.editable = false;
+					txtAppBy.editable = false;
+					dfDate.editable = dfDate.enabled = false;
+					gcRemove.visible = false;
+					txtVat.editable = false
+					cmbBranch.enabled = false;
+					hgNewReq.visible = hgNewReq.includeInLayout = false;
+					hgProcessReq.visible = hgProcessReq.includeInLayout = true;
+				}
 				
 			}
 			
 			public function genReqNoCode():void{
-				var yr:String = String(dfDate.selectedDate.getFullYear());
-				if (cmbBranch && txtReqNo && cmbBranch.dataProvider && (cmbBranch.dataProvider as ArrayCollection).length > 0)
+				if (cmbBranch && txtReqNo && cmbBranch.dataProvider && (cmbBranch.dataProvider as ArrayCollection).length > 0 && cmbBranch.selectedItem){
+					var yr:String = String(dfDate.selectedDate.getFullYear());
 					txtReqNo.text = cmbBranch.selectedItem.bCode+"-"+yr.substr(2)+"-"+_reqNo;
+				}
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -70,8 +89,8 @@
 					cmbProd.labelFunction = mycmbProdLabelFunction;
 				}else if (type == 1){
 					cmbBranch.dataProvider = arr;
-					cmbBranch.labelFunction = mycmbBraLabelFunction;
-					cmbBranch.selectedIndex = 0;
+					cmbBranch.labelFunction = mycmbBraLabelFunction;					
+					cmbBranch.selectedIndex = (!isProcess)?0:-1;
 					genReqNoCode();
 				}else if (type == 3){
 					dg.dataProvider = arr;
@@ -366,11 +385,23 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:txtSearchStr.text,qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
-				btnEdit.visible = btnEdit.includeInLayout = false;
-				mainCont.enabled = false;
+				var condition:String = (isProcess)?"onProcess!=0":"";
+				if (!isProcess){
+					var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:txtSearchStr.text,condition:"",qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log);
+					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+					btnEdit.visible = btnEdit.includeInLayout = false;
+					mainCont.enabled = false;
+				}else{
+					var popPnl:PopupPanel = new PopupPanel();
+					popPnl.width = searchProd.width;
+					//popPnl.height = undefined;
+					popPnl.popView = 2;
+					popPnl.mainID = "0";
+					popPnl.mainComp = this;
+					PopUpManager.addPopUp(popPnl,searchProd,true);
+					PopUpManager.centerPopUp(popPnl);
+				}
 			}
 			
 			protected function btnNewclickHandler(event:MouseEvent):void
@@ -451,10 +482,13 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
+			<s:HGroup id="hgNewReq" width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
 				<s:Label text="Search: "/>
 				<s:TextInput prompt="[Requi. No/Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
-				<s:Button label="Search" click="SearchClickHandler(event)"/>				
+				<s:Button label="Search" click="SearchClickHandler(event)" buttonMode="true" />				
+			</s:HGroup>
+			<s:HGroup id="hgProcessReq" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">
+				<s:Button label="Select Search Criteria " click="SearchClickHandler(event)" buttonMode="true" width="90%"/>				
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
 				<s:Label text="PR No." width="45%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
@@ -465,11 +499,11 @@
 					<s:VGroup id="dgSearch" gap="2" width="100%" height="100%" contentBackgroundAlpha="1" contentBackgroundColor="0x8bc76d" clipAndEnableScrolling="true"/>
 				</s:Scroller>
 			</s:Group>
-			<mx:HRule width="100%"/>
+			<!--<mx:HRule width="100%"/>
 			<s:HGroup width="100%" horizontalAlign="left" paddingLeft="10" paddingBottom="5">
 				<s:Label text="Total Request: "/>
 				<s:Label id="totCount" text="0" width="50" textAlign="right" paddingRight="10"/>
-			</s:HGroup>
+			</s:HGroup>-->
 		</s:BorderContainer>
 	</s:VGroup>
 	<s:VGroup id="cont" minHeight="600" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
@@ -488,11 +522,11 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Prepared By" width="90" textAlign="right"/>
-							<s:TextInput id="txtPrepBy" width="100%" styleName="required" keyUp="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
+							<s:TextInput id="txtPrepBy" width="100%" styleName="required" valueCommit="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Approved By" width="90" textAlign="right"/>
-							<s:TextInput id="txtAppBy" width="100%" styleName="required" keyUp="{txtAppBy.styleName = txtAppBy.text==''?'required':''}"/>
+							<s:TextInput id="txtAppBy" width="100%" styleName="required" valueCommit="{txtAppBy.styleName = txtAppBy.text==''?'required':''}"/>
 						</s:HGroup>
 					</s:VGroup>
 					
@@ -501,25 +535,28 @@
 							<s:Label text="Requisition No." width="90" textAlign="right"/>
 							<s:TextInput id="txtReqNo" width="100%" editable="false"/>
 							<s:Label text="Date" textAlign="center"/>
-							<mx:DateField id="dfDate" width="150" showToday="true" change="cmbBranchchangeHandler(event)"/>
+							<mx:DateField id="dfDate" width="150" showToday="true" change="cmbBranchchangeHandler(event)" selectedDate="{new Date()}"/>
 						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Item/Model No." width="90" textAlign="right"/>
-							<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
-						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Selling Price" width="90" textAlign="right"/>
-							<s:TextInput id="txtPrice" width="100" text="0.00" textAlign="right" selectable="false"/>
-							<s:Button label="View Historical Pricing" click="pricelist_clickHandler(event)"/>
-						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle">
-							<s:Label text="Quantity" width="90" textAlign="right"/>
-							<s:NumericStepper id="txtQty" width="100" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
-							<s:Button id="btnAdd" label="Add  Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
-							<s:Spacer width="10"/>
-							<s:Label text="Net Price"/>
-							<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
-						</s:HGroup>
+						<s:VGroup id="prodBox" width="100%" height="100%">
+							<s:HGroup width="100%" verticalAlign="middle">
+								<s:Label text="Item/Model No." width="90" textAlign="right"/>
+								<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
+							</s:HGroup>
+							<s:HGroup width="100%" verticalAlign="middle">
+								<s:Label text="Selling Price" width="90" textAlign="right"/>
+								<s:TextInput id="txtPrice" width="100" text="0.00" textAlign="right" selectable="false"/>
+								<s:Button label="View Historical Pricing" click="pricelist_clickHandler(event)"/>
+							</s:HGroup>
+							<s:HGroup width="100%" verticalAlign="middle">
+								<s:Label text="Quantity" width="90" textAlign="right"/>
+								<s:NumericStepper id="txtQty" width="100" value="0" textAlign="right" tabIndex="3" change="txtQtychangeHandler(event)"/>
+								<s:Button id="btnAdd" label="Add  Order" tabIndex="4" click="btnAddclickHandler(event)" keyDown="btnAdd_keyUpHandler(event)"/>
+								<s:Spacer width="10"/>
+								<s:Label text="Net Price"/>
+								<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
+							</s:HGroup>
+						</s:VGroup>
+						
 						
 						<!--<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
 						<s:HGroup verticalAlign="middle" paddingLeft="10">
@@ -543,7 +580,7 @@
 						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
 				<s:columns>
 					<s:ArrayList>
-						<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+						<s:GridColumn id="gcRemove" width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
 						<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>
 						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer"/>
 						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="120"  editable="false">
