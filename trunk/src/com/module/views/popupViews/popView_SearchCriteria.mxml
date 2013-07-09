@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" paddingTop="3" paddingBottom="3" paddingLeft="5" paddingRight="5"/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.cairngorm.control.CairngormEventDispatcher;
+			import com.module.events.DataListEvent;
+			import com.module.events.ItemsTransEvent;
+			import com.module.views.panels.PopupPanel;
+			import com.variables.AccessVars;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			private var arrStat:ArrayCollection = new ArrayCollection([{label:"Open PO",type:0},{label:"Fully Served",type:1},{label:"Partially Served",type:2},{label:"Cancelled",type:3},{label:"All PO",type:4}])
+			private var _sType:int = -1;
+			private var _mainComp:Object;
+			public var popPanel:PopupPanel;
+			
+			public function set sType(value:int):void{
+				_sType = value;
+			}
+			
+			public function get sType():int{
+				return _sType;
+			}
+			
+			public function set mainComp(value:Object):void{
+				_mainComp = value;
+			}
+			
+			public function get mainComp():Object{
+				return _mainComp;
+			}
+			
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				switch(_sType){
+					case 0:
+						purReq.visible = purReq.includeInLayout = true;
+						sDate.selectedDate = new Date();
+						eDate.selectedDate = new Date();
+						if (AccessVars.instance().branches == null){
+							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+						}else
+							updateDataList();
+					break;
+					case 1:
+					break;
+					case 2:
+					break;
+					case 3:
+					break;
+					case 4:
+					break;
+				}
+			}
+			
+			private function mycmbBraLabelFunction(item:Object):String{
+				return (item)?item.bCode+" - "+item.bLocation:"";
+			}
+			
+			protected function searchClickHandler(event:MouseEvent):void
+			{
+				var condPurReqID:String = (reqNo.text == "")?"":"purReqID = "+String(int(reqNo.text))+" OR ";
+				var condition:String = condPurReqID+"b.branchID ="+cmbBranch.selectedItem.branchID+" AND (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"') AND onProcess=1";
+				trace("condition",condition);
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:"null",condition:condition,qBox:mainComp})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				popPanel.cancelClickHandler(null);
+			}
+			
+			private function setDateFormat(d:Date):String{
+				var strDate:String="";
+				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
+				return strDate;
+			}
+			
+			public function updateDataList():void{
+				if(AccessVars.instance().branches){
+					cmbBranch.dataProvider = AccessVars.instance().branches;			
+					cmbBranch.selectedIndex = 0;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<s:VGroup id="purReq" width="100%" visible="false" includeInLayout="false">
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Requisition No." width="100" textAlign="right"/>
+			<s:TextInput id="reqNo" width="100%" restrict="0-9"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Branch" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbBranch" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Start Date" width="100" textAlign="right"/>
+			<mx:DateField id="sDate" width="100%" showToday="true"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="End Date" width="100" textAlign="right"/>
+			<mx:DateField id="eDate" width="100%" showToday="true"/>
+		</s:HGroup>
+	</s:VGroup>
+	<mx:HRule width="90%"/>
+	<s:HGroup>
+		<s:Button label="Search" click="searchClickHandler(event)"/>
+		<s:Button label="Close" click="popPanel.cancelClickHandler(event)"/>
+	</s:HGroup>
+</s:Group>

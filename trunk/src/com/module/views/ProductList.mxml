@@ -570,9 +570,9 @@
 						<s:VGroup  width="60%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" gap="15">
 							<s:HGroup width="100%" verticalAlign="middle">
 								<s:Label text="Item / Model No" width="130" textAlign="right"/>
-								<s:TextInput id="txtItemModNo" width="100%"  styleName="required" keyUp="{txtItemModNo.styleName = txtItemModNo.text==''?'required':''}"/>								
+								<s:TextInput id="txtItemModNo" width="100%"  styleName="required" valueCommit="{txtItemModNo.styleName = txtItemModNo.text==''?'required':''}"/>								
 								<s:Label text="Code:" textAlign="right"/>
-								<s:TextInput id="txtItemCode" width="60"  styleName="required" keyUp="{txtItemCode.styleName = txtItemCode.text==''?'required':''}"/>
+								<s:TextInput id="txtItemCode" width="60"  styleName="required" valueCommit="{txtItemCode.styleName = txtItemCode.text==''?'required':''}"/>
 							</s:HGroup>
 							<s:HGroup  width="100%" verticalAlign="middle">
 								<s:Label text="Sub Number" width="130" textAlign="right"/>
@@ -620,7 +620,7 @@
 									<s:VGroup paddingLeft="5" paddingRight="5">
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Weight" textAlign="right"/>
-											<s:TextInput id="txtWeight" width="100%" restrict="0-9." textAlign="right"  styleName="required" keyUp="{txtWeight.styleName = txtWeight.text==''?'required':''}"/>
+											<s:TextInput id="txtWeight" width="100%" restrict="0-9." textAlign="right"  styleName="required" valueCommit="{txtWeight.styleName = txtWeight.text==''?'required':''}"/>
 										</s:HGroup>
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="75" text="Size" textAlign="right"/>
@@ -641,21 +641,21 @@
 									</s:layout>
 									<s:HGroup  width="100%" verticalAlign="middle">
 										<s:Label width="140" text="List Price" textAlign="right"/>
-										<s:TextInput id="txtLstPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" keyUp="{txtLstPrice.styleName = txtLstPrice.text==''||txtLstPrice.text=='0.00'?'required':''}"/>
+										<s:TextInput id="txtLstPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" valueCommit="{txtLstPrice.styleName = txtLstPrice.text==''||txtLstPrice.text=='0.00'?'required':''}"/>
 										<s:DropDownList id="cmbLstCurr" width="70" labelField="name" fontSize="14"
 														dataProvider="{arrCurr}" selectedIndex="0"/>
 									</s:HGroup>
 									<s:HGroup  width="100%" verticalAlign="middle">
 										<s:Label width="140" text="Minimum Dealer Price"
 												 textAlign="right"/>
-										<s:TextInput id="txtDealPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" keyUp="{txtDealPrice.styleName = txtDealPrice.text==''||txtDealPrice.text=='0.00'?'required':''}"/>
+										<s:TextInput id="txtDealPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" valueCommit="{txtDealPrice.styleName = txtDealPrice.text==''||txtDealPrice.text=='0.00'?'required':''}"/>
 										<s:DropDownList id="cmbDealCurr" width="70"  selectedIndex="0" fontSize="14"
 														dataProvider="{arrCurr}" labelField="name"/> 
 									</s:HGroup>
 									<s:HGroup  width="100%" verticalAlign="middle">
 										<s:Label width="140" text="Suggested Retail Price"
 												 textAlign="right"/>
-										<s:TextInput id="txtSRP" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" keyUp="{txtSRP.styleName = txtSRP.text==''||txtSRP.text=='0.00'?'required':''}"/>
+										<s:TextInput id="txtSRP" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" valueCommit="{txtSRP.styleName = txtSRP.text==''||txtSRP.text=='0.00'?'required':''}"/>
 										<s:Label width="70" text="Php" textAlign="left"/>
 									</s:HGroup>
 								</s:BorderContainer>

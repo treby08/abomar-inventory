@@ -148,11 +148,15 @@
 						}
 						
 					break;
-					
+					/*pur_prl pur_pol*/
 					case 4:
-						if (code == "pur_pr"){
+						if (code == "pur_pr" || code == "pur_prl"){
 							objBox = new PurchaseReqBox();
-							_cnv.label = "Purchase Requisition";
+							if (code == "pur_prl"){
+								PurchaseReqBox(objBox).isProcess = true;
+								_cnv.label = "Purchase Requisition List";
+							}else
+								_cnv.label = "Purchase Requisition";
 						}else if (code == "pur_po"){
 							objBox = new PurchaseOrderBox();
 							_cnv.label = "Purchase Order";

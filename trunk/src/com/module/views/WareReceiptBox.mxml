@@ -363,7 +363,7 @@
 					<s:VGroup  width="40%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" verticalAlign="middle">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Supplier's Invoice No." width="130" textAlign="right"/>
-							<s:TextInput id="txtSupInvNo" width="100%" styleName="required" keyUp="{txtSupInvNo.styleName = txtSupInvNo.text==''?'required':''}"/>
+							<s:TextInput id="txtSupInvNo" width="100%" styleName="required" valueCommit="{txtSupInvNo.styleName = txtSupInvNo.text==''?'required':''}"/>
 						</s:HGroup>	
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label width="130" text="Invoice Date" textAlign="right"/>
@@ -425,9 +425,9 @@
 			</s:DataGrid>
 			<s:HGroup width="100%" verticalAlign="middle" gap="5" paddingLeft="10">
 				<s:Label text="Prepared By" textAlign="right"/>
-				<s:TextInput id="txtPrepBy" width="45%" styleName="required" keyUp="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
+				<s:TextInput id="txtPrepBy" width="45%" styleName="required" valueCommit="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 				<s:Label text="Checked By" textAlign="right" />
-				<s:TextInput id="txtCheckBy" width="45%" styleName="required" keyUp="{txtCheckBy.styleName = txtCheckBy.text==''?'required':''}"/>
+				<s:TextInput id="txtCheckBy" width="45%" styleName="required" valueCommit="{txtCheckBy.styleName = txtCheckBy.text==''?'required':''}"/>
 				<s:Spacer width="10%"/>
 				<s:Button id="btnAddItems" label="Add Items to Warehouse Receipt" click="addItemToWR(event)"/>
 			</s:HGroup>

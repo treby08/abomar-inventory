@@ -492,7 +492,7 @@ package com.module.business
 					arrObj.prd_purReqID = obj.@prd_purReqID;
 					arrObj.prd_prodID = obj.@prd_prodID;
 					arrObj.qty = obj.@quantity;
-					arrObj.total = obj.@totalPurchase;
+					arrObj.total = Number(obj.@quantity)*Number(obj.@srPrice);//obj.@totalPurchase;
 					arrObj.prodID = obj.@prodCode;
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;

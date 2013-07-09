@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" initialize="initHandler(event)"
 		 xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="creationCompleteHandler(event)" dropShadowVisible="true"
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" mouseDown="startDrag()" mouseUp="stopDrag()">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" >
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
@@ -10,6 +10,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.ItemsTransEvent;
 			import com.module.views.popupViews.popView_PurchaseOrder;
+			import com.module.views.popupViews.popView_SearchCriteria;
 			import com.module.views.popupViews.popView_WarehouseReceipt;
 			
 			import mx.collections.ArrayCollection;
@@ -18,6 +19,7 @@
 			
 			public var popView:int = 0
 			public var mainID:String = "";
+			public var mainComp:Object;
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
@@ -51,6 +53,16 @@
 						CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 						mainCont.addElement(popWr);
 					break;
+					case 2:
+						var popSC:popView_SearchCriteria = new popView_SearchCriteria();
+						popSC.mainComp = mainComp;
+						popSC.sType = int(mainID);
+						popSC.popPanel = this;
+						closeHG.visible = closeHG.includeInLayout = false;
+						mainCont.addElement(popSC);
+						mainCont.mouseChildren = true;
+						mainCont.mouseEnabled = true;
+						break;
 				}
 			}
 			
@@ -63,7 +75,7 @@
 	<s:VGroup id="mainCont" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5" horizontalAlign="center" mouseEnabled="false" mouseChildren="false">
 			
 	</s:VGroup>
-	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingBottom="5">		
+	<s:HGroup id="closeHG" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingBottom="5">		
 		<s:Button label="Close" click="cancelClickHandler(event)"/>
 	</s:HGroup>
 </s:Panel>

@@ -536,14 +536,14 @@
 						</s:HGroup>
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Prepared By" width="90" textAlign="right"/>
-							<s:TextInput id="txtPrepBy" width="100%" styleName="required" keyUp="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
+							<s:TextInput id="txtPrepBy" width="100%" styleName="required" valueCommit="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 						</s:HGroup>
 					</s:VGroup>
 					
 					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Invoice No." width="100" textAlign="right"/>
-							<s:TextInput id="txtInvoiceNo" width="100%" styleName="required" keyUp="{txtInvoiceNo.styleName = txtInvoiceNo.text==''?'required':''}"/>
+							<s:TextInput id="txtInvoiceNo" width="100%" styleName="required" valueCommit="{txtInvoiceNo.styleName = txtInvoiceNo.text==''?'required':''}"/>
 							<s:Label text="Date" textAlign="center"/>
 							<mx:DateField id="dfDate" width="140" showToday="true" change="cmbBranchchangeHandler(event)"/>
 						</s:HGroup>
@@ -620,7 +620,7 @@
 				<s:VGroup width="40%" height="100%">
 					<s:HGroup width="100%" verticalAlign="middle">
 						<s:Label text="Approved By" width="90" textAlign="right"/>
-						<s:TextInput id="txtAppBy" width="100%" styleName="required" keyUp="{txtAppBy.styleName = txtAppBy.text==''?'required':''}"/>
+						<s:TextInput id="txtAppBy" width="100%" styleName="required" valueCommit="{txtAppBy.styleName = txtAppBy.text==''?'required':''}"/>
 					</s:HGroup>
 					<s:Spacer height="100%"/>
 					<s:HGroup width="100%" >
