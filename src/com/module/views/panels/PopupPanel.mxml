@@ -62,7 +62,7 @@
 						mainCont.addElement(popSC);
 						mainCont.mouseChildren = true;
 						mainCont.mouseEnabled = true;
-						break;
+					break;
 				}
 			}
 			

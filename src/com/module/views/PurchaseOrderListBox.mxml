@@ -10,6 +10,7 @@
 			import com.module.events.UserEvent;
 			import com.module.renderer.PurchaseOrdListRenderer;
 			import com.module.renderer.PurchaseOrdRenderer;
+			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -205,8 +206,16 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,qBox:this,onProcess:"0,1"})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				/*var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,qBox:this,onProcess:"0,1"})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);*/
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.width = searchProd.width;
+				//popPnl.height = undefined;
+				popPnl.popView = 2;
+				popPnl.mainID = "1";
+				popPnl.mainComp = this;
+				PopUpManager.addPopUp(popPnl,searchProd,true);
+				PopUpManager.centerPopUp(popPnl);
 			}
 						
 			
@@ -251,7 +260,7 @@
 		<mx:NumberFormatter id="numFmttr" precision="2" useThousandsSeparator="true"  />
 	</fx:Declarations>
 	<!--<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:HGroup width="30%" height="100%" minWidth="300" maxWidth="350" >
+	<s:HGroup id="searchProd" width="30%" height="100%" minWidth="300" maxWidth="350" >
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:layout>
 				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
@@ -261,10 +270,8 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
-				<s:Label text="Search"/>
-				<s:TextInput prompt="[PO No. / Supplier]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
-				<s:Button label="Search" click="SearchClickHandler(event)"/>
+			<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5">
+				<s:Button label="Select Search Criteria " click="SearchClickHandler(event)" buttonMode="true" width="90%"/>				
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14"  fontWeight="bold" gap="2">
 				<s:Label text="PO No." width="20%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
