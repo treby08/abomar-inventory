@@ -17,9 +17,11 @@
 		$purReqID = $_REQUEST['purReqID'];
 	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-		
-	}else if ($type == "get_details")
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}else if ($type == "get_details"){
 		$purReqID = $_REQUEST['purReqID'];
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}
 	
 		
 	if ($type == "add"){
@@ -57,24 +59,30 @@
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM purchaseReq WHERE purReqID = '$purReqID'",$conn);
 	}else if ($type == "search"){
-		$query = mysql_query("SELECT pr.*, b.bCode, b.branchID, b.bLocation  FROM purchaseReq pr
+		$condition = ($condition == "")?"onProcess=0":stripslashes($condition);
+		$sCont = ($searchSTR == "null")?"":"(bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%') AND ";
+		
+		$query = mysql_query("SELECT pr.*, b.bCode, b.branchID, b.bLocation FROM purchaseReq pr
 							INNER JOIN branches b ON b.branchID=pr.purReq_branchID
-							WHERE (bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%') AND onProcess=0",$conn); 
+							WHERE ".$sCont." ".$condition,$conn) or die(mysql_error().' '.$sql.' '. __LINE__); 
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>";
+				$xml .= "<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\" onProcess=\"".$row['onProcess']."\" prStatus=\"".$row['purReq_status']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,prodWeight,
-							IF(prd_price=0.00,listPrice,prd_price) AS listPrice
+		$condition = ($condition == "")?"AND (quantity-itemServed) <> 0":$condition;
+		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,itemServed,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,prodWeight,
+							IF(prd_price=0.00,listPrice,prd_price) AS exPrice
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
-							WHERE prd_purReqID = $purReqID AND (quantity-itemServed) <> 0 AND isRemove=0",$conn);
+							WHERE prd_purReqID = $purReqID AND isRemove=0 ".$condition,$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['listPrice']."\" weight=\"".$row['prodWeight']."\"/>";
+				$qty = ($condition == "")?$row['quantity']:$row['itemServed'];
+				
+				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$qty."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['exPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
