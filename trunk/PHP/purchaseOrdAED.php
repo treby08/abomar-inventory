@@ -48,11 +48,11 @@
 		$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		
 		$row = mysql_fetch_assoc($query);
-		if($row['total']=="1"){
-			$sql = "UPDATE `purchaseReq` SET purReq_status=1,onProcess=1  WHERE purReqID=$purReqID";
+		if($row['total']=="1"){//Fully Served
+			$sql = "UPDATE `purchaseReq` SET purReq_status=1, onProcess=1  WHERE purReqID=$purReqID";
 			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
-		}else{
-			$sql = "UPDATE `purchaseReq` SET onProcess=1  WHERE purReqID=$purReqID";
+		}else{//Partially Served
+			$sql = "UPDATE `purchaseReq` SET purReq_status=2, onProcess=0  WHERE purReqID=$purReqID";
 			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}
 		
@@ -63,7 +63,7 @@
 	}else if ($type == "search"){
 		$query = mysql_query("SELECT pr.*, b.bCode, b.branchID, b.bLocation FROM purchaseReq pr
 							INNER JOIN branches b ON b.branchID=pr.purReq_branchID
-							WHERE (bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%') AND purReq_status=0",$conn);
+							WHERE (bCode LIKE '%$searchSTR%' OR purReqID LIKE '%$searchSTR%') AND onProcess=0 AND purReq_status<>1",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item purReqID=\"".$row['purReqID']."\" reqNo=\"".number_pad_req($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" branchID=\"".$row['branchID']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>";
