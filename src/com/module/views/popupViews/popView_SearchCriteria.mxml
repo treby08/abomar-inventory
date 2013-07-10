@@ -15,11 +15,10 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
-			
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
-			private var arrStat:ArrayCollection = new ArrayCollection([{label:"Open PO",type:0},{label:"Fully Served",type:1},{label:"Partially Served",type:2},{label:"Cancelled",type:3},{label:"All PO",type:4}])
+			
 			private var _sType:int = -1;
 			private var _mainComp:Object;
 			public var popPanel:PopupPanel;

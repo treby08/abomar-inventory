@@ -21,6 +21,7 @@
 			
 			private var _data:Object;
 			private var _theBox:PurchaseReqBox;
+			private var _isSelected:Boolean = false;
 			public var isDispatch:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
@@ -31,6 +32,17 @@
 			
 			public function set theBox(value:PurchaseReqBox):void{
 				_theBox = value
+			}
+			
+			public function set isSelected(value:Boolean):void{
+				_isSelected = value
+				if (value)
+					sFill.color = AccessVars.instance().colBgColorOver
+				else
+					sFill.color=AccessVars.instance().colBgColor;
+			}
+			public function get isSelected():Boolean{
+				return _isSelected;
 			}
 			
 			public function creationCompleteHandler(event:FlexEvent):void
@@ -44,31 +56,17 @@
 			
 			protected function editClickHandler(event:MouseEvent):void
 			{
-				/* _theBox.txtfname.text = _data.fname;
-				_theBox.txtmname.text = _data.mname;
-				_theBox.txtlname.text = _data.lname;
-				_theBox.txtAdd.text = _data.address;
-				_theBox.txtPhone.text = _data.pNum;
-				_theBox.txtMobile.text = _data.mNum;
-				_theBox.txtTin.text = _data.tin;
-				_theBox.txtEmail.text = _data.email;
-				_theBox.txtBname.text = _data.businame;
-				_theBox.txtBAdd.text = _data.baddress;
-				_theBox.txtBMobile.text = _data.bMobileNum;
-				_theBox.txtBPhone.text = _data.bPhoneNum;
-				_theBox.rbMale.selected = (_data.sex == "Male")
-				_theBox.rbFemale.selected = (_data.sex == "Female")
-				_theBox._type = 1;
-				_theBox._data = _data;
-				//_theBox.btnNewUser.visible = true;
-				_theBox.btnSave.label = "Update";
-				_theBox.btnSave.visible = true;
-				_theBox.btnClear.label = "Reset to Default"; */
+				for (var i:int =0; i < _theBox.dgSearch.numElements; i++){
+					(_theBox.dgSearch.getElementAt(i) as PurchaseReqRenderer).isSelected = false;
+				}
+				isSelected = true;
+				
 				isDispatch = true;
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
 				/*<item purReqID=\"".$row['purReqID']."\" reqNo=\"REQ - ".number_pad($row['purReqID'])."\" preparedBy=\"".$row['preparedBy']."\" 
-				bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"/>*/
+				bCode=\"".$row['bCode']."\" approvedBy=\"".$row['approvedBy']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\"
+				onProcess=\"".$row['onProcess']."\" prStatus=\"".$row['purReq_status']."\"/>*/
 				
 				var obj:Object = _theBox._data = _data;
 				_theBox.txtPrepBy.text = obj.preparedBy;
@@ -80,9 +78,11 @@
 				_theBox.genReqNoCode();
 				var arr:Array = String(_data.dateTrans).split("-");
 				_theBox.dfDate.selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
-				_theBox.txtGT.text = obj.totalAmt;
+				//_theBox.txtGT.text = obj.totalAmt;
 				var condition:String = "";
 				if (_theBox.isProcess){
+					_theBox.statBox.visible = _theBox.statBox.includeInLayout = true;
+					_theBox.reqStat.text = AccessVars.statLabel(int(obj.prStatus)).toUpperCase();
 					condition = " ";
 				}
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this,condition:condition})

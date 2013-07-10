@@ -34,13 +34,29 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				
-				var log4:UserEvent = new UserEvent(UserEvent.GET_SUPPLIER_LIST,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log4);
+				if(AccessVars.instance().branches == null){
+					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				}else
+					updateDataList();
+				if (AccessVars.instance().supplier == null){
+					var log4:UserEvent = new UserEvent(UserEvent.GET_SUPPLIER_LIST,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log4);
+				}else
+					updateDataList();
 				
 				//dfDate.selectedDate = new Date(); 
+			}
+			
+			public function updateDataList():void{
+				if(AccessVars.instance().branches){
+					cmbDeliver.dataProvider = AccessVars.instance().branches;			
+					cmbDeliver.selectedIndex = 0;
+				}
+				if(AccessVars.instance().supplier){
+					cmbSupplier.dataProvider = AccessVars.instance().supplier;			
+					cmbSupplier.selectedIndex = -1;
+				}
 			}
 			
 			public function setDataProvider(arr:ArrayCollection,type:int):void{
@@ -74,7 +90,8 @@
 					numItems.text = String(_totalQty);
 				}else if (type == 4){
 					//dataCollection = arr
-					cmbSupplier.dataProvider = arr;
+					cmbSupplier.dataProvider = AccessVars.instance().supplier = arr;
+					cmbSupplier.selectedIndex = -1;
 					//cmbSupplier.labelFunction = mycmbSupplierLabelFunction;
 					//cmbSupplier.validateNow();
 				}
