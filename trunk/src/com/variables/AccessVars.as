@@ -19,6 +19,7 @@ package com.variables
 		public var remarks:ArrayCollection;
 		public var invoiceList:ArrayCollection;
 		public var branches:ArrayCollection;
+		public var supplier:ArrayCollection;
 		public var customers:ArrayCollection;
 		
 		public var mainSupplier:String = "ABOMAR EQUIPMENT SALES CORP. \r4A Sapphire St. Gemsville Subd. Lahug" +

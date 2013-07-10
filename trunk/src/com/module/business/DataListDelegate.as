@@ -120,6 +120,33 @@ package com.module.business
 						_profPanel = null;
 					}
 				break;
+				case "suppliers":
+					for each (obj in listXML.children()){
+						arrObj = new Object();
+						arrObj.supID = obj.@supID;
+						arrObj.supCode = obj.@supCode;
+						arrObj.compName = obj.@compName;
+						arrObj.creditLine = obj.@creditLine;
+						arrObj.address = obj.@address;
+						arrObj.pNum = obj.@pNum;
+						arrObj.mNum = obj.@mNum;
+						arrObj.tin = obj.@tin;
+						arrObj.term = obj.@term;
+						arrObj.conPerson = obj.@conPerson;
+						arrObj.desig = obj.@desig;
+						arrObj.web = obj.@web;
+						arrObj.email = obj.@email;
+						arrObj.isLocal = obj.@isLocal;
+						arrObj.label = obj.@supCode+" - "+obj.@compName;		
+						arrCol.addItem(arrObj)
+					}
+					AccessVars.instance().supplier = arrCol;
+					if (_profPanel.pBox){
+						_profPanel.pBox.updateDataList();
+						_profPanel.pBox = null;
+						_profPanel = null;
+					}
+					break;
 				case "remarks":
 					for each (obj in listXML.children()){
 						arrObj = new Object;

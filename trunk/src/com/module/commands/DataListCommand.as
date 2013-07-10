@@ -29,6 +29,10 @@ package com.module.commands
 					obj.type = "branches";
 					DataListDelegate.instance().getDatalist((event as DataListEvent).params);
 				break;
+				case DataListEvent.GET_SUPPLIERS_LIST:
+					obj.type = "suppliers";
+					DataListDelegate.instance().getDatalist((event as DataListEvent).params);
+				break;
 				case DataListEvent.GET_REMARKS_LIST:
 					obj.type = "remarks";
 					DataListDelegate.instance().getDatalist((event as DataListEvent).params);
