@@ -92,12 +92,12 @@
 				var arr:Array = String(_data.dateTrans).split("-");
 				_theBox.dfDate..selectedDate = new Date(arr[0],(arr[1]-1),arr[2]);
 				_theBox.setSelectedSupplier(_data.purOrd_supID);
-				_theBox.setSelectedDelivery(String(obj.purOrd_branchID));
+				_theBox.setSelectedDelivery(String(obj.branchID));
 				var branchItem:Object = _theBox.getSelectedInvoice(String(_data.purOrd_delID));
 				
 				_theBox.txtInvoice.text = branchItem.bCode+" - "+branchItem.bLocation+"\r"+	branchItem.bAddress
 					+"\r"+String(branchItem.bPhoneNum).replace("|"," Ext. ")+"\r"+branchItem.bMobileNum;
-				_theBox.txtGT.text = obj.totalAmt;
+				//_theBox.txtGT.text = obj.totalAmt;
 				//_theBox.txtInvoice.text = obj.bCode;//setSelectedBranch(String(obj.branchID));
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_DETAILS,{purReqID:obj.purOrdID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);

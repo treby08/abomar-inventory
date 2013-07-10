@@ -532,6 +532,8 @@ package com.module.business
 					arrObj.approvedBy = obj.@approvedBy;
 					arrObj.dateTrans = obj.@dateTrans;
 					arrObj.totalAmt = obj.@totalAmt;
+					arrObj.prStatus = obj.@prStatus;
+					arrObj.onProcess = obj.@onProcess;
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					

@@ -21,6 +21,7 @@ package com.variables
 		public var branches:ArrayCollection;
 		public var supplier:ArrayCollection;
 		public var customers:ArrayCollection;
+		public var arrStat:ArrayCollection = new ArrayCollection([{label:"Open PO",type:0},{label:"Fully Served",type:1},{label:"Partially Served",type:2},{label:"Cancelled",type:3},{label:"All PO",type:4}])
 		
 		public var mainSupplier:String = "ABOMAR EQUIPMENT SALES CORP. \r4A Sapphire St. Gemsville Subd. Lahug" +
 			"\rCebu City 6000, Philippines\rTel/Fax:63(32) 2311411";
@@ -36,5 +37,14 @@ package com.variables
 			{name:"PRE-PAID",termId:0},{name:"CASH",termId:1},{name:"COD",termId:2},
 			{name:"7-DAYS",termId:3},{name:"15-DAYS",termId:4},{name:"30-DAYS",termId:5},
 			{name:"45-DAYS",termId:6},{name:"60-DAYS",termId:7},{name:"Special",termId:8}]);
+		
+		
+		public static function statLabel(type:int):String{
+			for each (var item:Object in instance().arrStat){
+				if (item.type==type)
+					return item.label;
+			}
+			return "";
+		}
 	}
 }

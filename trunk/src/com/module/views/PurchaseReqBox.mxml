@@ -60,7 +60,7 @@
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 					dfDate.selectedDate = new Date();
 				}else{
-					prodBox.visible = false;
+					prodBox.visible = prodBox.includeInLayout = false;
 					dg.editable = false;
 					dg.doubleClickEnabled = false;
 					hgControl.visible = false;
@@ -537,7 +537,7 @@
 							<s:Label text="Date" textAlign="center"/>
 							<mx:DateField id="dfDate" width="150" showToday="true" change="cmbBranchchangeHandler(event)" selectedDate="{new Date()}"/>
 						</s:HGroup>
-						<s:VGroup id="prodBox" width="100%" height="100%">
+						<s:VGroup id="prodBox" width="100%" height="100%" >
 							<s:HGroup width="100%" verticalAlign="middle">
 								<s:Label text="Item/Model No." width="90" textAlign="right"/>
 								<s:ComboBox id="cmbProd" width="100%" tabIndex="2" change="cmbProdchangeHandler(event)"/>
@@ -555,8 +555,11 @@
 								<s:Label text="Net Price"/>
 								<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
 							</s:HGroup>
-						</s:VGroup>
-						
+						</s:VGroup>	
+						<s:HGroup id="statBox" width="100%" visible="false" includeInLayout="false">
+							<s:Label text="Status" width="90"/>
+							<s:Label id="reqStat" width="100%" textAlign="left" fontWeight="bold"/>
+						</s:HGroup>
 						
 						<!--<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
 						<s:HGroup verticalAlign="middle" paddingLeft="10">
