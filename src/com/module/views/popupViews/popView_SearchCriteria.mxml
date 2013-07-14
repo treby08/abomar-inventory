@@ -15,6 +15,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
+			
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
@@ -47,6 +48,8 @@
 						purReq.visible = purReq.includeInLayout = true;
 						sDate.selectedDate = new Date();
 						eDate.selectedDate = new Date();
+						cmbStatus.dataProvider = AccessVars.instance().arrStat
+						cmbStatus.selectedIndex = 0;
 						if (AccessVars.instance().branches == null){
 							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
@@ -83,7 +86,8 @@
 				switch (_sType){
 					case 0:
 						var condPurReqID:String = (reqNo.text == "")?"":"purReqID = "+String(int(reqNo.text))+" OR ";
-						condition = condPurReqID+"b.branchID ="+cmbBranch.selectedItem.branchID+" AND (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"') AND onProcess=1";
+						var onProcess:String = cmbStatus.selectedItem.type==-1?"":" AND purReq_status="+cmbStatus.selectedItem.type;
+						condition = condPurReqID+"b.branchID ="+cmbBranch.selectedItem.branchID+" AND (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"')"+onProcess;
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:"null",condition:condition,qBox:mainComp})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
@@ -125,6 +129,10 @@
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Branch" width="100" textAlign="right"/>
 			<s:DropDownList id="cmbBranch" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Status" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbStatus" width="100%" labelField="label"/>
 		</s:HGroup>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Start Date" width="100" textAlign="right"/>
