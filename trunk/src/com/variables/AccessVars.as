@@ -21,7 +21,7 @@ package com.variables
 		public var branches:ArrayCollection;
 		public var supplier:ArrayCollection;
 		public var customers:ArrayCollection;
-		public var arrStat:ArrayCollection = new ArrayCollection([{label:"Open PO",type:0},{label:"Fully Served",type:1},{label:"Partially Served",type:2},{label:"Cancelled",type:3},{label:"All PO",type:4}])
+		public var arrStat:ArrayCollection = new ArrayCollection([{label:"All PO",type:-1},{label:"Open PO",type:0},{label:"Fully Served",type:1},{label:"Partially Served",type:2},{label:"Cancelled",type:3}])
 		
 		public var mainSupplier:String = "ABOMAR EQUIPMENT SALES CORP. \r4A Sapphire St. Gemsville Subd. Lahug" +
 			"\rCebu City 6000, Philippines\rTel/Fax:63(32) 2311411";

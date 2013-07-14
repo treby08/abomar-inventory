@@ -45,6 +45,7 @@
 				}else
 					updateDataList();
 				
+				cont.visible = false;
 				//dfDate.selectedDate = new Date(); 
 			}
 			
@@ -88,6 +89,7 @@
 					txtGT.text = numFmttr.format(_subTot+vat);
 					totWeight.text = String(_totWeight);
 					numItems.text = String(_totalQty);
+					btnView.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 				}else if (type == 4){
 					//dataCollection = arr
 					cmbSupplier.dataProvider = AccessVars.instance().supplier = arr;
