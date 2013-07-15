@@ -99,6 +99,7 @@
 					case "inv_pl":		
 					case "inv_wr":		
 					case "inv_wd":		
+					case "rep_inv_wr":		
 						AccessVars.instance().mainApp.appChange(null,2,String(event.item.@code));
 					break;
 					case "pur_pr":	

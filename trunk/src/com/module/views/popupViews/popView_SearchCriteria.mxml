@@ -67,16 +67,19 @@
 							updateDataList();
 					break;
 					case 2:
-					break;
+						WRGrp.visible = WRGrp.includeInLayout = true;
+						sDate_wr.selectedDate = new Date();
+						eDate_wr.selectedDate = new Date();
+						if (AccessVars.instance().branches == null){
+							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+						}else
+							updateDataList();
 					case 3:
 					break;
 					case 4:
 					break;
 				}
-			}
-			
-			private function mycmbBraLabelFunction(item:Object):String{
-				return (item)?item.bCode+" - "+item.bLocation:"";
 			}
 			
 			protected function searchClickHandler(event:MouseEvent):void
@@ -97,6 +100,12 @@
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:"null",qBox:mainComp,condition:condition})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
+					case 2:
+						var condWRID:String = (WRNo_wr.text == "")?"":"whrID = "+String(int(WRNo_wr.text))+" OR ";
+						condition = condWRID+"whr_branchID ="+cmbBranch_wr.selectedItem.branchID+" AND (whr_date >='"+setDateFormat(sDate_wr.selectedDate)+"' AND whr_date <='"+setDateFormat(eDate_wr.selectedDate)+"')";
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log);
+					break;
 				}
 				trace("condition",condition);
 				popPanel.cancelClickHandler(null);
@@ -110,8 +119,13 @@
 			
 			public function updateDataList():void{
 				if(AccessVars.instance().branches){
-					cmbBranch.dataProvider = AccessVars.instance().branches;			
-					cmbBranch.selectedIndex = 0;
+					if (_sType == 0){
+						cmbBranch.dataProvider = AccessVars.instance().branches;			
+						cmbBranch.selectedIndex = 0;
+					}else if (_sType == 2){
+						cmbBranch_wr.dataProvider = AccessVars.instance().branches;			
+						cmbBranch_wr.selectedIndex = 0;
+					}
 				}
 				if(AccessVars.instance().supplier){
 					cmbSupplier.dataProvider = AccessVars.instance().supplier;			
@@ -159,6 +173,24 @@
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="End Date" width="100" textAlign="right"/>
 			<mx:DateField id="eDate_po" width="100%" showToday="true"/>
+		</s:HGroup>
+	</s:VGroup>
+	<s:VGroup id="WRGrp" width="100%" visible="false" includeInLayout="false">
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Warehouse Receipt No." width="100" textAlign="right"/>
+			<s:TextInput id="WRNo_wr" width="100%" restrict="0-9"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Branch" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbBranch_wr" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Start Date" width="100" textAlign="right"/>
+			<mx:DateField id="sDate_wr" width="100%" showToday="true"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="End Date" width="100" textAlign="right"/>
+			<mx:DateField id="eDate_wr" width="100%" showToday="true"/>
 		</s:HGroup>
 	</s:VGroup>
 	<mx:HRule width="90%"/>

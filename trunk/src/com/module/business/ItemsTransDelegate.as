@@ -984,6 +984,7 @@ package com.module.business
 					arrObj.modelNo = obj.@prodModel;
 					arrObj.prodCode = obj.@prodCode;
 					arrObj.remarks = obj.@remLabel;
+					arrObj.remarksName = obj.@remLabel;
 					trace("obj.@isNew",obj.@isNew);
 					if (obj.@isNew =="1"){
 						arrObj.diff = "+"+arrObj.qtyRec;

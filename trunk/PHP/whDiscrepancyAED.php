@@ -4,21 +4,24 @@
 	
 	$type = $_REQUEST['type'];
 	
-	if ($type == "search")
+	if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-	else if ($type == "get_details")
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}else if ($type == "get_details"){
 		$whrID = $_REQUEST['whrID'];
-	
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}
 		
 	if ($type == "search"){
 		$searchSTR = str_replace("0","",$searchSTR);
+		$condition = ($condition=="")?"whrID LIKE '%$searchSTR%' OR whr_purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%'":stripslashes($condition);
 		$query = mysql_query("SELECT whr.*, b.bCode, b.bLocation, b.bAddress AS branchAdd, b.bPhoneNum AS branchPNum, b.bMobileNum AS branchMNum 		
 							,s.supCompName, s.address AS supAddress, s.phoneNum AS supPhoneNum,s.mobileNum AS supMobileNum, s.sup_term AS term 
 							,wd.whdID FROM wh_receipt whr
 							LEFT JOIN branches b ON b.branchID=whr.whr_branchID
 							LEFT JOIN supplier s ON s.supID=whr.whr_supID
 							INNER JOIN wh_discrepancy wd ON wd.whd_whrID = whr.whrID
-							WHERE whrID LIKE '%$searchSTR%' OR whr_purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%'",$conn);
+							WHERE ".$condition,$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item whrID=\"".$row['whrID']."\" whrID_label=\"".number_pad_req($row['whrID'])."\" whr_purOrdID=\"".$row['whr_purOrdID']."\" whr_supID=\"".$row['whr_supID']."\" whr_supInvNo=\"".$row['whr_supInvNo']."\" whr_supInvDate=\"".$row['whr_supInvDate']."\" supCompName=\"".$row['supCompName']."\" whr_branchID=\"".$row['whr_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" dateTrans=\"".$row['whr_date']."\" branchPNum=\"".$row['branchPNum']."\" branchMNum=\"".$row['branchMNum']."\" supAddress=\"".$row['supAddress']."\" supPhoneNum=\"".$row['supPhoneNum']."\" supMobileNum=\"".$row['supMobileNum']."\" branchAdd=\"".$row['branchAdd']."\" term=\"".$row['term']."\" whr_preparedBy=\"".$row['whr_preparedBy']."\" whr_checkedBy=\"".$row['whr_checkedBy']."\" whdID_label=\"".number_pad_req($row['whdID'])."\" whdID=\"".$row['whdID']."\" />";
