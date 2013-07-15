@@ -127,9 +127,13 @@
 						}else if (code == "inv_pl"){
 							objBox = new ProductList();	
 							_cnv.label = "Product";						
-						}else if (code == "inv_wr"){
-							objBox = new WareReceiptBox();	
-							_cnv.label = "Warehouse Receipt";
+						}else if (code == "inv_wr" || code ==	"rep_inv_wr"){
+							objBox = new WareReceiptBox();
+							if (code ==	"rep_inv_wr"){
+								WareReceiptBox(objBox).isProcess = true;
+								_cnv.label = "Warehouse Receipt List";
+							}else
+								_cnv.label = "Warehouse Receipt";
 						}else if (code == "inv_wd"){
 							objBox = new WareDiscrepancyBox();	
 							_cnv.label = "Warehouse Discrepancy";
