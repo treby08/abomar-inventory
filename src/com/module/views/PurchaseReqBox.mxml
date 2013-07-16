@@ -269,11 +269,13 @@
 				
 				//printPrevPO()
 			}
-			
-			private function setDateFormat(d:Date):String{
+				
+			public function setDateFormat(d:Date):String{
 				var strDate:String="";
 				//strDate = String(d.month+1)+"/"+d.date+"/"+d.fullYear;
-				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
+				var mon:String = (d.month+1 < 10)?"0"+String(d.month+1):String(d.month+1);
+				var dat:String = (d.date < 10)?"0"+String(d.date):String(d.date);
+				strDate = d.fullYear+"-"+mon+"-"+dat;
 				return strDate;
 			}
 			

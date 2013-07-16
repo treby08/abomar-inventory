@@ -95,8 +95,8 @@
 				_theBox.mainCont.enabled = false;
 				_theBox.btnEdit.enabled = true;
 				//_theBox.btnPrintWR.enabled = true;
-				/* _theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
-				_theBox.btnPrintWR.visible =_theBox. btnPrintWR.includeInLayout = false; */
+				/* _theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;*/
+				_theBox.btnPrintWR.visible =_theBox. btnPrintWR.includeInLayout = false; 
 			}			
 			
 			public function updateWRID(wrID:String):String{

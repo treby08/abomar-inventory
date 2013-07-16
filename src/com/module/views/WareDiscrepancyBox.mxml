@@ -137,7 +137,9 @@
 			public function setDateFormat(d:Date):String{
 				var strDate:String="";
 				//strDate = String(d.month+1)+"/"+d.date+"/"+d.fullYear;
-				strDate = d.fullYear+"-"+String(d.month+1)+"-"+d.date;
+				var mon:String = (d.month+1 < 10)?"0"+String(d.month+1):String(d.month+1);
+				var dat:String = (d.date < 10)?"0"+String(d.date):String(d.date);
+				strDate = d.fullYear+"-"+mon+"-"+dat;
 				return strDate;
 			}
 			
@@ -193,7 +195,7 @@
 				_type = 1;
 				/* btnCheckOut.label = "Save WH Receipt";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
-				//btnPrintWR.visible = btnPrintWR.includeInLayout = true;
+				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				mainCont.enabled = true;
 			}
 			
@@ -419,19 +421,19 @@
 			</s:DataGrid>
 			<s:HGroup width="100%" verticalAlign="middle" gap="10" paddingLeft="20">
 				<s:Label text="Prepared By" width="75" textAlign="right"/>
-				<s:TextInput id="txtPrepBy" width="200" />
+				<s:TextInput id="txtPrepBy" width="200" styleName="required" valueCommit="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 				<s:Spacer width="100"/>
 				<s:Label text="Checked By" width="75" textAlign="right"/>
-				<s:TextInput id="txtCheckBy" width="200"/>
+				<s:TextInput id="txtCheckBy" width="200" styleName="required" valueCommit="{txtCheckBy.styleName = txtCheckBy.text==''?'required':''}"/>
 			</s:HGroup>
 		</s:VGroup>		
 		<mx:HRule height="5" width="100%"/>
 		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
 				  horizontalAlign="left" verticalAlign="top">						
-			
+			<s:Button id="btnPrintWR" label="View Discrepancy Report" click="printPrevWR()" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnEdit"  label="Edit Discrepancy Report" click="editClickHandler(event)" enabled="false"/>
-			<!--<s:Button id="btnPrintWR" label="Print Discrepancy Report" click="printPrevWR()" visible="false" includeInLayout="false"/>-->
+			
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>
