@@ -59,6 +59,7 @@
 			import com.module.views.printViews.PrintInvoice;
 			import com.module.views.printViews.PrintPayment;
 			import com.module.views.printViews.PrintPurchaseOrder;
+			import com.module.views.printViews.PrintWHDiscrepancy;
 			import com.module.views.printViews.PrintWHReceipt;
 			
 			import flashx.textLayout.formats.WhiteSpaceCollapse;
@@ -127,7 +128,10 @@
 						childCanvas.addElement(pntInv);
 						break;
 					case 3:// Warehouse Discrepancy
-						
+						var pntWHD:PrintWHDiscrepancy = new PrintWHDiscrepancy();
+						pntWHD.salesBox = _salesBox as WareDiscrepancyBox;
+						pntWHD.orderTypeText = String(arrOrderType.getItemAt(_orderTypeID).name).toUpperCase();
+						childCanvas.addElement(pntWHD);
 					break;
 					case 4:// Payment
 						var pntPay:PrintPayment = new PrintPayment();
