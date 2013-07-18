@@ -193,6 +193,24 @@
 			<mx:DateField id="eDate_wr" width="100%" showToday="true"/>
 		</s:HGroup>
 	</s:VGroup>
+	<s:VGroup id="WDGrp" width="100%" visible="false" includeInLayout="false">
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Warehouse Discrepancy No." width="100" textAlign="right"/>
+			<s:TextInput id="WDNo_wd" width="100%" restrict="0-9"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Branch" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbBranch_wd" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Start Date" width="100" textAlign="right"/>
+			<mx:DateField id="sDate_wd" width="100%" showToday="true"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="End Date" width="100" textAlign="right"/>
+			<mx:DateField id="eDate_wd" width="100%" showToday="true"/>
+		</s:HGroup>
+	</s:VGroup>
 	<mx:HRule width="90%"/>
 	<s:HGroup>
 		<s:Button label="Search" click="searchClickHandler(event)"/>

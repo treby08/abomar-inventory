@@ -21,7 +21,7 @@
 			
 			private var _salesBox:WareDiscrepancyBox;
 			private var _orderTypeText:String;
-			private var _totWeight:Number = 0;
+			//private var _totWeight:Number = 0;
 			
 			public function set salesBox(value:WareDiscrepancyBox):void{
 				_salesBox = value;
@@ -29,6 +29,12 @@
 			public function set orderTypeText(value:String):void{
 				_orderTypeText = value;
 			}
+			private function changePos(e:Event):void{
+				trace(e.currentTarget,e.type," : dg.rowHeight",dg.rowHeight);
+				notFol.y = notFol.y + (dg.rowHeight * (_salesBox.dg.dataProvider as ArrayCollection).length);
+				notFol.visible = true;
+			}
+			
 			private function setData():void
 			{
 				transDate.text = _salesBox.setDateFormat(_salesBox.dfDate.selectedDate)//CurrentDateTimeString()
@@ -36,19 +42,20 @@
 				txtPONo.text = _salesBox.txtPONo.text
 				txtWRNo.text = _salesBox.txtWRNo.text
 				//_salesBox.dg.variableRowHeight = true;
+				dg.grid.addEventListener("rowHeightChanged",changePos);
 				dg.dataProvider = (_salesBox.dg.dataProvider as ArrayCollection);
 				var arrCol:ArrayCollection = (_salesBox.dg.dataProvider as ArrayCollection);
-				var rowH:Number = 23;
+				/*var rowH:Number = 23;
 				for each (var item:Object in arrCol){
-					_totWeight+= Number(item.prodWeight);
-					if(String(item.remarksName).length > 30)
+					//_totWeight+= Number(item.prodWeight);
+					trace("String(item.remarks).length",String(item.remarks).length)
+					if(String(item.remarks).length > 30)
 						rowH = 46
-				}
-				dg.rowHeight = rowH;
+				}*/
+				//dg.rowHeight = dg.rowHeight+1;//rowH;
 				
 				//txtWeight.text = String(_totWeight)+" kg";
-				notFol.y = notFol.y + (rowH * (_salesBox.dg.dataProvider as ArrayCollection).length);
-				notFol.visible = true;
+				
 				
 				/*txtSupplier.prompt="";
 				txtSupplier.selectable = false;
@@ -137,15 +144,15 @@
 						
 					</s:TextArea>
 				</mx:Canvas>
-				<mx:Canvas width="375" height="95" styleName="VBoxBorder" verticalScrollPolicy="off" horizontalScrollPolicy="off"
-						   color="#000000">
+				<mx:Canvas width="375" height="90" styleName="VBoxBorder" verticalScrollPolicy="off" horizontalScrollPolicy="off"
+						  >
 					
 					<s:HGroup x="3" y="3" width="344" height="12" fontSize="13">
 						<s:Label text="DATE:"/>
 						<s:Label id="transDate" text="March 27, 2013"/>
 					</s:HGroup>
 					
-					<s:BorderContainer x="-2" y="32" width="377" height="53" borderColor="#000000"
+					<s:BorderContainer x="-2" y="32" width="377" height="60" borderColor="#000000"
 									   borderWeight="2" fontSize="13">
 						<s:layout>
 							<s:VerticalLayout paddingTop="5" paddingLeft="5" paddingBottom="5" paddingRight="5"/>
@@ -189,7 +196,8 @@
 		<s:VGroup x="16" y="250" width="{parent.width-28}" height="100%" paddingBottom="20">
 			<mx:Canvas width="100%">
 				
-				<s:DataGrid id="dg" width="100%" height="100%"  minHeight="250"  sortableColumns="false" fontSize="12" editable="false" >
+				<s:DataGrid id="dg" width="100%" height="100%"  minHeight="450"  sortableColumns="false" fontSize="12" editable="false" 
+							selectionMode="none">
 					<s:columns>
 						<s:ArrayList>
 							<s:GridColumn width="40" dataField="num" headerText="No." editable="false"/>						
@@ -203,7 +211,7 @@
 							<s:GridColumn dataField="prodDesc" headerText="Description" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 								<s:itemRenderer>
 									<fx:Component>
-										<s:DefaultGridItemRenderer textAlign="left"/>
+										<s:DefaultGridItemRenderer textAlign="left" wordWrap="true" width="150"/>
 									</fx:Component>
 								</s:itemRenderer>
 							</s:GridColumn>
