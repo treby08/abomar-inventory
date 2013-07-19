@@ -89,6 +89,10 @@ package com.module.control
 			addCommand( ItemsTransEvent.GET_WH_RECEIPT_NUMBER, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_EXIST_WR, ItemsTransCommand );
 			
+			addCommand( ItemsTransEvent.ADD_WH_DISCREPANCY, ItemsTransCommand );
+			addCommand( ItemsTransEvent.EDIT_WH_DISCREPANCY, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_EXIST_WH_DISCREPANCY, ItemsTransCommand );
+			addCommand( ItemsTransEvent.GET_EXIST_WH_DISCREPANCY_DETAIL, ItemsTransCommand );
 			addCommand( ItemsTransEvent.SEARCH_WH_DISCREPANCY, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_WH_DISCREPANCY_NUMBER, ItemsTransCommand );

@@ -48,6 +48,10 @@ package com.module.events
 		public static var GET_WH_RECEIPT_NUMBER:String = "get_wh_receipt_number";
 		public static var GET_EXIST_WR:String = "get_exist_wr";
 		
+		public static var ADD_WH_DISCREPANCY:String = "add_wh_discrepancy";
+		public static var EDIT_WH_DISCREPANCY:String = "edit_wh_discrepancy";
+		public static var GET_EXIST_WH_DISCREPANCY:String = "get_exist_wh_discrepancy";
+		public static var GET_EXIST_WH_DISCREPANCY_DETAIL:String = "get_exist_wh_discrepancy_detail";
 		public static var SEARCH_WH_DISCREPANCY:String = "search_wh_discrepancy";
 		public static var GET_WH_DISCREPANCY_DETAILS:String = "get_wh_discrepancy_details";
 		public static var GET_WH_DISCREPANCY_NUMBER:String = "get_wh_discrepancy_number";

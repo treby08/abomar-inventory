@@ -134,9 +134,13 @@
 								_cnv.label = "Warehouse Receipt List";
 							}else
 								_cnv.label = "Warehouse Receipt";
-						}else if (code == "inv_wd"){
+						}else if (code == "inv_wd" || code == "rep_inv_wd"){
 							objBox = new WareDiscrepancyBox();	
-							_cnv.label = "Warehouse Discrepancy";
+							if (code == "rep_inv_wd"){
+								WareDiscrepancyBox(objBox).isProcess = true;
+								_cnv.label = "Warehouse Discrepancy List";
+							}else
+								_cnv.label = "Warehouse Discrepancy";
 						}
 					break;
 					case 3:

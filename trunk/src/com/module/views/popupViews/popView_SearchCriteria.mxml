@@ -76,6 +76,14 @@
 						}else
 							updateDataList();
 					case 3:
+						WDGrp.visible = WDGrp.includeInLayout = true;
+						sDate_wd.selectedDate = new Date();
+						eDate_wd.selectedDate = new Date();
+						if (AccessVars.instance().branches == null){
+							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+						}else
+							updateDataList();
 					break;
 					case 4:
 					break;
@@ -106,6 +114,12 @@
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
+					case 3:
+						var condWDID:String = (WDNo_wd.text == "")?"":"whdID = "+String(int(WDNo_wd.text))+" OR ";
+						condition = condWDID+"whr_branchID ="+cmbBranch_wd.selectedItem.branchID+" AND (wd.dateTrans >='"+setDateFormat(sDate_wd.selectedDate)+"' AND wd.dateTrans <='"+setDateFormat(eDate_wd.selectedDate)+"')";
+						log = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log);
+					break;
 				}
 				trace("condition",condition);
 				popPanel.cancelClickHandler(null);
@@ -125,6 +139,9 @@
 					}else if (_sType == 2){
 						cmbBranch_wr.dataProvider = AccessVars.instance().branches;			
 						cmbBranch_wr.selectedIndex = 0;
+					}else if (_sType == 3){
+						cmbBranch_wd.dataProvider = AccessVars.instance().branches;			
+						cmbBranch_wd.selectedIndex = 0;
 					}
 				}
 				if(AccessVars.instance().supplier){

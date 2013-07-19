@@ -8,6 +8,7 @@
 			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
+			import com.module.renderer.WareDiscrepListRenderer;
 			import com.module.renderer.WareDiscrepRenderer;
 			import com.module.renderer.WareReceiptRenderer;
 			import com.module.views.panels.PopupPanel;
@@ -38,13 +39,13 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
+				dfDate.selectedDate = new Date(); 
 				if (!isProcess){
 					if (AccessVars.instance().remarks == null){
 						var log3:DataListEvent = new DataListEvent(DataListEvent.GET_REMARKS_LIST,{qBox:this})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 					}
 					
-					dfDate.selectedDate = new Date(); 
 				}else{
 					cont.visible = false;
 					hgWD.visible = hgWD.includeInLayout = false;
@@ -79,12 +80,23 @@
 				}
 				
 				if (arrCol.length > 0){
-					var itemUser:WareDiscrepRenderer;
-					for each (var obj:Object in arrCol){
-						itemUser = new WareDiscrepRenderer()
-						itemUser.data = obj;
-						itemUser.theBox = this
-						dgSearch.addElement(itemUser);
+					var obj:Object;
+					if (!isProcess){
+						var itemUser:WareDiscrepRenderer;
+						for each (obj in arrCol){
+							itemUser = new WareDiscrepRenderer()
+							itemUser.data = obj;
+							itemUser.theBox = this
+							dgSearch.addElement(itemUser);
+						}
+					}else{
+						var itemWD:WareDiscrepListRenderer;
+						for each (obj in arrCol){
+							itemWD = new WareDiscrepListRenderer()
+							itemWD.data = obj;
+							itemWD.theBox = this
+							dgSearch.addElement(itemWD);
+						}
 					}
 				}
 			}
@@ -123,22 +135,17 @@
 					Alert.show("Please fill up the 'Prepared By' field","Field Empty");
 					return;
 				}
+				if (txtCheckBy.text == ""){
+					Alert.show("Please fill up the 'Checked By' field","Field Empty");
+					return;
+				}
 				var obj:Object = new Object();				
-				obj.branchID = _tempData.branchID;
-				obj.purOrdID = _tempData.purOrdID;
+				obj.whdID = _tempData.whdID;
 				obj.prepBy = txtPrepBy.text;
 				obj.checkBy = txtCheckBy.text;
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
-				
-				var strItem:Array = new Array();
-				
-				for each (var item:Object in dg.dataProvider){
-					strItem.push(item.podID+"|"+item.pod_prodID+"|"+item.qty+"|"+item.qtyRec+"|"+item.pkgNo+"|"+item.remarks);
-				}
-				obj.whrDetails = strItem.join("||");
 				obj.pBox = this;
-				trace("whrDetails", obj.whrDetails)
-				 var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.ADD_WH_RECEIPT,obj)
+				 var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.EDIT_WH_DISCREPANCY,obj)
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2); 
 				
 				
@@ -182,48 +189,14 @@
 				txtPrepBy.text = "";
 				txtCheckBy.text = "";
 			}
-			
-			protected function btnNewclickHandler(event:MouseEvent):void
-			{
-				if (dg.dataProvider != null){
-					Alert.show("Are you sure to create a new Purchase Order?","Purchase Order not empty",Alert.YES|Alert.NO,null,newSalesHandler,null,Alert.NO);
-				}else{
-					_type = 0;
-					mainCont.enabled = true;
-					/* btnCheckOut.label = "Save WH Receipt";
-					btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
-					btnEdit.visible = btnEdit.includeInLayout = false;
-					//btnPrintWR.visible = btnPrintWR.includeInLayout = false;
-					clearFields(null);
-					//btnPrint.enabled = false;
-					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
-				}
-			}
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				_type = 1;
-				/* btnCheckOut.label = "Save WH Receipt";
-				btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
+				/* btnCheckOut.label = "Save WH Receipt";*/
+				btnSave.enabled = true;
 				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
 				mainCont.enabled = true;
-			}
-			
-			private function newSalesHandler(event:CloseEvent):void{
-				if (event.detail == Alert.YES){
-					_type = 0;
-					mainCont.enabled = true;
-					/* btnCheckOut.label = "Save WH Receipt";
-					btnCheckOut.visible = btnCheckOut.includeInLayout = true; */
-					//btnPrintWR.visible = btnPrintWR.includeInLayout = false;
-					btnEdit.visible = btnEdit.includeInLayout = false;
-					clearFields(null);
-					//btnPrint.enabled = false;
-					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				}
-			}
-			
+			}			
 			
 			
 			protected function SearchClickHandler(event:MouseEvent):void
@@ -266,21 +239,6 @@
 				trace("dg_gridClickHandler",dg.selectedItem.qtyRec);
 				trace("dg_gridClickHandler",dg.selectedItem.remarks);
 			}
-			
-			/*public function updateWR():void{
-				
-				btnEdit.visible = btnEdit.includeInLayout = true;
-				//btnPrintWR.visible = btnPrintWR.includeInLayout = true;
-				var PO_renderer:WareReceiptRenderer;
-				for (var i:int=dgSearch.numElements-1; i >= 0; i-- ){
-					PO_renderer = (dgSearch.getElementAt(i) as WareReceiptRenderer);
-					if (PO_renderer.data == _tempData){
-						dgSearch.removeElementAt(i);
-						break;							
-					}
-				}
-				mainCont.enabled = false;
-			}*/
 			
 			public function updateWDID(value:String):void{
 				txtWDNo.text = value;
@@ -349,10 +307,10 @@
 				<s:Label text="Supplier" width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 				<s:Label text="Date" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 			</s:HGroup>
-			<s:HGroup id="hgProcessHeader" width="100%" fontSize="14"  fontWeight="bold" gap="2">
-				<s:Label text="WD No." width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Supplier" width="40%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
-				<s:Label text="Date" width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+			<s:HGroup id="hgProcessHeader" width="100%" fontSize="14"  fontWeight="bold" gap="2" visible="false" includeInLayout="false">
+				<s:Label text="WD No." width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Branch" width="45%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
+				<s:Label text="Date" width="30%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
@@ -459,9 +417,10 @@
 		<mx:HRule height="5" width="100%"/>
 		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
 				  horizontalAlign="left" verticalAlign="top">						
-			<s:Button id="btnPrintWR" label="View Discrepancy Report" click="printPrevWR()" visible="false" includeInLayout="false"/>
+			<s:Button id="btnSave"  label="Save Discrepancy Report" click="CheckOutclickHandler(event)" enabled="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnEdit"  label="Edit Discrepancy Report" click="editClickHandler(event)" enabled="false"/>
+			<s:Button id="btnPrintWR" label="View Discrepancy Report" click="printPrevWR()" visible="false" includeInLayout="false"/>
 			
 		</s:HGroup>
 	</s:VGroup>
