@@ -46,6 +46,7 @@
 					dfDate.selectedDate = new Date();
 				}else{
 					cont.visible = false;
+					hgControl.visible = false;
 					hgWR.visible = hgWR.includeInLayout = false;
 					hgHeader.visible = hgHeader.includeInLayout = false;
 					hgProcessHeader.visible = hgProcessHeader.includeInLayout = true;

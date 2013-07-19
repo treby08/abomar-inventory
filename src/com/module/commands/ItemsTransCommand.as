@@ -180,6 +180,18 @@ package com.module.commands
 					break;
 				
 				/*Warehouse Discrepancy*/
+				case ItemsTransEvent.EDIT_WH_DISCREPANCY:
+					obj.type = "edit";
+					ItemsTransDelegate.instance().warehouseDiscrepancy_AED(obj);
+					break;
+				case ItemsTransEvent.GET_EXIST_WH_DISCREPANCY:
+					obj.type = "get_exists";
+					ItemsTransDelegate.instance().warehouseDiscrepancy_AED(obj);
+					break;
+				case ItemsTransEvent.GET_EXIST_WH_DISCREPANCY_DETAIL:
+					obj.type = "get_exists_details";
+					ItemsTransDelegate.instance().warehouseDiscrepancy_AED(obj);
+					break;
 				case ItemsTransEvent.SEARCH_WH_DISCREPANCY:
 					obj.type = "search";
 					ItemsTransDelegate.instance().warehouseDiscrepancy_AED(obj);

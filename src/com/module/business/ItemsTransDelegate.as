@@ -942,6 +942,9 @@ package com.module.business
 				case "add":
 					str="Adding";
 					break;
+				case "edit":
+					str="Update";
+					break;
 			}
 			
 			if (strResult != "" && str != null){
@@ -957,8 +960,7 @@ package com.module.business
 					if (_params.pBox){
 						if (str == "Adding")
 							_params.pBox.updateWR();
-						else
-							_params.pBox.clearFields(null);
+						
 						_params.pBox = null;
 					}
 					_params = null;
@@ -1003,6 +1005,43 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}
+			}else if (_params.type=="get_exists"){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				//arrObj = {};
+				for each (obj in listXML.children()){
+					arrObj = new Object();
+					/*<item whdID=\"".$row['whdID']."\" whrID=\"".$row['whd_whrID']."\" 
+					whrID_label=\"".number_pad_req($row['whd_whrID'])."\" whr_purOrdID=\"".$row['whr_purOrdID']."\" 
+					whr_branchID=\"".$row['whr_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" 
+					dateTrans=\"".$row['whr_date']."\" branchPNum=\"".$row['branchPNum']."\" branchMNum=\"".$row['branchMNum']."\"  
+					branchAdd=\"".$row['branchAdd']."\" whd_prepBy=\"".$row['whd_prepBy']."\" whd_checkBy=\"".$row['whd_checkBy']."\" 
+					whdID_label=\"".number_pad_req($row['whdID'])."\"/>*/
+					arrObj.whrID = obj.@whrID;
+					arrObj.whrID_label = obj.@whrID_label;
+					arrObj.whdID_label = obj.@whdID_label;
+					arrObj.whdID = obj.@whdID;
+					arrObj.dateTrans = obj.@dateTrans;
+					
+					arrObj.purOrdID = obj.@whr_purOrdID;
+					arrObj.whr_purOrdID = obj.@whr_purOrdID;
+					arrObj.whd_prepBy = obj.@whd_prepBy;			
+					arrObj.whd_checkBy = obj.@whd_checkBy;
+					
+					arrObj.branchID = obj.@whr_branchID;
+					arrObj.bCode = obj.@bCode;				
+					arrObj.bLocation = obj.@bLocation;	
+					arrObj.branchName = obj.@bCode+" - "+obj.@bLocation;
+					arrObj.branchPNum = obj.@branchPNum;
+					arrObj.branchAdd = obj.@branchAdd;
+					arrObj.branchMNum = obj.@branchMNum;
+					arrCol.addItem(arrObj);
+				}
+				if (_params.qBox){					
+					_params.qBox.dataCollection = arrCol;
+					_params.qBox = null;
+					_params = null;
+				}
 			}else{
 				
 				listXML = XML(evt.result);
@@ -1019,6 +1058,7 @@ package com.module.business
 					arrObj.whrID = obj.@whrID;
 					arrObj.whrID_label = obj.@whrID_label;
 					arrObj.whdID_label = obj.@whdID_label;
+					arrObj.whdID = obj.@whdID;
 					arrObj.purOrdID = obj.@whr_purOrdID;
 					arrObj.whr_purOrdID = obj.@whr_purOrdID;
 					arrObj.whr_supID = obj.@whr_supID;
