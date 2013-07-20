@@ -3,16 +3,26 @@
 		
 	
 	$type = $_REQUEST['type'];
-	
-	if ($type == "search"){
+	if ($type == "add" || $type == "edit"){
+		$prepBy = $_REQUEST['prepBy'];
+		$checkBy = $_REQUEST['checkBy'];
+		$dateTrans = $_REQUEST['dateTrans'];
+		if ($type == "edit")
+			$whdID = $_REQUEST['whdID'];
+	}else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
 		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
 	}else if ($type == "get_details"){
 		$whrID = $_REQUEST['whrID'];
 		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}else if ($type == "get_exists"){
+		$whdID = $_REQUEST['whdID'];
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
 	}
-		
-	if ($type == "search"){
+	if ($type == "edit"){
+		mysql_query("UPDATE wh_discrepancy SET whd_prepBy='$prepBy' , whd_checkBy='$checkBy' , dateTrans='$dateTrans' WHERE whdID = $whdID",$conn);
+		//echo "UPDATE wh_discrepancy SET whd_prepBy='$prepBy' , whd_checkBy='$checkBy' , dateTrans='$dateTrans' WHERE whdID = $whdID";
+	}else if ($type == "search"){
 		$searchSTR = str_replace("0","",$searchSTR);
 		$condition = ($condition=="")?"whrID LIKE '%$searchSTR%' OR whr_purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%'":stripslashes($condition);
 		$query = mysql_query("SELECT whr.*, b.bCode, b.bLocation, b.bAddress AS branchAdd, b.bPhoneNum AS branchPNum, b.bMobileNum AS branchMNum 		
@@ -47,6 +57,21 @@
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['whdID']?$row['whdID']:1;
 		echo number_pad_req($reqNum);
+		
+	}else if ($type == "get_exists"){
+		$condition = ($condition=="")?"whrID LIKE '%$searchSTR%' OR whr_purOrdID LIKE '%$searchSTR%' OR supCompName LIKE '%$searchSTR%'":stripslashes($condition);
+			$query = mysql_query("SELECT wd.*,wr.whr_purOrdID, wr.whr_branchID, b.bCode, b.bLocation, b.bAddress AS branchAdd, b.bPhoneNum AS 		
+							branchPNum, b.bMobileNum AS branchMNum 
+							FROM wh_discrepancy wd 
+							INNER JOIN wh_receipt wr ON wd.whd_whrID = wr.whrID
+							LEFT JOIN branches b ON b.branchID=wr.whr_branchID
+							WHERE ".$condition,$conn);
+		$xml = "<root>";
+			while($row = mysql_fetch_assoc($query)){
+				$xml .= "<item whdID=\"".$row['whdID']."\" whrID=\"".$row['whd_whrID']."\" whrID_label=\"".number_pad_req($row['whd_whrID'])."\" whr_purOrdID=\"".$row['whr_purOrdID']."\" whr_branchID=\"".$row['whr_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" dateTrans=\"".$row['dateTrans']."\" branchPNum=\"".$row['branchPNum']."\" branchMNum=\"".$row['branchMNum']."\" branchAdd=\"".$row['branchAdd']."\" whd_prepBy=\"".$row['whd_prepBy']."\" whd_checkBy=\"".$row['whd_checkBy']."\" whdID_label=\"".number_pad_req($row['whdID'])."\"/>";
+			}
+		$xml .= "</root>";
+		echo $xml;
 	}
 	
 	function number_pad($number) {

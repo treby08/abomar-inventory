@@ -55,11 +55,13 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
+				dfDate.selectedDate = new Date();
 				if (!isProcess){
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-					dfDate.selectedDate = new Date();
+					
 				}else{
+					cont.visible = false;
 					prodBox.visible = prodBox.includeInLayout = false;
 					dg.editable = false;
 					dg.doubleClickEnabled = false;
@@ -110,6 +112,8 @@
 					txtGT.text = numFmttr.format(_subTot+vat);
 					
 					numItems.text = String(_totalQty);
+					if (isProcess)
+						printPrevPO();
 				}
 			}
 			
@@ -283,7 +287,7 @@
 			{
 				var _printBox:PrintPrevBox = new PrintPrevBox();
 				_printBox.boxType = this;
-				_printBox.orderTypeID = 2;
+				_printBox.orderTypeID = 5;
 				_printBox.width = AccessVars.instance().mainApp.width-5;
 				_printBox.height = AccessVars.instance().mainApp.height-5;
 				PopUpManager.addPopUp(_printBox,this,true);
