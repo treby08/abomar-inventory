@@ -329,8 +329,8 @@ package com.flexlib.controls
 	        var sm:ISystemManager = systemManager;
 	        
 	        // check to see if we'll go offscreen
-	        if (pt.y + item.height + 1 + menu.getExplicitOrMeasuredHeight() > screen.height + screen.y)
-	            pt.y -= menu.getExplicitOrMeasuredHeight();
+	        if (pt.y + 1 + menu.getExplicitOrMeasuredHeight() > screen.height + screen.y)
+	            pt.y -= menu.getExplicitOrMeasuredHeight()- (item.height*2);
 	        else
 	            pt.y += item.height + 1;
 	        if (pt.x + menu.getExplicitOrMeasuredWidth() > screen.width + screen.x)

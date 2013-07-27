@@ -800,7 +800,7 @@ package com.module.business
 					arrObj.srPrice = obj.@srPrice;
 					arrObj.prodWeight = obj.@prodWeight;
 					arrObj.pkgNo = "";
-					arrObj.qtyRec = "";
+					arrObj.qtyRec = "0";
 					arrObj.remarks="";
 					
 					arrObj.num = num;					
