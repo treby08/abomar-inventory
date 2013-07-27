@@ -75,6 +75,7 @@
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 						}else
 							updateDataList();
+					break;
 					case 3:
 						WDGrp.visible = WDGrp.includeInLayout = true;
 						sDate_wd.selectedDate = new Date();

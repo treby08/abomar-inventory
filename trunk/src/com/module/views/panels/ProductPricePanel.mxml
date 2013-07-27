@@ -113,10 +113,10 @@
 			</s:columns>
 		</s:DataGrid>		
 		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Label text="Selected Price" width="115" textAlign="right"/>
+			<s:Label text="Selected Price" width="100" textAlign="right"/>
 			<s:DropDownList id="cmbPrice" width="100" labelField="label" tabIndex="6" dataProvider="{arrPriceType}" selectedIndex="1"
 							change="cmbPrice_changeHandler(event)"/>
-			<s:Spacer width="100"/>
+			<s:Spacer width="10"/>
 			<s:TextInput id="priceSel" text="0.00" width="100%" textAlign="right" editable="false" selectable="false" borderVisible="false" fontWeight="bold" fontSize="14"/>
 		</s:HGroup>
 		<mx:ControlBar width="100%" horizontalAlign="center" verticalAlign="middle">

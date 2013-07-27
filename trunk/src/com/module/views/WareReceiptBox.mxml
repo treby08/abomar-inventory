@@ -302,12 +302,21 @@
 						event.grid.dataGrid.startItemEditorSession(event.rowIndex, event.columnIndex);
 				}
 			}
+			private var prevQty:int = 1;
+			protected function dg_gridItemEditorSessionStartHandler(event:GridItemEditorEvent):void
+			{
+				var item:Object = event.column.grid.dataGrid.selectedItem;
+				prevQty = item.qtyRec;
+			}
 			
 			protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
 			{
-				return;
-				trace("dg_gridItemEditorSessionSave",DataGrid(event.target).selectedItem.pkgNo)
-				trace("dg_gridItemEditorSessionSave",DataGrid(event.target).selectedItem.qtyRec)
+				var item:Object = event.column.grid.dataGrid.selectedItem;
+				if (item.qtyRec <= 0){
+					item.qtyRec = prevQty;
+					dg.dataProvider.itemUpdated(item);
+					event.preventDefault();
+				}
 			}
 			
 			
@@ -431,7 +440,8 @@
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
 			<s:DataGrid id="dg" width="100%" height="100%" minHeight="250" sortableColumns="false" fontSize="12" editable="true" gridClick="dg_gridClickHandler(event)"
-						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
+						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)"
+						gridItemEditorSessionStart="dg_gridItemEditorSessionStartHandler(event)">
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="40" dataField="num" headerText="No." editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>

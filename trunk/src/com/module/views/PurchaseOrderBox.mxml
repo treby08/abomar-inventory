@@ -438,9 +438,22 @@
 				}
 			}
 			
+			private var prevQty:int = 1;
+			protected function dg_gridItemEditorSessionStartHandler(event:GridItemEditorEvent):void
+			{
+				var item:Object = event.column.grid.dataGrid.selectedItem;
+				prevQty = item.qty;
+			}
+			
 			protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
 			{
 				var item:Object = event.column.grid.dataGrid.selectedItem;
+				if (item.qty <= 0){
+					item.qty = prevQty;
+					dg.dataProvider.itemUpdated(item);
+					event.preventDefault();
+					return;
+				}
 				item.total = roundDec(Number(item.qty * item.price)).toFixed(2)
 				item.weight = Number(item.oWeight)*Number(item.qty)
 				dg.dataProvider.itemUpdated(item);
@@ -588,7 +601,8 @@
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
 			<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
-						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
+						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)"
+						gridItemEditorSessionStart="dg_gridItemEditorSessionStartHandler(event)">
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="20" itemRenderer="com.module.renderer.IncludeItemRenderer" editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>

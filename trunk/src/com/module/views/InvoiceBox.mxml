@@ -95,6 +95,14 @@
 						_subTot += Number(item.total);
 						vat += Number(Number(item.total)*0.12);
 						_totalQty+=Number(item.qty);
+						/*for each (var items:Object in cmbProd.dataProvider as ArrayCollection){
+							if (items.prodID == item.sqd_prodID){
+								items.stockCnt= Number(items.stockCnt)-Number(item.qty);
+								(cmbProd.dataProvider as ArrayCollection).itemUpdated(items);
+								(cmbProd.dataProvider as ArrayCollection).refresh();
+								break;
+							}
+						}*/
 						
 					}
 					txtSubtot.text = numFmttr.format(_subTot);
@@ -151,9 +159,23 @@
 				txtVat.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))*0.12);
 				txtGT.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))+Number(txtVat.text.replace(/\b,\b/g,"")));
 				_totalQty = Number(Number(numItems.text) - obj.qty);
+				var item:Object;
+				
+				//revert stock count
+				for each (item in cmbProd.dataProvider as ArrayCollection){
+					if (item.prodID == obj.prodDBID){
+						item.stockCnt= Number(item.stockCnt)+Number(obj.qty);
+						(cmbProd.dataProvider as ArrayCollection).itemUpdated(item);
+						(cmbProd.dataProvider as ArrayCollection).refresh();
+						txtQty.value = 0;
+						txtSub.text = "0.00";
+						break;
+					}
+				}
+				
 				numItems.text = String(_totalQty);
 				var num:int=1;
-				for each(var item:Object in dg.dataProvider as ArrayCollection){
+				for each(item in dg.dataProvider as ArrayCollection){
 					item.num =num;
 					num++;
 				}
@@ -199,22 +221,42 @@
 			{	
 				if (cmbProd.selectedItem == null || txtQty.value == 0) return;
 				var arrCol:ArrayCollection;
+				var items:Object;
 				if (dg.dataProvider == null)
 					arrCol = new ArrayCollection();
 				else
 					arrCol = dg.dataProvider as ArrayCollection;
 				
 				var obj:Object = cmbProd.selectedItem;
-				_totalQty +=txtQty.value;
 				
-				arrCol.addItem({num:arrCol.length+1,prodID:obj.prodID,pCode:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
+				if (arrCol.length > 0){
+					var sameItem:Object
+					for each (items in arrCol){
+						if (items.prodDBID == obj.prodID){
+							sameItem = items;
+							break;
+						}
+					}
+					
+					if (sameItem){
+						sameItem.qty=Number(sameItem.qty)+ txtQty.value;
+						sameItem.total = sameItem.price * sameItem.qty;
+						arrCol.itemUpdated(sameItem);
+					}else
+						arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
+				}else
+					arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
+				
+				cmbProd.selectedItem.stockCnt -=txtQty.value;
+				cmbProd.dataProvider.itemUpdated(cmbProd.selectedItem);
+				//arrCol.addItem({num:arrCol.length+1,prodID:obj.prodID,pCode:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:obj.srPrice,vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
 				dg.dataProvider = arrCol;
 				
 				txtSubtot.text = numFmttr.format(Number(txtSub.text.replace(/\b,\b/g,""))+Number(txtSubtot.text.replace(/\b,\b/g,"")));
 				txtVat.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))*0.12);
 				txtGT.text = numFmttr.format(Number(txtSubtot.text.replace(/\b,\b/g,""))+Number(txtVat.text.replace(/\b,\b/g,"")));
 				_totalQty =0;
-				for each (var items:Object in arrCol){
+				for each (items in arrCol){
 					_totalQty += Number(items.qty);
 				}
 				numItems.text = String(_totalQty);
@@ -374,11 +416,58 @@
 				}
 			}
 			
-			protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
+			/*protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
 			{
 				var item:Object = event.column.grid.dataGrid.selectedItem;
 				item.total = Number(item.qty * item.price);
+				dg.dataProvider.itemUpdated(item);*/
+			private var prevQty:int = 1;
+			protected function dg_gridItemEditorSessionStartHandler(event:GridItemEditorEvent):void
+			{
+				var item:Object = event.column.grid.dataGrid.selectedItem;
+				prevQty = item.qty;
+			}
+			
+			protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
+			{
+				var item:Object = event.column.grid.dataGrid.selectedItem;
+				if (item.qty <= 0){
+					item.qty = prevQty;
+					dg.dataProvider.itemUpdated(item);
+					event.preventDefault();
+					return;
+				}
+				var prodItem:Object;
+				var hasErr:Boolean = false;
+				
+				for each (prodItem in cmbProd.dataProvider as ArrayCollection){
+					if (prodItem.prodID == item.prodDBID){
+						var maxStock:int = int(prodItem.stockCnt)+prevQty;
+						//trace(item.qty," > ",maxStock, " prevQty: ",prevQty, "stock:",prodItem.stockCnt);
+						if (item.qty > maxStock){
+							item.qty = prevQty;
+							dg.dataProvider.itemUpdated(item);
+							event.preventDefault();
+							hasErr = true;
+							break;
+						}else
+							prodItem.stockCnt += prevQty - item.qty;
+						(cmbProd.dataProvider as ArrayCollection).itemUpdated(prodItem);
+						(cmbProd.dataProvider as ArrayCollection).refresh();
+						txtQty.value = 0;
+						txtSub.text = "0.00";
+						break;
+					}
+				}
+				
+				if (hasErr){
+					Alert.show("Value is greater than Available Stock.\n Max Stock:"+maxStock,"Error");
+					return;
+				}
+				
+				item.total = Number(item.qty * item.price);
 				dg.dataProvider.itemUpdated(item);
+				
 				_totalQty = 0;				
 				var subTot:Number = 0;
 				for each (var items:Object in dg.dataProvider){
@@ -525,7 +614,7 @@
 						weight="2"/> 
 				</s:borderStroke> 
 				<s:HGroup  width="100%" height="100%" fontSize="16">
-					<s:VGroup width="50%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="15" paddingRight="15">
+					<s:VGroup width="40%" height="100%" paddingBottom="10" paddingTop="10" paddingLeft="15" paddingRight="15">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Sold To." width="90" textAlign="right"/>
 							<s:ComboBox id="cmbCustomer" width="100%" tabIndex="2" labelField="label" change="cmbCuschangeHandler(event)"/>
@@ -540,7 +629,7 @@
 						</s:HGroup>
 					</s:VGroup>
 					
-					<s:VGroup  width="50%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
+					<s:VGroup  width="60%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Invoice No." width="100" textAlign="right"/>
 							<s:TextInput id="txtInvoiceNo" width="100%" styleName="required" valueCommit="{txtInvoiceNo.styleName = txtInvoiceNo.text==''?'required':''}"/>
@@ -579,7 +668,8 @@
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
 			<s:DataGrid id="dg" width="100%" height="100%" minHeight="200" sortableColumns="false" textAlign="center" fontSize="12" editable="true"
-						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)">
+						gridDoubleClick="dg_gridDoubleClickHandler(event)" doubleClickEnabled="true" gridItemEditorSessionSave="dg_gridItemEditorSessionSave(event)"
+						gridItemEditorSessionStart="dg_gridItemEditorSessionStartHandler(event)">
 				<s:columns>
 					<s:ArrayList>
 						<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
