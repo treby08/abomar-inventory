@@ -989,7 +989,7 @@ package com.module.business
 					arrObj.remarksName = obj.@remLabel;
 					trace("obj.@isNew",obj.@isNew);
 					if (obj.@isNew =="1"){
-						arrObj.diff = "+"+arrObj.qtyRec;
+						arrObj.diff = "0";//arrObj.qtyRec;
 					}else{
 						var diff:int = int(obj.@whrd_qty) - int(obj.@whrd_qty_rec);
 						trace("diff:",diff)
