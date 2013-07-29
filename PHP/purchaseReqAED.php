@@ -21,8 +21,10 @@
 	}else if ($type == "get_details"){
 		$purReqID = $_REQUEST['purReqID'];
 		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}else if ($type == "change_stat"){
+		$purReqID = $_REQUEST['purReqID'];
+		$stat = $_REQUEST['stat'];
 	}
-	
 		
 	if ($type == "add"){
 		$sql = "INSERT INTO purchaseReq (purReq_branchID, preparedBy, approvedBy, dateTrans, timeTrans, totalAmt) VALUES ($purReq_branchID, '$preparedBy', '$approvedBy', '$dateTrans', NOW(), $totalAmt)";
@@ -80,7 +82,7 @@
 							WHERE prd_purReqID = $purReqID AND isRemove=0 ".$condition,$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$qty = ($condition == "")?$row['quantity']:$row['itemServed'];
+				$qty = $_REQUEST['condition'] == ""?$row['quantity']:$row['itemServed'];
 				
 				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$qty."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['exPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
@@ -94,6 +96,8 @@
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['purReqID']?$row['purReqID']:1;
 		echo number_pad($reqNum);
+	}else if ($type == "change_stat"){
+		mysql_query("UPDATE purchaseReq SET purReq_status = $stat WHERE purReqID = $purReqID",$conn);
 	}
 	
 	function number_pad($number) {

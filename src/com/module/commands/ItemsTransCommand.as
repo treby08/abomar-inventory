@@ -116,6 +116,10 @@ package com.module.commands
 					obj.type = "get_req_no";
 					ItemsTransDelegate.instance().purchaseReq_ReqNo(obj);
 				break;
+				case ItemsTransEvent.CHANGE_REQUISITION_STATUS:
+					obj.type = "change_stat";
+					ItemsTransDelegate.instance().purchaseReq_AED(obj);
+				break;
 				
 				/*PURCHASE Order*/
 				case ItemsTransEvent.ADD_PURORD:

@@ -164,7 +164,7 @@
 				var item:Object;
 				
 				//revert stock count
-				for each (item in cmbProd.dataProvider as ArrayCollection){
+				/*for each (item in cmbProd.dataProvider as ArrayCollection){
 					if (item.prodID == obj.prodDBID){
 						item.stockCnt= Number(item.stockCnt)+Number(obj.qty);
 						(cmbProd.dataProvider as ArrayCollection).itemUpdated(item);
@@ -173,7 +173,7 @@
 						txtPrice.text = txtSub.text = "0.00";
 						break;
 					}
-				}
+				}*/
 				
 				numItems.text = String(_totalQty);
 				var num:int=1;
@@ -197,7 +197,7 @@
 				txtPrice.text = obj.listPrice;
 				//_prodID = obj.prodID
 				//txtStock.text =  obj.stockCnt;
-				txtQty.maximum = Number(obj.stockCnt);
+				//txtQty.maximum = Number(obj.stockCnt);
 				if (txtQty.value !=0){
 					txtQtychangeHandler(null);
 				}
@@ -251,8 +251,8 @@
 				}else
 					arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:txtPrice.text.replace(/\b,\b/g,""),vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
 				
-				cmbProd.selectedItem.stockCnt -=txtQty.value;
-				cmbProd.dataProvider.itemUpdated(cmbProd.selectedItem);
+				//cmbProd.selectedItem.stockCnt -=txtQty.value;
+				//cmbProd.dataProvider.itemUpdated(cmbProd.selectedItem);
 				//trace("txtPrice.text",txtPrice.text)
 				//arrCol.addItem({num:arrCol.length+1,prodDBID:obj.prodID,prodID:obj.pCode,modelNo:obj.modelNo,prodDesc:obj.desc,qty:txtQty.value,price:txtPrice.text.replace(/\b,\b/g,""),vat:txtVat.text.replace(/\b,\b/g,""),total:txtSub.text.replace(/\b,\b/g,"")});
 				dg.dataProvider = arrCol;
@@ -415,7 +415,7 @@
 					event.preventDefault();
 					return;
 				}
-				var prodItem:Object;
+				/*var prodItem:Object;
 				var hasErr:Boolean = false;
 				
 				for each (prodItem in cmbProd.dataProvider as ArrayCollection){
@@ -441,7 +441,7 @@
 				if (hasErr){
 					Alert.show("Value is greater than Available Stock.\n Max Stock:"+maxStock,"Error");
 					return;
-				}
+				}*/
 				
 				item.total = Number(item.qty * item.price);
 				dg.dataProvider.itemUpdated(item);
@@ -506,6 +506,7 @@
 					btnCheckOut.label = "Submit Requisition";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					statChange.visible = statChange.includeInLayout = false;
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -519,6 +520,7 @@
 					btnCheckOut.label = "Submit Requisition";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					statChange.visible = statChange.includeInLayout = false;
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -738,6 +740,10 @@
 			<s:Button id="btnNew"  label="New Requisition" click="btnNewclickHandler(event)"/>
 			<s:Button id="btnEdit"  label="Edit Requisition" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<!--<s:Button id="btnView"  label="View Requisition" click="printPrevPO()" visible="false" includeInLayout="false"/>-->
+		</s:HGroup>
+		<s:HGroup id="statChange" width="100%" verticalAlign="middle" visible="false" includeInLayout="false">
+			<s:CheckBox label="Cancel Requisition" id="cbCancel" selected="false"/>
+			<s:Button label="Confirm"/>
 		</s:HGroup>
 	</s:VGroup>
 </s:HGroup>
