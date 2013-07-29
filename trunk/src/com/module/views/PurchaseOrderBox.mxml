@@ -169,7 +169,7 @@
 				var obj:Object = cmbProd.selectedItem;
 				txtPrice.text = obj.srPrice;
 				//txtStock.text =  obj.stockCnt;
-				txtQty.maximum = Number(obj.stockCnt);
+				//txtQty.maximum = Number(obj.stockCnt);
 				if (txtQty.value !=0){
 					txtQtychangeHandler(null);
 				}

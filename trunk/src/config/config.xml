@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<!--<http host="http://localhost/adomar/flexServices"/>-->
-	<!--<http host="http://trebster.host-ed.me/projects/Adomar/flexServices"/>-->
 	<http host="http://www.philnig.com/abomar/flexServices" imgPath="http://www.philnig.com/abomar/images/"/>
+	<!--<http host="http://www.abomar.com/ics/flexServices" imgPath="http://www.abomar.com/ics/images/"/>-->
 </config>

@@ -72,6 +72,7 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_REQUISITION, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_REQUISITION_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_REQUISITION_NUMBER, ItemsTransCommand );
+			addCommand( ItemsTransEvent.CHANGE_REQUISITION_STATUS, ItemsTransCommand );
 			
 			addCommand( ItemsTransEvent.ADD_PURORD, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_PURORD, ItemsTransCommand );

@@ -31,6 +31,7 @@ package com.module.events
 		public static var SEARCH_REQUISITION:String = "search_requisition";
 		public static var GET_REQUISITION_DETAILS:String = "get_requisition_details";
 		public static var GET_REQUISITION_NUMBER:String = "get_requisition_number";
+		public static var CHANGE_REQUISITION_STATUS:String = "change_requisition_status";
 		
 		public static var ADD_PURORD:String = "add_purord";
 		public static var EDIT_PURORD:String = "edit_purord";

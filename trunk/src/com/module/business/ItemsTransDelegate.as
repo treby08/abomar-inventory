@@ -449,6 +449,7 @@ package com.module.business
 			if(_params == null)
 				return;
 			var str:String;
+			var str2:String = "Purchase Requisition";
 			switch(_params.type){
 				case "add":
 					str="Adding";
@@ -458,6 +459,9 @@ package com.module.business
 					break;
 				case "delete":
 					str="Deleting";
+					break;
+				case "change_stat":
+					str="Status Changed";
 					break;
 			}
 			
@@ -470,8 +474,11 @@ package com.module.business
 			var arrObj:Object = {}
 			var obj:XML;
 			if (str){
-				Alert.show(str+" Purchase Requisition Complete.", str+" Purchase Requisition",4,null,function():void{
-					if (_params.pBox){
+				str+=_params.type!="change_stat"?" Purchase Requisition Complete":"";
+				Alert.show(str, str2,4,null,function():void{
+					if (_params.type == "change_stat" && _params.pBox){
+						
+					}else if (_params.pBox){
 						_params.pBox.clearFields(null);
 						_params.pBox = null;
 					}else if (_params.ppnl){

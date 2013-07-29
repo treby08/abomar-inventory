@@ -92,6 +92,7 @@
 					_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 					_theBox.mainCont.enabled = false;
 					_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+					_theBox.statChange.visible = _theBox.statChange.includeInLayout = true;
 				}else
 					_theBox.mainCont.enabled = true;
 			}
