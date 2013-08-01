@@ -491,7 +491,7 @@ package com.module.business
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
 				var num:int = 1;
-				trace("get_details",XML(evt.result).toXMLString())
+				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
 					//prdID,prd_purReqID,prd_prodID,quantity,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,srPrice					
