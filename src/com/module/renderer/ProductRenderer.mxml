@@ -86,7 +86,6 @@
 				_theBox.txtWeight.text = _data.weight;
 				_theBox.txtSize.text = _data.size;
 				_theBox.cbReturn.selected = String(_data.returnable)=="1"?true:false;
-				trace(_data.inactive);
 				_theBox.cbInactive.selected = String(_data.inactive)=="1"?true:false;
 				_theBox.txtLstPrice.text = _data.listPrice;
 				_theBox.txtDealPrice.text = _data.dealPrice;
