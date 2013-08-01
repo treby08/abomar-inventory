@@ -18,8 +18,8 @@
 		$subNum = $_REQUEST['subNum'];
 		$comModUse = $_REQUEST['comModUse'];
 		$desc = $_REQUEST['desc'];
-		$returnable = $_REQUEST['returnable']=="false"?0:1;
-		$inactive = $_REQUEST['inactive']=="false"?0:1;		
+		$returnable = $_REQUEST['returnable'];//=="false"?0:1;
+		$inactive = $_REQUEST['inactive'];//=="false"?0:1;		
 		$imgPath = $_REQUEST['imgPath'];
 		$listPrice = $_REQUEST['listPrice'];
 		$dealPrice = $_REQUEST['dealPrice'];
