@@ -11,6 +11,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.ProductRenderer;
+			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
 			
@@ -20,6 +21,7 @@
 			import mx.events.CloseEvent;
 			import mx.events.EffectEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			
 			import spark.effects.animation.Animation;
 			
@@ -101,8 +103,10 @@
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
 				_type = 0;
+				_data = new Object();
 				_fromUpdate = false;
 				hasSelectedItem = true;
+				hgControl.enabled = true;
 				clearFields(null);
 				btnSave.visible = btnSave.includeInLayout = false;
 				btnEdit.visible = btnEdit.includeInLayout = false;
@@ -507,6 +511,18 @@
 			}
 			
 			
+			protected function advSearch_clickHandler(event:MouseEvent):void
+			{
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.width = searchProd.width;
+				//popPnl.height = undefined;
+				popPnl.popView = 2;
+				popPnl.mainID = "4";
+				popPnl.mainComp = this;
+				PopUpManager.addPopUp(popPnl,searchProd,true);
+				PopUpManager.centerPopUp(popPnl);
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -534,7 +550,7 @@
 					<s:Label text="Search: "/>
 					<s:TextInput prompt="[Supplier/Product Code/Item No.]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
 					<s:Button label="Search" click="SearchClickHandler(event)"/>
-					
+					<s:Label text="Adv. Search" width="50" textAlign="center" color="blue" buttonMode="true" fontSize="10" textDecoration="underline" click="advSearch_clickHandler(event)"/>
 				</s:HGroup>
 				<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
 					<s:Label text="Item /Model No." width="65%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>

@@ -368,6 +368,8 @@
 					(theOwner as PurchaseReqRenderer).creationCompleteHandler(null);
 					return;
 				}
+				viewOnly(true)
+					
 				txtAppBy.text = "";
 				txtPrepBy.text = "";
 				cmbBranch.selectedIndex = 0;
@@ -381,7 +383,6 @@
 				txtVat.text = "0.00";
 				numItems.text = "0";
 				dg.dataProvider = null;
-				
 				
 				dfDate.selectedDate = new Date(); 
 			}
@@ -507,6 +508,8 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					statChange.visible = statChange.includeInLayout = false;
+					cbCancel.selected = false;
+					cbCancel_changeHandler(null);
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -521,6 +524,8 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					statChange.visible = statChange.includeInLayout = false;
+					cbCancel.selected = false;
+					cbCancel_changeHandler(null);
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -559,6 +564,48 @@
 			}
 			
 			
+			public function cbCancel_changeHandler(event:Event):void
+			{
+				btnCheckOut.enabled = !cbCancel.selected
+			}
+			
+			protected function updateCancel_clickHandler(event:MouseEvent):void
+			{
+				_data.purReqID;
+				var obj:Object = new Object();
+				obj.purReqID = _data.purReqID;
+				obj.stat = _data.prStatus = cbCancel.selected?3:0;
+				obj.pBox = this;
+				_fromUpdate = true;
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.CHANGE_REQUISITION_STATUS,obj)
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+			}
+			
+			protected function advSearch_clickHandler(event:MouseEvent):void
+			{
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.width = searchProd.width;
+				//popPnl.height = undefined;
+				popPnl.popView = 2;
+				popPnl.mainID = "0";
+				popPnl.mainComp = this;
+				PopUpManager.addPopUp(popPnl,searchProd,true);
+				PopUpManager.centerPopUp(popPnl);
+			}
+			
+			public function viewOnly(value:Boolean):void{
+				prodBox.visible = prodBox.includeInLayout = value;
+				dg.editable = value;
+				dg.doubleClickEnabled = value;
+				
+				txtPrepBy.editable = value;
+				txtAppBy.editable = value;
+				dfDate.editable = dfDate.enabled = value;
+				gcRemove.visible = value;
+				txtVat.editable = value
+				cmbBranch.enabled = value;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -576,10 +623,10 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup id="hgNewReq" width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
-				<s:Label text="Search: "/>
+			<s:HGroup id="hgNewReq" width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5" paddingLeft="3">
 				<s:TextInput prompt="[Requi. No/Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
-				<s:Button label="Search" click="SearchClickHandler(event)" buttonMode="true" />				
+				<s:Button label="Search" click="SearchClickHandler(event)" buttonMode="true" />
+				<s:Label text="Adv. Search" width="50" textAlign="center" color="blue" buttonMode="true" fontSize="10" textDecoration="underline" click="advSearch_clickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup id="hgProcessReq" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">
 				<s:Button label="Select Search Criteria " click="SearchClickHandler(event)" buttonMode="true" width="90%"/>				
@@ -621,6 +668,10 @@
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Approved By" width="90" textAlign="right"/>
 							<s:TextInput id="txtAppBy" width="100%" styleName="required" valueCommit="{txtAppBy.styleName = txtAppBy.text==''?'required':''}"/>
+						</s:HGroup>
+						<s:HGroup id="statChange" width="100%" verticalAlign="middle" visible="false" includeInLayout="false" horizontalAlign="right">
+							<s:CheckBox label="InActive" id="cbCancel" selected="false" change="cbCancel_changeHandler(event)"/>
+							<s:Button label="Confirm" click="updateCancel_clickHandler(event)"/>
 						</s:HGroup>
 					</s:VGroup>
 					
@@ -741,9 +792,6 @@
 			<s:Button id="btnEdit"  label="Edit Requisition" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<!--<s:Button id="btnView"  label="View Requisition" click="printPrevPO()" visible="false" includeInLayout="false"/>-->
 		</s:HGroup>
-		<s:HGroup id="statChange" width="100%" verticalAlign="middle" visible="false" includeInLayout="false">
-			<s:CheckBox label="Cancel Requisition" id="cbCancel" selected="false"/>
-			<s:Button label="Confirm"/>
-		</s:HGroup>
+		
 	</s:VGroup>
 </s:HGroup>

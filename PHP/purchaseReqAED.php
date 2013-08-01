@@ -21,6 +21,7 @@
 	}else if ($type == "get_details"){
 		$purReqID = $_REQUEST['purReqID'];
 		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		$isPurOrd = $_REQUEST['isPurOrd']?$_REQUEST['isPurOrd']:"";
 	}else if ($type == "change_stat"){
 		$purReqID = $_REQUEST['purReqID'];
 		$stat = $_REQUEST['stat'];
@@ -74,15 +75,15 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){	
-		$condition = ($condition == "")?"AND (quantity-itemServed) <> 0":$condition;
+		$condition = ($isPurOrd=="true")?"AND (quantity-itemServed) > 0":$condition;
 		$query = mysql_query("SELECT prdID,prd_purReqID,prd_prodID,quantity,itemServed,totalPurchase,prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,prodWeight,
-							IF(prd_price=0.00,listPrice,prd_price) AS exPrice
+							IF(prd_price=0.00,listPrice,prd_price) AS exPrice, ABS(quantity-itemServed) as itemBalance
 							FROM purchaseReq_details pr 
 							INNER JOIN products p ON pr.prd_prodID=p.prodID
 							WHERE prd_purReqID = $purReqID AND isRemove=0 ".$condition,$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$qty = $_REQUEST['condition'] == ""?$row['quantity']:$row['itemServed'];
+				$qty = $isPurOrd=="true"?$row['itemBalance']:$row['quantity'];
 				
 				$xml .= "<item prdID=\"".$row['prdID']."\" prd_purReqID=\"".$row['prd_purReqID']."\" prd_prodID=\"".$row['prd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$qty."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['exPrice']."\" weight=\"".$row['prodWeight']."\"/>";
 			}
