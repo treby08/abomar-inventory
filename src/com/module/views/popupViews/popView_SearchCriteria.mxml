@@ -103,7 +103,7 @@
 				var condition:String;
 				switch (_sType){
 					case 0:
-						var condPurReqID:String = (reqNo.text == "")?"":"purReqID = "+String(int(reqNo.text))+" AND ";
+						var condPurReqID:String = (reqNo.text == "")?"":"purReqID = "+String(int(reqNo.text))+" OR ";
 						var onProcess:String = cmbStatus.selectedItem.type==-1?"":" AND purReq_status="+cmbStatus.selectedItem.type;
 						var condExp:String = cmbStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"')";
 						condition = condPurReqID+"b.branchID ="+cmbBranch.selectedItem.branchID+onProcess+" "+condExp;
@@ -117,13 +117,13 @@
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 2:
-						var condWRID:String = (WRNo_wr.text == "")?"":"whrID = "+String(int(WRNo_wr.text))+" AND ";
+						var condWRID:String = (WRNo_wr.text == "")?"":"whrID = "+String(int(WRNo_wr.text))+" OR ";
 						condition = condWRID+"whr_branchID ="+cmbBranch_wr.selectedItem.branchID+" OR (whr_date >='"+setDateFormat(sDate_wr.selectedDate)+"' AND whr_date <='"+setDateFormat(eDate_wr.selectedDate)+"')";
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 3:
-						var condWDID:String = (WDNo_wd.text == "")?"":"whdID = "+String(int(WDNo_wd.text))+" AND ";
+						var condWDID:String = (WDNo_wd.text == "")?"":"whdID = "+String(int(WDNo_wd.text))+" OR ";
 						condition = condWDID+"whr_branchID ="+cmbBranch_wd.selectedItem.branchID+" OR (wd.dateTrans >='"+setDateFormat(sDate_wd.selectedDate)+"' AND wd.dateTrans <='"+setDateFormat(eDate_wd.selectedDate)+"')";
 						log = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
