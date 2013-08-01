@@ -165,17 +165,7 @@
 			private function mycmbSupplierLabelFunction(item:Object):String{
 				return (item)?item.supCode+" - "+item.compName:"";
 			}
-			
-			protected function newProdClickHandler(event:MouseEvent):void
-			{
-				_type = 0;
-				clearFields(null);
-				//btnNewProd.visible = false;
-				_data = {};
-				btnSave.label = "Add Product";
-				btnClear.label = "Clear"
-			}
-			
+						
 			public function clearFields(event:MouseEvent):void
 			{
 				if (!hasSelectedItem)return;
@@ -364,7 +354,7 @@
 					return;
 				}
 				//trace("_data.imgPath:_",String(_data.imgPath)+"_")
-				if (_type==0 && _data && _data.prodID != ""){
+				if (_type==0 && _data && _data.hasOwnProperty('prodID') && _data.prodID != ""){
 					Alert.yesLabel = "Add as New";
 					Alert.noLabel = "Update only";
 					Alert.buttonWidth = 120;
@@ -489,6 +479,7 @@
 			protected function createProductTab(event:MouseEvent):void
 			{
 				_type = 0;
+				_data = null;
 				hasSelectedItem = true;
 				mainCont.enabled = true;
 				btnSave.label = "Save Product";
