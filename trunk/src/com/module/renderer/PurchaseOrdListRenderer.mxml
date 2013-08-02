@@ -57,6 +57,7 @@
 				txtDate.text =String(_data.dateTrans);
 				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
 				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
+				updateRenderer(_data.stat);
 			}
 			public function zeroPad(number:int, width:int):String {
 				var ret:String = ""+number;
@@ -86,6 +87,7 @@
 				
 				var obj:Object = _theBox._tempData = _data;
 				_theBox.txtReqNo.text = zeroPad(obj.purOrdID,5);
+				
 				//_theBox.txtInvoice.text = obj.invTo;
 				//_theBox.txtAppBy.text = obj.approvedBy;
 				//_theBox.txtReqNo.text = obj.reqNo;
@@ -134,16 +136,44 @@
 					hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);*/
 			}
 			
+			protected function cancel_clickHandler(event:MouseEvent):void
+			{
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.CHANGE_PURORD_STATUS,{purOrdID:_data.purOrdID,pBox:this,stat:3})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+			}
+			
+			public function updateRenderer(stat:int):void{
+				_data.stat = stat
+				if (stat == 3){
+					btnCancel.visible = btnCancel.includeInLayout = false;
+					btnOpen.visible = btnOpen.includeInLayout = true;
+				}else if (stat == 0){
+					btnCancel.visible = btnCancel.includeInLayout = true;
+					btnOpen.visible = btnOpen.includeInLayout = false;
+				}
+			}
+			
+			protected function open_clickHandler(event:MouseEvent):void
+			{
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.CHANGE_PURORD_STATUS,{purOrdID:_data.purOrdID,pBox:this,stat:0})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+			}
+			
 		]]>
 	</fx:Script>
 	<s:Rect width="100%" height="100%">
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" height="30" fontSize="14" verticalAlign="middle" 
-			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtPoNo" width="20%" textAlign="center"/>
-		<s:Label id="txtVendor" width="50%" textAlign="center"/>
-		<s:Label id="txtDate" width="30%" textAlign="center"/>
+	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" height="30" fontSize="14" >
+		<s:HGroup width="75%" height="100%" verticalAlign="middle" useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
+			<s:Label id="txtPoNo" width="20%" textAlign="center"/>
+			<s:Label id="txtVendor" width="50%" textAlign="center"/>
+			<s:Label id="txtDate" width="30%" textAlign="center"/>
+		</s:HGroup>
+		<s:HGroup width="25%" height="100%"  useHandCursor="true" buttonMode="true" >
+			<s:Button id="btnCancel" width="100%" label="Cancel" click="cancel_clickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnOpen" width="100%" label="Open" click="open_clickHandler(event)" visible="false" includeInLayout="false"/>
+		</s:HGroup>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
 		</s:HGroup>-->

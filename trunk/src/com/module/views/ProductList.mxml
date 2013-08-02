@@ -305,9 +305,9 @@
 					strRet +="- Item Code field is empty \r";
 				if (cmbSupplier.selectedItem==null)
 					strRet +="- Supplier field is empty \r";
-				/* if (txtProdName.text == "")
-					strRet +="- Product Name field is empty \r";
-				if (txtStock.text == "")
+				if (txtWeight.text == "" || txtWeight.text == "0.00")
+					strRet +="- Weight field is empty or 0.00 \r";
+				/*if (txtStock.text == "")
 					strRet +="- Initial Stock Count field is empty \r";*/
 				if (txtSRP.text == "0.00")
 					strRet +="- SRP Price field is empty \r"; 
@@ -349,8 +349,8 @@
 								
 				var strErr:String = UserErrorTrap();
 				if (strErr != ""){
-					if (_type==0)
-						hasSelectedItem = false;
+					/*if (_type==0)
+						hasSelectedItem = false;*/
 					
 					Alert.show(strErr,"Error Summary:");
 					return;
