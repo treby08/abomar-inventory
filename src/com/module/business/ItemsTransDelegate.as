@@ -59,6 +59,10 @@ package com.module.business
 			
 			if (strResult != "" && str != null){
 				Alert.show(str+" Product Error: "+strResult,"Error");
+				if (_paramsItems.pBox){
+					_paramsItems.pBox.hgControl.enabled = true;
+					_paramsItems.pBox = null;
+				}
 				return;
 			}
 			
@@ -568,6 +572,7 @@ package com.module.business
 			if(_params == null)
 				return;
 			var str:String;
+			var str2:String = " Purchase Order";
 			switch(_params.type){
 				case "add":
 					str="Adding";
@@ -578,23 +583,34 @@ package com.module.business
 				case "delete":
 					str="Deleting";
 					break;
+				case "change_stat":
+					str="Status Changed";
+					break;
 			}
 			
 			if (strResult != "" && str != null){
 				Alert.show(str+" Purchase Order Error: "+strResult,"Error");
 				return;
 			}
+			
+			
 			var listXML:XML = XML(evt.result);
 			var arrCol:ArrayCollection = new ArrayCollection()
 			var arrObj:Object ;
 			var obj:XML;
+						
 			if (str){
-				Alert.show(str+" Purchase Order Complete.", str+" Purchase Order",4,null,function():void{
+				str+=_params.type!="change_stat"?" Purchase Order Complete":"";
+				
+				Alert.show(str, str2,4,null,function():void{
 					if (_params.pBox){
-						if (str == "Adding")
+						if (_params.type == "change_stat")
+							_params.pBox.updateRenderer(_params.stat);
+						else if (str == "Adding")
 							_params.pBox.updateCurrentPO();
 						else
 							_params.pBox.clearFields(null);
+						
 						_params.pBox = null;
 					}else if (_params.ppnl){
 						_params.ppnl.parent.removeElement(_params.ppnl);
@@ -699,7 +715,7 @@ package com.module.business
 					arrObj.approvedBy = obj.@approvedBy;
 					arrObj.dateTrans = obj.@dateTrans;
 					arrObj.preparedBy = obj.@preparedBy;
-					arrObj.totalAmt = obj.@totalAmt;					
+					arrObj.totalAmt = obj.@totalAmt;			
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					
@@ -897,7 +913,8 @@ package com.module.business
 					arrObj.supAddress = obj.@supAddress;
 					arrObj.supPhoneNum = obj.@supPhoneNum;
 					arrObj.supMobileNum = obj.@supMobileNum;
-					arrObj.term = obj.@term;
+					arrObj.term = obj.@term;					
+					arrObj.stat = obj.@stat;
 					arrCol.addItem(arrObj);
 				}
 				if (_params.qBox){					

@@ -151,6 +151,10 @@ package com.module.commands
 					obj.type = "get_exist_po";
 					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
 					break;
+				case ItemsTransEvent.CHANGE_PURORD_STATUS:
+					obj.type = "change_stat";
+					ItemsTransDelegate.instance().purchaseOrd_AED(obj);
+					break;
 				
 				/*WareHouse Reciept*/
 				case ItemsTransEvent.ADD_WH_RECEIPT:

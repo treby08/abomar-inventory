@@ -60,6 +60,8 @@
 						purOrd.visible = purOrd.includeInLayout = true;
 						sDate_po.selectedDate = new Date();
 						eDate_po.selectedDate = new Date();
+						cmbStatusPO.dataProvider = AccessVars.instance().arrStat
+						cmbStatusPO.selectedIndex = 0;
 						if (AccessVars.instance().supplier == null){
 							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_SUPPLIERS_LIST,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
@@ -112,7 +114,8 @@
 					break;
 					case 1:
 						var condPurOrdID:String = (PONo.text == "")?"":"purOrdID = "+String(int(PONo.text))+" OR ";
-						condition = condPurOrdID+"po.purOrd_supID ="+cmbSupplier.selectedItem.supID+" OR (po.dateTrans >='"+setDateFormat(sDate_po.selectedDate)+"' AND po.dateTrans <='"+setDateFormat(eDate_po.selectedDate)+"')";
+						var onProcessPO:String = cmbStatusPO.selectedItem.type==-1?"":" AND purOrd_status="+cmbStatusPO.selectedItem.type;
+						condition = condPurOrdID+"po.purOrd_supID ="+cmbSupplier.selectedItem.supID+onProcessPO+" OR (po.dateTrans >='"+setDateFormat(sDate_po.selectedDate)+"' AND po.dateTrans <='"+setDateFormat(eDate_po.selectedDate)+"')";
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:"null",qBox:mainComp,condition:condition})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
@@ -202,6 +205,10 @@
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Supplier" width="100" textAlign="right"/>
 			<s:DropDownList id="cmbSupplier" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Status" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbStatusPO" width="100%" labelField="label"/>
 		</s:HGroup>
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Start Date" width="100" textAlign="right"/>
