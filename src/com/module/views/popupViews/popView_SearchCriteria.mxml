@@ -257,7 +257,7 @@
 	</s:VGroup>
 	<s:VGroup id="product" width="100%" visible="false" includeInLayout="false">
 		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Label text="Product Code/Item No." width="100" textAlign="right"/>
+			<s:Label text="Item/Model No." width="100" textAlign="right"/>
 			<s:TextInput id="prodNo" width="100%"/>
 		</s:HGroup>
 		<s:HGroup width="100%" verticalAlign="middle">
