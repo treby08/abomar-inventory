@@ -147,9 +147,21 @@
 				if (stat == 3){
 					btnCancel.visible = btnCancel.includeInLayout = false;
 					btnOpen.visible = btnOpen.includeInLayout = true;
+					lblStatus.visible = lblStatus.includeInLayout = false;
 				}else if (stat == 0){
 					btnCancel.visible = btnCancel.includeInLayout = true;
 					btnOpen.visible = btnOpen.includeInLayout = false;
+					lblStatus.visible = lblStatus.includeInLayout = false;
+				}else if (stat == 1){
+					btnCancel.visible = btnCancel.includeInLayout = false;
+					btnOpen.visible = btnOpen.includeInLayout = false;
+					lblStatus.visible = lblStatus.includeInLayout = true;
+					lblStatus.text = "Fully Served";
+				}else if (stat == 2){
+					btnCancel.visible = btnCancel.includeInLayout = false;
+					btnOpen.visible = btnOpen.includeInLayout = false;
+					lblStatus.visible = lblStatus.includeInLayout = true;
+					lblStatus.text = "Partially Served";
 				}
 			}
 			
@@ -173,6 +185,7 @@
 		<s:HGroup width="25%" height="100%"  useHandCursor="true" buttonMode="true" >
 			<s:Button id="btnCancel" width="100%" label="Cancel" click="cancel_clickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnOpen" width="100%" label="Open" click="open_clickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Label id="lblStatus" width="100%" fontSize="11"/>
 		</s:HGroup>
 		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
 			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
