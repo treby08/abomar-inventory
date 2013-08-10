@@ -37,7 +37,7 @@
 			public var theOwner:Object;
 			private static var DEF_IMG:String = "assets/icons/default_product.png";
 			public var arrCurr:ArrayCollection = new ArrayCollection([
-				{name:"USD",curr:0},{name:"PHP",curr:1}]);
+				{name:"USD",curr:0},{name:"PHP",curr:1},{name:"EURO",curr:2}]);
 			
 			[Embed (source="com/flexlib/assets/assets.swf", symbol="up_arrow")]
 			private static var DEFAULT_UP_BUTTON:Class;
