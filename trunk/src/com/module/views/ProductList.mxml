@@ -234,7 +234,7 @@
 					cmbLstCurr.selectedIndex =0;
 					cmbDealCurr.selectedIndex =0;
 						
-					txtItemModNo.setFocus();
+					
 				}else{
 					Alert.show("Are you sure to reset to default value?","Confirm Reset to Default",Alert.YES|Alert.NO,null,resetDefCloseHandler)
 				}
@@ -490,6 +490,7 @@
 				btnOrdHis.visible = btnOrdHis.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = false
 				clearFields(null);
+				txtItemModNo.setFocus();
 				//saveClickHandler(new MouseEvent(MouseEvent.CLICK));
 			}
 			
@@ -661,21 +662,21 @@
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="140" text="List Price" textAlign="right"/>
 											<s:TextInput id="txtLstPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" valueCommit="{txtLstPrice.styleName = txtLstPrice.text==''||txtLstPrice.text=='0.00'?'required':'';txtLstPrice.text=numFmttr.format(txtLstPrice.text)}"/>
-											<s:DropDownList id="cmbLstCurr" width="70" labelField="name" fontSize="14"
+											<s:DropDownList id="cmbLstCurr" width="80" labelField="name" fontSize="14"
 															dataProvider="{arrCurr}" selectedIndex="0"/>
 										</s:HGroup>
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="140" text="Minimum Dealer Price"
 													 textAlign="right"/>
 											<s:TextInput id="txtDealPrice" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" valueCommit="{txtDealPrice.styleName = txtDealPrice.text==''||txtDealPrice.text=='0.00'?'required':'';txtDealPrice.text=numFmttr.format(txtDealPrice.text)}"/>
-											<s:DropDownList id="cmbDealCurr" width="70"  selectedIndex="0" fontSize="14"
+											<s:DropDownList id="cmbDealCurr" width="80"  selectedIndex="0" fontSize="14"
 															dataProvider="{arrCurr}" labelField="name"/> 
 										</s:HGroup>
 										<s:HGroup  width="100%" verticalAlign="middle">
 											<s:Label width="140" text="Suggested Retail Price"
 													 textAlign="right"/>
 											<s:TextInput id="txtSRP" width="100%" restrict="0-9." text="0.00" textAlign="right"  styleName="required" valueCommit="{txtSRP.styleName = txtSRP.text==''||txtSRP.text=='0.00'?'required':'';txtSRP.text=numFmttr.format(txtSRP.text)}"/>
-											<s:Label width="70" text="Php" textAlign="left"/>
+											<s:Label width="80" text="Php" textAlign="left"/>
 										</s:HGroup>
 									</s:BorderContainer>
 									<mx:Canvas x="15" height="15" width="50" backgroundAlpha="1" backgroundColor="0xFFFFFF">

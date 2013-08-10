@@ -15,6 +15,7 @@ package com.variables
 		}
 		
 		public var mainApp:Abomar;
+		public var test:int=0;
 		public var userType:ArrayCollection;
 		public var remarks:ArrayCollection;
 		public var invoiceList:ArrayCollection;

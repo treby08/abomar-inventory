@@ -19,7 +19,7 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				
+				lblforTest.visible = AccessVars.instance().test == 1?true:false;
 			}
 			
 			
@@ -42,6 +42,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	
 	<s:HGroup width="100%" height="100%">
 		<s:Image source="assets/logo2.png" height="62" maintainProjectionCenter="false"/>
 		<s:Spacer width="100%"/>
@@ -53,5 +54,5 @@
 			<s:Button label="Logout" height="53" icon="assets/icons/icon_logout.png" useHandCursor="true" click="logoutClickHandler(event)" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>
-	
+	<s:Label id="lblforTest" x="270" y="20" color="#CA2A1E" fontSize="22" fontWeight="bold" text="FOR TRAINING PURPOSES ONLY" visible="false"/>
 </s:BorderContainer>
