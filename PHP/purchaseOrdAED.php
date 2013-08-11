@@ -24,7 +24,11 @@
 		$purReqID = $_REQUEST['purReqID'];
 	else if ($type == "get_exist_po")
 		$poID = $_REQUEST['poID'];
-		
+	else if ($type == "change_stat"){
+		$purOrdID = $_REQUEST['purOrdID'];
+		$stat = $_REQUEST['stat'];
+	}
+	
 	if ($type == "add"){
 		$sql = "INSERT INTO purchaseOrd (purOrd_purReqID, purOrd_supID, purOrd_branchID, purOrd_delID, totalWeight, dateTrans, timeTrans, totalAmt) VALUES ($purReqID,$supID, $branchID, $delID, $totalWeight,'$dateTrans', NOW(), $totalAmt)";
 		mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
@@ -133,6 +137,8 @@
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['purOrdID']?$row['purOrdID']:1;
 		echo number_pad($reqNum);
+	}else if ($type == "change_stat"){
+		mysql_query("UPDATE purchaseOrd SET purOrd_status = $stat WHERE purOrdID = $purOrdID",$conn);
 	}
 	
 	function number_pad($number) {
