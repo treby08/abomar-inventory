@@ -56,7 +56,10 @@ package com.module.business
 			}
 		}
 		private function logIn_onFault(evt:FaultEvent):void{
-			Alert.show("Error in Connection: \r"+evt.message,"Connection Error");
+			Alert.show("Error in Connection: \r"+evt.message.body,"Connection Error",4,null,function():void{
+				AccessVars.instance().mainApp.showLoginPanel();
+			});
+			
 		}
 	}
 }

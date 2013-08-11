@@ -93,7 +93,7 @@
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = true;
-				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
+				//_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
 				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 				_theBox.btnView.visible = _theBox.btnView.includeInLayout = false;

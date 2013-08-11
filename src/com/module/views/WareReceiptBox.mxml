@@ -236,8 +236,11 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
-					btnNew.visible = btnNew.includeInLayout = true;
+					btnNew.visible = btnNew.includeInLayout = false;
 					clearFields(null);
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as WareReceiptRenderer).isSelected = false;
+					}
 					//btnPrint.enabled = false;
 					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
@@ -260,8 +263,11 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnPrintWR.visible = btnPrintWR.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
-					btnNew.visible = btnNew.includeInLayout = true;
+					btnNew.visible = btnNew.includeInLayout = false;
 					clearFields(null);
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as WareReceiptRenderer).isSelected = false;
+					}
 					//btnPrint.enabled = false;
 					/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_RECEIPT_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
@@ -278,7 +284,12 @@
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnNew.visible = btnNew.includeInLayout = false;
 					mainCont.enabled = false;
+					clearFields(null);
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as WareReceiptRenderer).isSelected = false;
+					}
 				}else{
 					var popPnl:PopupPanel = new PopupPanel();
 					popPnl.width = searchWR.width;
@@ -335,6 +346,7 @@
 				btnNew.label = "Clear WH Receipt";
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnPrintWR.visible = btnPrintWR.includeInLayout = true;
+				btnNew.visible = btnNew.includeInLayout = true;
 				var PO_renderer:WareReceiptRenderer;
 				for (var i:int=dgSearch.numElements-1; i >= 0; i-- ){
 					PO_renderer = (dgSearch.getElementAt(i) as WareReceiptRenderer);
@@ -495,7 +507,7 @@
 			<s:Button id="btnCheckOut" label="Save WH Receipt" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			
 			<s:Spacer width="100%"/>
-			<s:Button id="btnNew"  label="New WH Receipt" click="btnNewclickHandler(event)"/>
+			<s:Button id="btnNew"  label="Clear WH Receipt" click="btnNewclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnEdit"  label="Edit WH Receipt" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnPrintWR" label="Print WH Receipt" click="printPrevWR()" visible="false" includeInLayout="false"/>
 			<s:Button id="btnView"  label="View Listings" visible="false" includeInLayout="false"/>

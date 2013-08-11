@@ -11,15 +11,16 @@
 			import mx.managers.PopUpManager;
 			protected function logoutClickHandler(event:MouseEvent):void
 			{
-				cntrl.visible = false;
+				cntrl.visible = cntrl.includeInLayout = false;
 				AccessVars.instance().mainApp.initializeApp();
 				AccessVars.instance().mainApp.showLoginPanel();
-				
+				lblforTest.x = 200+(spCer.width/2 - lblforTest.width/2)
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				lblforTest.visible = AccessVars.instance().test == 1?true:false;
+				lblforTest.x = 200+(spCer.width/2 - lblforTest.width/2);
 			}
 			
 			
@@ -45,14 +46,14 @@
 	
 	<s:HGroup width="100%" height="100%">
 		<s:Image source="assets/logo2.png" height="62" maintainProjectionCenter="false"/>
-		<s:Spacer width="100%"/>
+		<s:Spacer id="spCer" width="100%"/>
 		<s:HGroup id="cntrl" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
-				  visible="false" gap="10">
+				  visible="false" includeInLayout="false" gap="10">
 			<s:Button label="Home" height="53" icon="assets/icons/icon_home.png" useHandCursor="true" click="homeClickHandler(event)" buttonMode="true"/>
 			<s:Button label="Profile" height="53" icon="assets/icons/icon_prof.png" useHandCursor="true" click="profileClickHandler(event)" buttonMode="true"/>
 			<mx:VRule height="55"/>
 			<s:Button label="Logout" height="53" icon="assets/icons/icon_logout.png" useHandCursor="true" click="logoutClickHandler(event)" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>
-	<s:Label id="lblforTest" x="270" y="20" color="#CA2A1E" fontSize="22" fontWeight="bold" text="FOR TRAINING PURPOSES ONLY" visible="false"/>
+	<s:Label id="lblforTest" x="200" y="20" color="#CA2A1E" fontSize="22" fontWeight="bold" text="FOR TRAINING PURPOSES ONLY"/>
 </s:BorderContainer>

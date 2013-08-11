@@ -426,6 +426,18 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{				
+				for (var i:int =0; i < dgSearch.numElements; i++){
+					(dgSearch.getElementAt(i) as PurchaseOrdRenderer).isSelected = false;
+				}
+				mainCont.enabled = false;
+				clearFields(null);
+				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+				btnView.visible = btnView.includeInLayout = false;
+				btnEdit.visible = btnEdit.includeInLayout = false;
+				
+				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
+				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PURORD,{searchstr:txtSearchStr.text,qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
@@ -672,7 +684,7 @@
 				  horizontalAlign="left" verticalAlign="top">						
 			<s:Button id="btnCheckOut" label="Submit Purchase Order" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
-			<s:Button id="btnNew"  label="New Purchase Order" click="btnNewclickHandler(event)"/>
+			<!--<s:Button id="btnNew"  label="New Purchase Order" click="btnNewclickHandler(event)"/>-->
 			<s:Button id="btnEdit"  label="Edit Purchase Order" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnView"  label="View Purchase Order" click="printPrevPO()" visible="false" includeInLayout="false"/>
 		</s:HGroup>

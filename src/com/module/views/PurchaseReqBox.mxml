@@ -236,7 +236,7 @@
 				if (arrCol.length > 0){
 					var sameItem:Object
 					for each (items in arrCol){
-						if (items.prodDBID == obj.prodID){
+						if (items.prodDBID == obj.prodID || items.prd_prodID == obj.prodID){
 							sameItem = items;
 							break;
 						}
@@ -511,6 +511,9 @@
 					cbCancel.selected = false;
 					cbCancel_changeHandler(null);
 					clearFields(null);
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as PurchaseReqRenderer).isSelected = false;
+					}
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
@@ -527,6 +530,9 @@
 					cbCancel.selected = false;
 					cbCancel_changeHandler(null);
 					clearFields(null);
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as PurchaseReqRenderer).isSelected = false;
+					}
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				}
