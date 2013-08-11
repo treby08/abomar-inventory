@@ -30,6 +30,8 @@
 			import com.variables.AccessVars;
 			import com.variables.SecurityType;
 			
+			import flash.utils.setTimeout;
+			
 			import flashx.textLayout.formats.Float;
 			
 			import mx.events.FlexEvent;
@@ -45,6 +47,8 @@
 			{
 				var configLoad:URLLoader = new URLLoader(new URLRequest("config/config.xml"));
 				configLoad.addEventListener(Event.COMPLETE,configLoadComp);
+				
+				AccessVars.instance().test = parameters.test?parameters.test:0;
 			}
 			
 			protected function configLoadComp(event:Event):void
@@ -86,7 +90,13 @@
 			}
 			
 			public function loginUser():void{
-				menNav.cntrl.visible = true;
+				menNav.cntrl.visible = menNav.cntrl.includeInLayout = true;
+				menNav.lblforTest.visible = false;
+				menNav.lblforTest.x = 200
+				setTimeout(function():void{
+					menNav.lblforTest.x = 200+(menNav.spCer.width/2 - menNav.lblforTest.width/2);
+					menNav.lblforTest.visible = AccessVars.instance().test ==1?true:false;
+				},100);
 				floatMenuVisible(true);
 				initNonClosableTab()
 				//PopUpManager.removePopUp(logPanel);				
