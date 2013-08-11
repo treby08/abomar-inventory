@@ -55,14 +55,21 @@
 				$hasDiscrep = true;
 			}else if ($arrDetails[2] != $arrDetails[3]){
 				$hasDiscrep = true;
+			}else if ($arrDetails[2] == $arrDetails[3] && ($arrDetails[5]==3 || $arrDetails[5]==5)){
+				$hasDiscrep = true;
 			}
 		}
 		
-		$sql = "UPDATE `purchaseOrd` SET onProcess=1 WHERE purOrdID=$purOrdID";
-		$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
+		
 		
 		if ($hasDiscrep){
+			$sql = "UPDATE `purchaseOrd` SET onProcess=1, purOrd_status=2 WHERE purOrdID=$purOrdID";
+			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
+			
 			$sql = "INSERT INTO wh_discrepancy (whd_whrID) VALUES ($whr_whrID)";
+			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
+		}else{
+			$sql = "UPDATE `purchaseOrd` SET onProcess=1, purOrd_status=1 WHERE purOrdID=$purOrdID";
 			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}
 		
@@ -78,11 +85,11 @@
 							LEFT JOIN branches b ON b.branchID=po.purOrd_branchID
 							LEFT JOIN supplier s ON s.supID=po.purOrd_supID
 							WHERE ".$condition;
-		$query = mysql_query($sql,$conn)or die(mysql_error().' '.$sql.' '. __LINE__);
+		$query = mysql_query($sql,$conn)or die(mysql_error().' '.$sql.' '. __LINE__); 
 		
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\" branchPNum=\"".$row['branchPNum']."\"  branchMNum=\"".$row['branchMNum']."\" supAddress=\"".$row['supAddress']."\" supPhoneNum=\"".$row['supPhoneNum']."\" supMobileNum=\"".$row['supMobileNum']."\" branchAdd=\"".$row['branchAdd']."\" term=\"".$row['term']."\"/>";
+				$xml .= "<item purOrdID=\"".$row['purOrdID']."\" purOrd_supID=\"".$row['purOrd_supID']."\" supCompName=\"".$row['supCompName']."\" purOrd_branchID=\"".$row['purOrd_branchID']."\" bCode=\"".$row['bCode']."\" bLocation=\"".$row['bLocation']."\" purOrd_delID=\"".$row['purOrd_delID']."\" totalWeight=\"".$row['totalWeight']."\" dateTrans=\"".$row['dateTrans']."\" totalAmt=\"".$row['totalAmt']."\" branchPNum=\"".$row['branchPNum']."\"  branchMNum=\"".$row['branchMNum']."\" supAddress=\"".$row['supAddress']."\" supPhoneNum=\"".$row['supPhoneNum']."\" supMobileNum=\"".$row['supMobileNum']."\" branchAdd=\"".$row['branchAdd']."\" term=\"".$row['term']."\" stat=\"".$row['purOrd_status']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;

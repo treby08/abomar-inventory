@@ -43,7 +43,7 @@
 							FROM wh_receipt_details whd 
 							INNER JOIN products p ON whd.whrd_prodID=p.prodID
 							INNER JOIN whr_remarks rem ON whd.whrd_remarks = rem.remID
-							WHERE whrd_whrID = $whrID AND (whrd_qty <> whrd_qty_rec OR isNew=1)",$conn);
+							WHERE whrd_whrID = $whrID AND ((whrd_qty = whrd_qty_rec AND (whd.whrd_remarks=3 || whd.whrd_remarks=5)) OR whrd_qty <> whrd_qty_rec OR isNew=1)",$conn);
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item whrdID=\"".$row['whrdID']."\" whrd_whrID=\"".$row['whrd_whrID']."\" whrd_podID=\"".$row['whrd_podID']."\" whrd_prodID=\"".$row['whrd_prodID']."\" prodDescrip=\"".$row['prodDescrip']."\" prodModel=\"".$row['prodModel']."\" whrd_qty=\"".$row['whrd_qty']."\" whrd_qty_rec=\"".$row['whrd_qty_rec']."\" prodCode=\"".$row['prodCode']."\" whrd_pkgNo=\"".$row['whrd_pkgNo']."\" remLabel=\"".$row['remLabel']."\" isNew=\"".$row['isNew']."\"/>";
