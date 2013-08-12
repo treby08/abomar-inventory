@@ -1186,7 +1186,7 @@ package com.module.business
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
 				var num:int = 1;
-				trace("get_details",XML(evt.result).toXMLString())
+				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
 					//pdID,pd_payID,pd_invID,pd_amt,pd_credit,pd_totalAmt 			

@@ -361,7 +361,7 @@
 				else
 					arrCol = new ArrayCollection();
 				
-				if (dg.selectedIndex == dg.dataProviderLength-1 && AccessVars.instance().invoiceList.length > 0){
+				if (dg.dataProviderLength !=0 && dg.selectedIndex == dg.dataProviderLength-1 && AccessVars.instance().invoiceList.length > 0){
 					var obj:Object = new Object();
 					obj.num = arrCol.length+1;
 					obj.invID = -1;

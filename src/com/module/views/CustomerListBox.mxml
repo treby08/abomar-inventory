@@ -195,13 +195,29 @@
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 			}
 			
+			protected function initializeHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(AccessVars.instance().branches == null){
+					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				}
+				
+			}
+			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				btnSave.addEventListener(MouseEvent.CLICK,saveClickHandler);
 				btnClear.addEventListener(MouseEvent.CLICK,clearFields);
 				
-				cmbOpenBranch.dataProvider = AccessVars.instance().branches;
-				cmbOpenBranch.selectedIndex = 0;
+				updateDataList()
+			}
+			
+			public function updateDataList():void{
+				if(AccessVars.instance().branches){
+					cmbOpenBranch.dataProvider = AccessVars.instance().branches;			
+					cmbOpenBranch.selectedIndex = 0;
+				}
 			}
 			
 			private var _arrCol:ArrayCollection;
@@ -261,14 +277,7 @@
 				btnClear.visible = btnClear.includeInLayout = true;
 			}
 			
-			protected function initializeHandler(event:FlexEvent):void
-			{
-				// TODO Auto-generated method stub
-				if (AccessVars.instance().branches==null){
-					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				}
-			}
+			
 			
 		]]>
 	</fx:Script>

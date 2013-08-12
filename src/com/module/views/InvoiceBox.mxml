@@ -232,7 +232,7 @@
 				if (arrCol.length > 0){
 					var sameItem:Object
 					for each (items in arrCol){
-						if (items.prodDBID == obj.prodID){
+						if (items.prodDBID == obj.prodID || items.sqd_prodID == obj.prodID){
 							sameItem = items;
 							break;
 						}
