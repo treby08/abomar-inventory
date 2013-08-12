@@ -16,8 +16,8 @@
 				cmbInvoice.dataProvider = AccessVars.instance().invoiceList;
 				cmbInvoice.selectedIndex = -1
 					
-				if (data) 
-					trace("prepare", data.invID, data.acctNo)
+				/*if (data) 
+					trace("prepare", data.invID, data.acctNo)*/
 				acctNo.visible = acctNo.includeInLayout = false;
 				cmbInvoice.visible = cmbInvoice.includeInLayout = true;
 				
@@ -29,7 +29,7 @@
 						}
 					}
 				}else if (data && data.acctNo != "" && data.acctNo != undefined){
-					trace("prepare: acctNo_", data.invID, data.acctNo)
+					//trace("prepare: acctNo_", data.invID, data.acctNo)
 					acctNo.text = data.acctNo;
 					acctNo.visible = acctNo.includeInLayout = true;
 					cmbInvoice.visible = cmbInvoice.includeInLayout = false;
