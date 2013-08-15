@@ -91,10 +91,14 @@ s|Panel
 {
 	skin-class: ClassReference("assets.skins.skin_Panel");
 }
-/*#labelDisplays
+
+
+.btnSearch
 {
-	typographicCase: lowercaseToSmallCaps
-}*/
+	overSkin: Embed("assets/icons/btnSearch_over.png");
+	upSkin: Embed("assets/icons/btnSearch_up.png");
+	downSkin: Embed("assets/icons/btnSearch_up.png");
+}
 
 /* 
 //------------------------------ 

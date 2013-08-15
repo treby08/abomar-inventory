@@ -65,6 +65,10 @@ package com.module.business
 				}
 				return;
 			}
+			var listXML:XML;
+			var arrCol:ArrayCollection;
+			var arrObj:Object;
+			var obj:XML;
 			
 			if (str){
 				Alert.show(str+" Product Complete.", str+" Product",4,null,function():void{
@@ -79,10 +83,10 @@ package com.module.business
 					_paramsItems = null;
 				});
 			}else if (_paramsItems.type == "get_price_list"){
-				var listXML:XML = XML(evt.result);
-				var arrCol:ArrayCollection = new ArrayCollection();
-				var arrObj:Object;
-				for each (var obj:XML in listXML.children()){
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
+				
+				for each (obj in listXML.children()){
 					/*<item prodp_ID=\"".$row['prodp_ID']."\" prodID=\"".$row['prodp_prodID']."\" prodDate=\"".$row['prodp_date']."\" 
 					listPrice=\"".$row['prodp_listPrice']."\" dealPrice=\"".$row['prodp_dealPrice']."\" srPrice=\"".$row['prodp_srPrice']."\" 
 					factor=\"".$row['prodp_factor']."\"/>*/
@@ -102,11 +106,11 @@ package com.module.business
 					_paramsItems = null;
 				}
 			}else{
-				var listXML:XML = XML(evt.result);
-				var arrCol:ArrayCollection = new ArrayCollection();
+				listXML = XML(evt.result);
+				arrCol = new ArrayCollection();
 				trace("search",XML(evt.result).toXMLString())
-				var arrObj:Object;
-				for each (var obj:XML in listXML.children()){
+				
+				for each (obj in listXML.children()){
 					arrObj = new Object();
 					arrObj.prodID = obj.@prodID;
 					arrObj.pCode = obj.@pCode;
@@ -598,7 +602,7 @@ package com.module.business
 			var arrCol:ArrayCollection = new ArrayCollection()
 			var arrObj:Object ;
 			var obj:XML;
-						
+			var num:int;		
 			if (str){
 				str+=_params.type!="change_stat"?" Purchase Order Complete":"";
 				
@@ -622,7 +626,7 @@ package com.module.business
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
 				//arrObj = {};
-				var num:int = 1;
+				num = 1;
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
@@ -666,7 +670,7 @@ package com.module.business
 				arrObj.poID_label = listXML.@poID_label;
 				
 				_params.popBox.updateFields(arrObj);
-				var num:int = 1;
+				num = 1;
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
@@ -783,6 +787,8 @@ package com.module.business
 			var arrCol:ArrayCollection = new ArrayCollection()
 			var arrObj:Object ;
 			var obj:XML;
+			var num:int;
+			
 			if (str){
 				Alert.show(str+" Warehouse Receipt Complete.", str+" Warehouse Receipt",4,null,function():void{
 					if (_params.pBox){
@@ -801,7 +807,7 @@ package com.module.business
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
 				//arrObj = {};
-				var num:int = 1;
+				num = 1;
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();
@@ -858,7 +864,7 @@ package com.module.business
 				
 				_params.popBox.updateFields(arrObj);
 				
-				var num:int = 1;
+				num = 1;
 				//trace("get_details",XML(evt.result).toXMLString())
 				for each (obj in listXML.children()){
 					arrObj = new Object();

@@ -479,7 +479,13 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer"/>
+						<s:GridColumn dataField="pkgNo" headerText="Pkg No." width="100"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:DefaultGridItemRenderer textAlign="center"/>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
 						<s:GridColumn dataField="qtyRec" headerText="Qty Rcv" width="70"  editable="false" headerRenderer="com.module.renderer.GridHeadRenderer">
 							<s:itemRenderer>
 								<fx:Component>
