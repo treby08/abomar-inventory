@@ -15,6 +15,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.core.UIComponent;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
@@ -400,7 +401,7 @@
 			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
 			{
 				if(event.keyCode == Keyboard.ENTER)
-					(event.target as Button).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+					(event.target as UIComponent).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			}
 			
 			
@@ -642,8 +643,8 @@
 			</s:borderStroke> 
 			<s:HGroup id="hgNewReq" width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5" paddingLeft="3">
 				<s:TextInput prompt="[Requi. No/Branch]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
-				<s:Button label="Search" click="SearchClickHandler(event)" buttonMode="true" />
-				<s:Label text="Adv. Search" width="50" textAlign="center" color="blue" buttonMode="true" fontSize="10" textDecoration="underline" click="advSearch_clickHandler(event)"/>
+				<mx:Button width="28" height="28" click="SearchClickHandler(event)" buttonMode="true" styleName="btnSearch" toolTip="Search"/>
+				<s:Button label="Adv. Search" buttonMode="true" click="advSearch_clickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup id="hgProcessReq" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">
 				<s:Button label="Select Search Criteria " click="SearchClickHandler(event)" buttonMode="true" width="90%"/>				
