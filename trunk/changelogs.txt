@@ -1,0 +1,25 @@
+Abomar v1.0.3 -
+ - change UI for search button with adv search
+ - PO: click a search item, SUBMIT PURCHASE ORDER appears without editing
+ - WD & WR Pkg Column items are centered
+ - 
+
+Abomar v1.0.2 - 8/12/2013
+ - fixed bugs on editting PR with same Item entry 
+ - fixed/remove New PR button and New/Clear WR button to avoid confusion
+ - clear all selected search item when button search is clicked. (WR/PR/PO)
+ - update position of traning purpose label
+ - update UI on PO list
+ 
+Abomar v1.0.1 PATCH - 08/07/2013
+
+ - minor program update
+ - clean db structure and data
+ - patch version for v1.0.1
+ 
+Abomar v1.0.0 - 7/31/2013
+ - Added Adv Search for products and PR
+ - Added inactive field for PR
+ - update php on checking PR, PO details
+ - fix bugs on product upon editting a product then creating new product.
+ - fix bugs on Inactive products (no check mark on inactive product)
