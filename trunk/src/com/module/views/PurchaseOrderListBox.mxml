@@ -71,19 +71,23 @@
 					cmbDeliver.selectedIndex = 0;
 					//cmbDeliver.validateNow();
 				}else if (type == 3){
-					dg.dataProvider = arr;
+					
+					
 					numItems.text = "0";
 					_totalQty = 0
 					var vat:Number = 0;			
 					var _subTot:Number = 0;
 					var _totWeight:Number = 0;
-					for each (var item:Object in arr){						
+					for each (var item:Object in arr){
+						item.isSelected = "1";
 						_subTot += Number(item.total);
 						_totWeight += Number(item.weight);
 						vat += Number(Number(item.total)*0.12);
 						_totalQty+=Number(item.qty);
+						arr.itemUpdated(item);
 						
 					}
+					dg.dataProvider = arr;
 					txtSubtot.text = numFmttr.format(_subTot);
 					txtVat.text = numFmttr.format(vat);//roundDec(_subTot*0.12).toFixed(2);
 					txtGT.text = numFmttr.format(_subTot+vat);

@@ -68,7 +68,7 @@
 					txtWeb.text = "";
 					txtMobile.text = "";
 					txtPhone.text = "";
-					txtSupCode.setFocus();
+					
 				}else{
 					Alert.show("Are you sure to reset to default value?","Confirm Reset to Default",Alert.YES|Alert.NO,null,resetDefCloseHandler)
 				}
@@ -227,6 +227,7 @@
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = false
 				clearFields(null);
+				txtSupCode.setFocus();
 				//saveClickHandler(new MouseEvent(MouseEvent.CLICK));
 			}
 			
@@ -238,6 +239,7 @@
 				btnSave.visible = btnSave.includeInLayout = true;
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = true;
+				txtSupCode.setFocus();
 			}
 			
 		]]>

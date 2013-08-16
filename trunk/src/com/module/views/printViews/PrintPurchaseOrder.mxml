@@ -31,8 +31,17 @@
 			{
 				transDate.text = _salesBox.setDateFormat(_salesBox.dfDate.selectedDate)//CurrentDateTimeString()
 				poID.text = _salesBox.txtReqNo.text
-				dg.dataProvider = (_salesBox.dg.dataProvider as ArrayCollection);
-				notFol.y = notFol.y + (28 * (_salesBox.dg.dataProvider as ArrayCollection).length);
+				
+				var forPrintArrCol:ArrayCollection = new ArrayCollection();
+				for each (var item:Object in _salesBox.dg.dataProvider){
+					if (item.isSelected=="1")
+						forPrintArrCol.addItem(item);
+						
+				}
+				
+				dg.dataProvider = forPrintArrCol;
+				
+				notFol.y = notFol.y + (28 * (dg.dataProvider as ArrayCollection).length);
 				
 				txtInvoiceTo.prompt="";
 				txtInvoiceTo.selectable = false;

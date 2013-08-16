@@ -35,6 +35,7 @@
 				if (_fromUpdate){
 					_fromUpdate = false;
 					_data.acctno = txtAcctNo.text;
+					_data.companyName = txtCompName.text;
 					_data.branchID = cmbOpenBranch.selectedItem.branchID;
 					_data.address = txtAdd.text;
 					_data.tin = txtTin.text;
@@ -49,13 +50,14 @@
 					_data.email = txtEmail.text;
 					_data.web = txtWeb.text;
 					
-					(owner as CustomerRenderer).data = _data;
-					(owner as CustomerRenderer).creationCompleteHandler(null);
+					(theOwner as CustomerRenderer).data = _data;
+					(theOwner as CustomerRenderer).creationCompleteHandler(null);
 					return;
 				}
 				
 				if (_type == 0){
 					txtAcctNo.text = "";
+					txtCompName.text = "";
 					txtAdd.text = "";
 					cmbOpenBranch.selectedIndex = 0;
 					txtCreditLine.text = "0.00";
@@ -69,7 +71,7 @@
 					txtWeb.text = "";
 					txtMobile.text = "";
 					txtPhone.text = "";
-					txtAcctNo.setFocus();
+					//txtAcctNo.setFocus();
 				}else{
 					Alert.show("Are you sure to reset to default value?","Confirm Reset to Default",Alert.YES|Alert.NO,null,resetDefCloseHandler)
 				}
@@ -88,6 +90,7 @@
 			private function resetDefCloseHandler(evt:CloseEvent):void{
 				if (evt.detail == Alert.YES){
 					txtAcctNo.text = _data.acctno;
+					txtCompName.text = _data.companyName;
 					cmbOpenBranch.selectedIndex = setSelectedItem(arrBranch,"branchID",_data.branchID);
 					txtAdd.text = _data.address;
 					txtTin.text = _data.tin;
@@ -112,9 +115,9 @@
 					strRet +="- Contact Person field is empty \r";
 				if (txtAcctNo.text == "")
 					strRet +="- Account No. field is empty \r";
-				/* if (txtmname.text == "")
-					strRet +="- Middle Name field is empty \r";
-				if (txtBname.text == "")
+				if (txtCompName.text == "")
+					strRet +="- Company Name field is empty \r";
+				/*if (txtBname.text == "")
 					strRet +="- Business Name field is empty \r"; */
 				
 				return strRet;
@@ -130,6 +133,7 @@
 				
 				var obj:Object = {}
 				obj.acctno = txtAcctNo.text;
+				obj.companyName = txtCompName.text;
 				obj.branchId = cmbOpenBranch.selectedItem.branchID;
 				obj.address = txtAdd.text;
 				obj.tin = txtTin.text;
@@ -264,6 +268,7 @@
 				btnOrdHis.visible = btnOrdHis.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = false
 				clearFields(null);
+				txtAcctNo.setFocus();
 				//saveClickHandler(new MouseEvent(MouseEvent.CLICK));
 			}
 			
@@ -275,6 +280,7 @@
 				btnSave.visible = btnSave.includeInLayout = true;
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = true;
+				txtAcctNo.setFocus();
 			}
 			
 			
@@ -336,6 +342,10 @@
 					<s:HGroup width="100%" verticalAlign="middle">
 						<s:Label text="Account No" width="95" textAlign="right"/>
 						<s:TextInput id="txtAcctNo" width="100%"  styleName="required" valueCommit="{txtAcctNo.styleName = txtAcctNo.text==''?'required':''}"/>
+					</s:HGroup>
+					<s:HGroup width="100%" verticalAlign="middle">
+						<s:Label text="Company Name" width="95" textAlign="right"/>
+						<s:TextInput id="txtCompName" width="100%" styleName="required" valueCommit="{txtCompName.styleName = txtCompName.text==''?'required':''}"/>
 					</s:HGroup>
 					<s:HGroup width="100%" verticalAlign="middle">
 						<s:Label text="Opening Branch" width="95" textAlign="right"/>

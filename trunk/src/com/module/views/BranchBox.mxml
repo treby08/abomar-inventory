@@ -18,6 +18,7 @@
 			import mx.events.FlexEvent;
 			
 			public var _data:Object;
+			public var theOwner:Object;
 			/** 0=add 1=edit**/
 			public var _type:int = 0; 
 			private var _fromUpdate:Boolean = false;
@@ -36,8 +37,8 @@
 					_data.phoneNum = txtPhone.text+"|"+txtExt.text;
 					_data.email = txtEmail.text;
 					
-					(owner as BranchRenderer).data = _data;
-					(owner as BranchRenderer).creationCompleteHandler(null);
+					(theOwner as BranchRenderer).data = _data;
+					(theOwner as BranchRenderer).creationCompleteHandler(null);
 					return;
 				}
 				
@@ -51,7 +52,7 @@
 					txtExt.text = "";
 					txtMobile.text = "";
 					txtPhone.text = "";
-					txtBrachCode.setFocus();
+					
 				}else{
 					Alert.show("Are you sure to reset to default value?","Confirm Reset to Default",Alert.YES|Alert.NO,null,resetDefCloseHandler)
 				}
@@ -197,6 +198,7 @@
 				btnOrdHis.visible = btnOrdHis.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = false
 				clearFields(null);
+				txtBrachCode.setFocus();
 				//saveClickHandler(new MouseEvent(MouseEvent.CLICK));
 			}
 			
@@ -208,6 +210,7 @@
 				btnSave.visible = btnSave.includeInLayout = true;
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = true;
+				txtBrachCode.setFocus();
 			}
 			
 		]]>

@@ -502,6 +502,7 @@
 				btnSave.visible = btnSave.includeInLayout = true;
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				btnClear.visible = btnClear.includeInLayout = true;
+				txtItemModNo.setFocus();
 			}
 			
 			
