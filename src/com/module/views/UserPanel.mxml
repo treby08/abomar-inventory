@@ -20,6 +20,7 @@
 			import mx.managers.PopUpManager;
 			
 			private var _data:Object;
+			public var theOwner:Object;
 			/** 0=add 1=edit**/
 			public var _type:int = 0; 
 			private var _fromUpdate:Boolean = false;
@@ -63,8 +64,8 @@
 					_data.user = txtUser.text;
 					_data.pass = txtPass.text;
 					_data.sex = rbMale.selected?"Male":"Female";
-					(owner as UserRenderer).data = _data;
-					(owner as UserRenderer).creationCompleteHandler(null);
+					(theOwner as UserRenderer).data = _data;
+					(theOwner as UserRenderer).creationCompleteHandler(null);
 						
 				}
 				PopUpManager.removePopUp(this);

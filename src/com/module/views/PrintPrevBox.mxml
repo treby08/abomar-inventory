@@ -49,6 +49,7 @@
 				</s:HGroup>
 				<s:Spacer width="10"/>
 				<s:Button label="Print" click="printPrevPO()"/>
+				<s:Button label="Save" click="savePreview()"/>
 				<s:Button label="Close" click="closeHandler(event)"/>
 			</s:HGroup>
 		</s:VGroup>
@@ -72,6 +73,12 @@
 			import mx.managers.PopUpManager;
 			import mx.printing.FlexPrintJob;
 			import mx.printing.FlexPrintJobScaleType;
+			
+			import org.alivepdf.layout.Orientation;
+			import org.alivepdf.layout.Size;
+			import org.alivepdf.layout.Unit;
+			import org.alivepdf.pdf.PDF;
+			import org.alivepdf.saving.Method;
 			
 			import spark.events.IndexChangeEvent;
 			import spark.utils.TextFlowUtil;
@@ -215,10 +222,15 @@
 				printJob.addObject(childCanvas, FlexPrintJobScaleType.SHOW_ALL); 
 				printJob.send();
 			}
-			
-			protected function OrderTypechangeHandler(event:IndexChangeEvent):void
+			protected function savePreview():void
 			{
-				//orderType.text = cmbOrderType.selectedItem.name.toUpperCase();
+				var fileRefPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.LETTER);
+				fileRefPDF.addPage();
+				fileRefPDF.addImage(childCanvas);
+				fileRefPDF.addMultiCell(850,1100,"Print",1);
+				var bytes:ByteArray = fileRefPDF.save(Method.LOCAL);
+				var file:FileReference = new FileReference();
+				file.save(bytes,"Abomar-"+String(arrOrderType.getItemAt(_orderTypeID).name)+".pdf");
 			}
 			
 		]]>

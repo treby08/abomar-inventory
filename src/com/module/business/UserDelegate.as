@@ -149,6 +149,7 @@ package com.module.business
 					arrObj = new Object();
 					arrObj.custID = obj.@custID;
 					arrObj.acctno = obj.@acctno;
+					arrObj.companyName = obj.@companyName;
 					arrObj.branchID = obj.@branchId;
 					arrObj.creditLine = obj.@creditLine;
 					arrObj.address = obj.@address;
@@ -176,6 +177,7 @@ package com.module.business
 					arrObj = new Object();
 					arrObj.custID = obj.@custID;
 					arrObj.acctno = obj.@acctno;
+					arrObj.companyName = obj.@companyName;
 					arrObj.branchID = obj.@branchID;
 					arrObj.creditLine = obj.@creditLine;
 					arrObj.address = obj.@address;

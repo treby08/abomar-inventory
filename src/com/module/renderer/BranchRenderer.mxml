@@ -80,7 +80,7 @@
 				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 				_theBox.btnOrdHis.visible = _theBox.btnOrdHis.includeInLayout = true;
 				_theBox.btnClear.visible = _theBox.btnClear.includeInLayout = false;
-				_theBox.owner = this;
+				_theBox.theOwner = this;
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void

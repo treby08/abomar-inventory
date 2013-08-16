@@ -35,7 +35,7 @@
 				userPanl.title = "Edit User";
 				userPanl._type = 1;
 				userPanl.data = _data;
-				userPanl.owner = this;
+				userPanl.theOwner = this;
 				PopUpManager.addPopUp(userPanl,parent.parent,true);
 				PopUpManager.centerPopUp(userPanl);
 			}

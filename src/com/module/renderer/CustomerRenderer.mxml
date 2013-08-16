@@ -53,6 +53,7 @@
 			{
 				
 				_theBox.txtAcctNo.text = _data.acctno;
+				_theBox.txtCompName.text = _data.companyName;
 				_theBox.cmbOpenBranch.selectedIndex = _theBox.setSelectedItem(_theBox.arrBranch,"branchID",_data.branchID);
 				_theBox.txtAdd.text = _data.address;
 				_theBox.txtTin.text = _data.tin;
@@ -77,6 +78,7 @@
 				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 				_theBox.btnOrdHis.visible = _theBox.btnOrdHis.includeInLayout = true;
 				_theBox.btnClear.visible = _theBox.btnClear.includeInLayout = false;
+				
 				//_theBox.btnNewUser.visible = true;
 				/* _theBox.btnSave.label = "Update";
 				_theBox.btnSave.visible = true;
