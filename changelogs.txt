@@ -1,8 +1,8 @@
-Abomar v1.0.3 -
+Abomar v1.0.2a - 8/19/2013
  - change UI for search button with adv search
  - PO: click a search item, SUBMIT PURCHASE ORDER appears without editing
  - WD & WR Pkg Column items are centered
- - 
+ - Fixed Payment module, on querying invoices for a customer
 
 Abomar v1.0.2 - 8/12/2013
  - fixed bugs on editting PR with same Item entry 
