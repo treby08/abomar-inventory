@@ -8,6 +8,7 @@
 			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
+			import com.module.renderer.PurchaseReqListRenderer;
 			import com.module.renderer.PurchaseReqRenderer;
 			import com.module.views.panels.PopupPanel;
 			import com.module.views.panels.ProductPricePanel;
@@ -84,7 +85,9 @@
 					txtVat.editable = false
 					cmbBranch.enabled = false;
 					hgNewReq.visible = hgNewReq.includeInLayout = false;
+					mainHeader.visible = mainHeader.includeInLayout = false;
 					hgProcessReq.visible = hgProcessReq.includeInLayout = true;
+					processHeader.visible = processHeader.includeInLayout = true;
 				}
 				
 			}
@@ -145,14 +148,23 @@
 				if (dgSearch.numElements > 0){
 					dgSearch.removeAllElements();
 				}
-				
 				if (arrCol.length > 0){
-					var itemUser:PurchaseReqRenderer;
-					for each (var obj:Object in arrCol){
-						itemUser = new PurchaseReqRenderer()
-						itemUser.data = obj;
-						itemUser.theBox = this
-						dgSearch.addElement(itemUser);
+					if (isProcess){
+						var itemRend:PurchaseReqListRenderer;
+						for each (var obj:Object in arrCol){
+							itemRend = new PurchaseReqListRenderer()
+							itemRend.data = obj;
+							itemRend.theBox = this
+							dgSearch.addElement(itemRend);
+						}
+					}else{
+						var itemUser:PurchaseReqRenderer;
+						for each (var obj:Object in arrCol){
+							itemUser = new PurchaseReqRenderer()
+							itemUser.data = obj;
+							itemUser.theBox = this
+							dgSearch.addElement(itemUser);
+						}
 					}
 				}
 			}
@@ -649,9 +661,16 @@
 			<s:HGroup id="hgProcessReq" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">
 				<s:Button label="Select Search Criteria " click="SearchClickHandler(event)" buttonMode="true" width="90%"/>				
 			</s:HGroup>
-			<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
+			<s:HGroup id="mainHeader" width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
 				<s:Label text="PR No." width="45%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
 				<s:Label text="Requesting Branch" width="55%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+			</s:HGroup>
+			<s:HGroup id="processHeader" width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="0" visible="false" includeInLayout="false">
+				<s:HGroup width="72%" gap="0" horizontalAlign="center">
+					<s:Label text="PR No." width="35%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+					<s:Label text="Requesting Branch" width="65%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+				</s:HGroup>
+				<s:Label text="Status" width="28%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
