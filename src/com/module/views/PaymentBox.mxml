@@ -361,8 +361,20 @@
 				else
 					arrCol = new ArrayCollection();
 				
-				if (dg.dataProviderLength !=0 && dg.selectedIndex == dg.dataProviderLength-1 && AccessVars.instance().invoiceList.length > 0){
-					var obj:Object = new Object();
+				var obj:Object = new Object();
+				
+				if(dg.dataProviderLength == 0 && AccessVars.instance().invoiceList.length > 0){
+					
+					obj.num = arrCol.length+1;
+					obj.invID = -1;
+					obj.amt = "0.00";
+					obj.credit = "0.00";
+					obj.totalAmt = "0.00";
+					arrCol.addItem(obj);
+					dg.dataProvider = arrCol;
+					
+				}else if (dg.selectedIndex == dg.dataProviderLength-1 && AccessVars.instance().invoiceList.length > 0){
+					
 					obj.num = arrCol.length+1;
 					obj.invID = -1;
 					obj.amt = "0.00";
