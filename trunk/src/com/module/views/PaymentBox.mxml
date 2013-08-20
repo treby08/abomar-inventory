@@ -429,7 +429,8 @@
 			
 			protected function computefocusOutHandler(event:FocusEvent):void
 			{
-				txtPayTotal.text = numFmttr.format(Number(txtCheckAmt.text) + Number(txtCash.text));
+				event.target.text = numFmttr.format(String(event.target.text).replace(/\b,\b/g,""))
+				txtPayTotal.text = numFmttr.format(Number(txtCheckAmt.text.replace(/\b,\b/g,"")) + Number(txtCash.text.replace(/\b,\b/g,"")));
 				checkIfPrintable()				
 			}
 			

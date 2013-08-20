@@ -44,7 +44,9 @@
 			$arrDetails = explode("|",$arr_payDetails[$i]);
 			//strItem.push(item.invID+"|"+item.amt+"|"+item.credit+"|"+item.totalAmt);
 			$sql = "INSERT INTO payment_details (`pd_payID`, `pd_invID`, `pd_amt`, `pd_credit`, `pd_totalAmt`) VALUES ($prd_payID, ".$arrDetails[0].", ".$arrDetails[1].", ".$arrDetails[2].", ".$arrDetails[3].")";
-			array_push($arr_invID,$arrDetails[0]);
+			if ($arrDetails[1]-$arrDetails[2] == 0)
+				array_push($arr_invID,$arrDetails[0]);
+				
 			mysql_query($sql,$conn) or die(mysql_error().' '.$sql.' '. __LINE__);
 		}
 		if (count($arr_invID) > 0){
