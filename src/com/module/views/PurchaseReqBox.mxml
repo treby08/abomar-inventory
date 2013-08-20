@@ -149,9 +149,10 @@
 					dgSearch.removeAllElements();
 				}
 				if (arrCol.length > 0){
+					var obj:Object;
 					if (isProcess){
 						var itemRend:PurchaseReqListRenderer;
-						for each (var obj:Object in arrCol){
+						for each (obj in arrCol){
 							itemRend = new PurchaseReqListRenderer()
 							itemRend.data = obj;
 							itemRend.theBox = this
@@ -159,7 +160,7 @@
 						}
 					}else{
 						var itemUser:PurchaseReqRenderer;
-						for each (var obj:Object in arrCol){
+						for each (obj in arrCol){
 							itemUser = new PurchaseReqRenderer()
 							itemUser.data = obj;
 							itemUser.theBox = this

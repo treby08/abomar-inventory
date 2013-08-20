@@ -49,7 +49,7 @@
 				</s:HGroup>
 				<s:Spacer width="10"/>
 				<s:Button label="Print" click="printPrevPO()"/>
-				<s:Button label="Save" click="savePreview()"/>
+				<s:Button label="Save" click="savePreview()" visible="false" includeInLayout="false"/>
 				<s:Button label="Close" click="closeHandler(event)"/>
 			</s:HGroup>
 		</s:VGroup>
@@ -67,6 +67,7 @@
 			import flashx.textLayout.formats.WhiteSpaceCollapse;
 			
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.formatters.DateFormatter;
@@ -74,9 +75,14 @@
 			import mx.printing.FlexPrintJob;
 			import mx.printing.FlexPrintJobScaleType;
 			
+			import org.alivepdf.display.Display;
+			import org.alivepdf.layout.Mode;
 			import org.alivepdf.layout.Orientation;
+			import org.alivepdf.layout.Position;
+			import org.alivepdf.layout.Resize;
 			import org.alivepdf.layout.Size;
 			import org.alivepdf.layout.Unit;
+			import org.alivepdf.pages.Page;
 			import org.alivepdf.pdf.PDF;
 			import org.alivepdf.saving.Method;
 			
@@ -224,13 +230,26 @@
 			}
 			protected function savePreview():void
 			{
-				var fileRefPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, Size.LETTER);
-				fileRefPDF.addPage();
-				fileRefPDF.addImage(childCanvas);
-				fileRefPDF.addMultiCell(850,1100,"Print",1);
+				var fileRefPDF:PDF = new PDF(Orientation.PORTRAIT, Unit.INCHES, Size.LETTER);
+				var pg:Page = new Page(Orientation.PORTRAIT,Unit.INCHES, Size.LETTER);
+				pg.size = new Size([850,1100],"Letter",[8.5,11],[215.9,279.4]);
+				//var re:Resize = new Resize(Mode.FIT_TO_PAGE,Position.LEFT);
+				fileRefPDF.addPage(pg);
+				fileRefPDF.setTopMargin(0);
+				fileRefPDF.setBottomMargin(0);
+				fileRefPDF.setRightMargin(0);
+				fileRefPDF.setLeftMargin(0);
+				fileRefPDF.addImage(childCanvas,null,0,0,0,0,0,1,false);//,re,0,0,850,1100);
+				fileRefPDF.setCreator("UFlip Media")
 				var bytes:ByteArray = fileRefPDF.save(Method.LOCAL);
 				var file:FileReference = new FileReference();
+				file.addEventListener(Event.COMPLETE,saveComplete);
 				file.save(bytes,"Abomar-"+String(arrOrderType.getItemAt(_orderTypeID).name)+".pdf");
+			}
+			
+			protected function saveComplete(event:Event):void
+			{
+				Alert.show("Save Complete","PDF Saved");
 			}
 			
 		]]>

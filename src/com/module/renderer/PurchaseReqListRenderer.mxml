@@ -162,7 +162,7 @@
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
 	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" height="30" fontSize="14" 
-			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
+			  useHandCursor="true" buttonMode="true">
 		<s:HGroup width="72%" height="100%" verticalAlign="middle" useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 			<s:Label id="txtReqNo" width="45%" textAlign="center"/>
 			<s:Label id="txtBranch" width="55%" textAlign="center"/>

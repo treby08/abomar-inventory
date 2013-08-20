@@ -4,6 +4,7 @@
 	$type = $_REQUEST['type'];
 	if ($type == "add" || $type == "edit"){
 		$acctno = $_REQUEST['acctno'];
+		$companyName = $_REQUEST['companyName'];
 		$branchID = $_REQUEST['branchId'];
 		$creditLine = $_REQUEST['creditLine'];
 		$address = $_REQUEST['address'];
@@ -31,11 +32,11 @@
 			echo "$conPerson - $acctno Already Exist";
 		}else{
 		
-			$query = mysql_query("INSERT INTO customers (acctno, cus_branchID, address, creditLine, tin, cus_term, conPerson, desig, phoneNum, mobileNum, email, web, isDeleted) VALUES (\"$acctno\", $branchID, \"$address\", \"$creditLine\", \"$tin\", $term, \"$conPerson\", \"$desig\", \"$phoneNum\", \"$mobileNum\",\"$email\", \"$web\", $inactive)",$conn);
+			$query = mysql_query("INSERT INTO customers (acctno, companyName, cus_branchID, address, creditLine, tin, cus_term, conPerson, desig, phoneNum, mobileNum, email, web, isDeleted) VALUES (\"$acctno\", \"$companyName\", $branchID, \"$address\", \"$creditLine\", \"$tin\", $term, \"$conPerson\", \"$desig\", \"$phoneNum\", \"$mobileNum\",\"$email\", \"$web\", $inactive)",$conn);
 		}
 		
 	}else if ($type == "edit"){
-		mysql_query("UPDATE customers SET acctno = '$acctno' , cus_branchID = $branchID , address = '$address' , creditLine = '$creditLine' , tin = '$tin' , cus_term = '$term' , conPerson = '$conPerson' , desig = '$desig' , phoneNum = '$phoneNum' , mobileNum = '$mobileNum' , email = '$email' , web = '$web' , isDeleted = $inactive WHERE custID = $custID",$conn);
+		mysql_query("UPDATE customers SET acctno = '$acctno' , companyName = '$companyName' ,cus_branchID = $branchID , address = '$address' , creditLine = '$creditLine' , tin = '$tin' , cus_term = '$term' , conPerson = '$conPerson' , desig = '$desig' , phoneNum = '$phoneNum' , mobileNum = '$mobileNum' , email = '$email' , web = '$web' , isDeleted = $inactive WHERE custID = $custID",$conn);
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM customers WHERE custID = '$custID'",$conn);
 	}else if ($type == "search"){
@@ -43,7 +44,16 @@
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$inactive = $row['isDeleted']=="1"?"true":"false";
-				$xml .= "<item custID=\"".$row['custID']."\" acctno=\"".$row['acctno']."\" branchId=\"".$row['cus_branchID']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['cus_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" inactive=\"".$inactive."\"/>";
+				$xml .= "<item custID=\"".$row['custID']."\" acctno=\"".$row['acctno']."\" companyName=\"".$row['companyName']."\" branchId=\"".$row['cus_branchID']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['cus_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" inactive=\"".$inactive."\"/>";
+			}
+		$xml .= "</root>";
+		echo $xml;
+	}else if ($type == "get_list"){
+		$query = mysql_query("SELECT * from customers",$conn);
+		$xml = "<root>";
+			while($row = mysql_fetch_assoc($query)){
+				$inactive = $row['isDeleted']=="1"?"true":"false";
+				$xml .= "<item custID=\"".$row['custID']."\" acctno=\"".$row['acctno']."\" companyName=\"".$row['companyName']."\" branchId=\"".$row['cus_branchID']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['cus_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" inactive=\"".$inactive."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
