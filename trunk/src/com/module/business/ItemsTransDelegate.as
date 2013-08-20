@@ -485,7 +485,7 @@ package com.module.business
 				str+=_params.type!="change_stat"?" Purchase Requisition Complete":"";
 				Alert.show(str, str2,4,null,function():void{
 					if (_params.type == "change_stat" && _params.pBox){
-						
+						_params.pBox.updateRenderer(_params.stat);
 					}else if (_params.pBox){
 						_params.pBox.clearFields(null);
 						_params.pBox = null;

@@ -63,7 +63,7 @@
 		
 		
 		if ($hasDiscrep){
-			$sql = "UPDATE `purchaseOrd` SET onProcess=1, purOrd_status=2 WHERE purOrdID=$purOrdID";
+			$sql = "UPDATE `purchaseOrd` SET onProcess=0, purOrd_status=2 WHERE purOrdID=$purOrdID";
 			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 			
 			$sql = "INSERT INTO wh_discrepancy (whd_whrID) VALUES ($whr_whrID)";
