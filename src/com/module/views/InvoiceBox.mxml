@@ -41,15 +41,8 @@
 			private function init():void{
 				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-				if (AccessVars.instance().branches == null){
-					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
-				}
-				if (AccessVars.instance().customers == null){
-					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				}
-				updateDataList();
+				
+				
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -58,15 +51,26 @@
 				CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
 				dfDate.selectedDate = new Date(); 
 				
-				cmbBranch.dataProvider = AccessVars.instance().branches;
+				if (AccessVars.instance().branches == null){
+					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				}
+				
+				if (AccessVars.instance().customers == null){
+					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+				}
+				
+				updateDataList();
+			
 				//genReqNoCode();
 			}
 			
 			public function updateDataList():void{
 				if(AccessVars.instance().branches)
-				cmbBranch.dataProvider = AccessVars.instance().branches;
+					cmbBranch.dataProvider = AccessVars.instance().branches;
 				if(AccessVars.instance().customers)
-				cmbCustomer.dataProvider = AccessVars.instance().customers;
+					cmbCustomer.dataProvider = AccessVars.instance().customers;
 			}
 			
 			public function genReqNoCode():void{
@@ -311,7 +315,7 @@
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
 				obj.totalAmt = txtGT.text.replace(/\b,\b/g,"");
 				obj.vat = txtVat.text.replace(/\b,\b/g,"");
-				obj.salesQuoteID = _data.sqID;
+				//obj.salesQuoteID = _data?_data.sqID:"";
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					//strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.sqdID);

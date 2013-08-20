@@ -162,7 +162,9 @@
 					var prdNew:String = "0";
 					if (item.hasOwnProperty("isNew") && item.isNew=="1")
 						prdNew="1";
-						
+					if (item.remarks=="")
+						item.remarks=0;
+					
 					strItem.push(item.podID+"|"+item.pod_prodID+"|"+item.qty+"|"+item.qtyRec+"|"+item.pkgNo+"|"+item.remarks+"|"+prdNew);
 				}
 				obj.whrDetails = strItem.join("||");

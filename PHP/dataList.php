@@ -23,7 +23,13 @@
 		$custID = $_REQUEST['custID'];
 		if ($custID)
 			$add = " AND sq_custID=".$custID;
-		$query = mysql_query('SELECT * FROM salesInvoice WHERE onProcess=0'.$add,$conn);
+		$query = mysql_query('SELECT sqID,totalAmt,sq_quoteNo FROM salesInvoice WHERE onProcess=0'.$add,$conn);
+		/*SELECT sqID,totalAmt, pd.pd_amt, pd.pd_credit,sq_quoteNo,onProcess, pd.pd_amt- pd.pd_credit AS bal
+FROM payment p 
+INNER JOIN salesInvoice si ON p.pay_custID=si.sq_custID
+INNER JOIN payment_details pd ON p.payID=pd.pd_payID AND pd.pd_amt>0 AND pd.pd_credit >0
+WHERE  sq_custID=2 AND (pd.pd_amt-pd.pd_credit)<>0  ORDER BY `si`.`sqID` ASC*/
+		
 		while($row = mysql_fetch_assoc($query)){
 			$xml .= "<item invID=\"".$row['sqID']."\" totalAmt=\"".$row['totalAmt']."\" invIDLabel=\"".$row['sq_quoteNo']."\" />";
 		}
