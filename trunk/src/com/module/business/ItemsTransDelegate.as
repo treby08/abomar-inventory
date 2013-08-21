@@ -293,6 +293,7 @@ package com.module.business
 			if(_paramsQuote == null)
 				return;
 			var str:String;
+			var str2:String = "Quote";
 			switch(_paramsQuote.type){
 				case "add":
 					str="Adding";
@@ -303,6 +304,9 @@ package com.module.business
 				case "delete":
 					str="Deleting";
 					break;
+				case "change_stat":
+					str="Status Changed";
+				break;
 			}
 			
 			if (strResult != "" && str != null){
@@ -313,10 +317,15 @@ package com.module.business
 			var arrCol:ArrayCollection = new ArrayCollection()
 			var arrObj:Object = {}
 			var obj:XML;
+						
 			if (str){
-				Alert.show(str+" Quote Complete.", str+" Quote",4,null,function():void{
+				str+=_params.type!="change_stat"?" Quote Complete":"";
+			
+				Alert.show(str, str2,4,null,function():void{
 					if (_paramsQuote.pBox){
-						if (str == "Adding")
+						if (_params.type == "change_stat")
+							_params.pBox.updateRenderer(_params.stat);
+						else if (str == "Adding")
 							_paramsQuote.pBox.clearFields(new MouseEvent(MouseEvent.CLICK));
 						else
 							_paramsQuote.pBox.clearFields(null);
