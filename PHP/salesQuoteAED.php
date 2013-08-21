@@ -22,7 +22,11 @@
 		$searchSTR = $_REQUEST['searchstr'];
 	else if ($type == "get_details")
 		$sqID = $_REQUEST['sqID'];
-			
+	else if ($type == "change_stat"){
+		$sqID = $_REQUEST['sqID'];
+		$stat = $_REQUEST['stat'];
+	}
+	
 	if ($type == "add"){
 		$sql = "INSERT INTO salesQuote (sq_quoteNo, sq_custID, sq_branchID, prepBy, apprBy, dateTrans, timeTrans, sq_vat, totalAmt) VALUES ('$sq_quoteNo', $sq_custID, $sq_branchID, '$preparedBy', '$approvedBy', '$dateTrans', NOW(), $vat, $totalAmt)";
 		mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
@@ -98,6 +102,9 @@
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['sqID']?$row['sqID']:1;
 		echo number_pad($reqNum);
+		
+	}else if ($type == "change_stat"){
+		mysql_query("UPDATE salesQuote SET sq_status = $stat WHERE sqID = $sqID",$conn);
 	}
 	
 	function number_pad($number) {

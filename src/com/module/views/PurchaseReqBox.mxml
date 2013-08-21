@@ -637,6 +637,13 @@
 				cmbBranch.enabled = value;
 			}
 			
+			public function updateRenderer(stat:int):void{
+				_data.stat = stat;
+				if (theOwner){
+					(theOwner as PurchaseReqRenderer).data = _data;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>

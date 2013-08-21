@@ -7,6 +7,8 @@
 		<![CDATA[
 			import com.variables.AccessVars;
 			
+			import flash.net.navigateToURL;
+			
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			protected function logoutClickHandler(event:MouseEvent):void
@@ -36,6 +38,10 @@
 			{
 				AccessVars.instance().mainApp.floatMenuVisible(true);
 			}
+			protected function helpClickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest("http://www.abomar.com/icsuserguide/"),"_blank");
+			}
 			
 		]]>
 	</fx:Script>
@@ -52,6 +58,7 @@
 			<s:Button label="Home" height="53" icon="assets/icons/icon_home.png" useHandCursor="true" click="homeClickHandler(event)" buttonMode="true"/>
 			<s:Button label="Profile" height="53" icon="assets/icons/icon_prof.png" useHandCursor="true" click="profileClickHandler(event)" buttonMode="true"/>
 			<mx:VRule height="55"/>
+			<s:Button label="Help" height="53" icon="assets/icons/icon_help.png" useHandCursor="true" click="helpClickHandler(event)" buttonMode="true"/>
 			<s:Button label="Logout" height="53" icon="assets/icons/icon_logout.png" useHandCursor="true" click="logoutClickHandler(event)" buttonMode="true"/>
 		</s:HGroup>
 	</s:HGroup>

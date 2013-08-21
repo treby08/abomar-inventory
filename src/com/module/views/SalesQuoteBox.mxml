@@ -487,6 +487,7 @@
 					mainCont.enabled = true;
 					btnCheckOut.label = "Submit Quote";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					statChange.visible = statChange.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
@@ -500,6 +501,7 @@
 					mainCont.enabled = true;
 					btnCheckOut.label = "Submit Quote";
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
+					statChange.visible = statChange.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
@@ -533,6 +535,28 @@
 				return numFmttr.format(item.price);
 			}
 			
+			public function cbCancel_changeHandler(event:Event):void
+			{
+				btnCheckOut.enabled = !cbCancel.selected
+			}
+			
+			protected function updateCancel_clickHandler(event:MouseEvent):void
+			{
+				var obj:Object = new Object();
+				obj.sqID = _data.sqID;
+				obj.stat = _data.stat = cbCancel.selected?3:0;
+				obj.pBox = this;
+				_fromUpdate = true;
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.CHANGE_QUOTE_STATUS,obj)
+				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+			}
+			
+			public function updateRenderer(stat:int):void{
+				_data.stat = stat;
+				if (theOwner){
+					(theOwner as SalesQuoteRenderer).data = _data;
+				}
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -593,6 +617,10 @@
 						<s:HGroup width="100%" verticalAlign="middle">
 							<s:Label text="Prepared By" width="90" textAlign="right"/>
 							<s:TextInput id="txtPrepBy" width="100%" styleName="required" valueCommit="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
+						</s:HGroup>
+						<s:HGroup id="statChange" width="100%" verticalAlign="middle" visible="false" includeInLayout="false" horizontalAlign="right">
+							<s:CheckBox label="InActive" id="cbCancel" selected="false" change="cbCancel_changeHandler(event)"/>
+							<s:Button label="Confirm" click="updateCancel_clickHandler(event)"/>
 						</s:HGroup>
 					</s:VGroup>
 					
