@@ -18,9 +18,10 @@
 			$sqID = $_REQUEST['sqID'];
 	}else if ($type == "delete")
 		$sqID = $_REQUEST['sqID'];
-	else if ($type == "search")
+	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-	else if ($type == "get_details")
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}else if ($type == "get_details")
 		$sqID = $_REQUEST['sqID'];
 	else if ($type == "change_stat"){
 		$sqID = $_REQUEST['sqID'];
@@ -70,14 +71,16 @@
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM salesQuote WHERE sqID = '$sqID'",$conn);
 	}else if ($type == "search"){		
+		$condition = ($condition == "")?"q.onProcess=0":stripslashes($condition);
+		$sCont = ($searchSTR == "null")?"":"(q.sq_quoteNo LIKE '%$searchSTR%' OR c.acctno LIKE '%$searchSTR%' OR c.conPerson LIKE '%$searchSTR%')  AND ";
 		
 		$query = mysql_query("SELECT q.*, c.acctno, c.conPerson, b.branchID, b.bCode, b.bLocation FROM salesQuote q
 							INNER JOIN customers c ON c.custID=q.sq_custID
 							INNER JOIN branches b ON b.branchID=q.sq_branchID
-							WHERE (q.sq_quoteNo LIKE '%$searchSTR%' OR c.acctno LIKE '%$searchSTR%' OR c.conPerson LIKE '%$searchSTR%') AND q.onProcess=0",$conn);
+							WHERE ".$sCont." ".$condition." ORDER BY q.dateTrans",$conn) or die(mysql_error().' '.$sql.' '. __LINE__); 
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item sqID=\"".$row['sqID']."\" sq_quoteNo=\"".$row['sq_quoteNo']."\" quoteLabel=\"".number_pad($row['sqID'])."\" sq_custID=\"".$row['sq_custID']."\" acctno=\"".$row['acctno']."\" conPerson=\"".$row['conPerson']."\" sq_branchID=\"".$row['sq_branchID']."\" prepBy=\"".$row['prepBy']."\" apprBy=\"".$row['apprBy']."\" dateTrans=\"".$row['dateTrans']."\" sq_vat=\"".$row['sq_vat']."\" totalAmt=\"".$row['totalAmt']."\"/>";
+				$xml .= "<item sqID=\"".$row['sqID']."\" sq_quoteNo=\"".$row['sq_quoteNo']."\" quoteLabel=\"".number_pad($row['sqID'])."\" sq_custID=\"".$row['sq_custID']."\" acctno=\"".$row['acctno']."\" conPerson=\"".$row['conPerson']."\" sq_branchID=\"".$row['sq_branchID']."\" prepBy=\"".$row['prepBy']."\" apprBy=\"".$row['apprBy']."\" dateTrans=\"".$row['dateTrans']."\" sq_vat=\"".$row['sq_vat']."\" totalAmt=\"".$row['totalAmt']."\" sq_status=\"".$row['sq_status']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
@@ -102,7 +105,6 @@
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['sqID']?$row['sqID']:1;
 		echo number_pad($reqNum);
-		
 	}else if ($type == "change_stat"){
 		mysql_query("UPDATE salesQuote SET sq_status = $stat WHERE sqID = $sqID",$conn);
 	}

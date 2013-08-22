@@ -31,12 +31,12 @@
 		if (mysql_num_rows($query) > 0){
 			echo "$conPerson - $supCode Already Exist";
 		}else{
-		
-			$query = mysql_query("INSERT INTO supplier (supCode, supCompName, address, creditLine, tin, cus_term, conPerson, desig, phoneNum, mobileNum, email, web, isLocal, isDeleted) VALUES (\"$supCode\", $compName, \"$address\", \"$creditLine\", \"$tin\", $term, \"$conPerson\", \"$desig\", \"$phoneNum\", \"$mobileNum\",\"$email\", \"$web\", $local, $inactive)",$conn);
+			//echo "INSERT INTO supplier (supCode, supCompName, address, creditLine, tin, sup_term, conPerson, desig, phoneNum, mobileNum, email, web, isLocal, isDeleted) VALUES (\"$supCode\", \"$compName\", \"$address\", \"$creditLine\", \"$tin\", $term, \"$conPerson\", \"$desig\", \"$phoneNum\", \"$mobileNum\",\"$email\", \"$web\", $local, $inactive)";
+			$query = mysql_query("INSERT INTO supplier (supCode, supCompName, address, creditLine, tin, sup_term, conPerson, desig, phoneNum, mobileNum, email, web, isLocal, isDeleted) VALUES (\"$supCode\", \"$compName\", \"$address\", \"$creditLine\", \"$tin\", $term, \"$conPerson\", \"$desig\", \"$phoneNum\", \"$mobileNum\",\"$email\", \"$web\", $local, $inactive)",$conn);
 		}
 		
 	}else if ($type == "edit"){
-		mysql_query("UPDATE supplier SET supCode = '$supCode' , supCompName = $compName , address = '$address' , creditLine = '$creditLine' , tin = '$tin' , cus_term = '$term' , conPerson = '$conPerson' , desig = '$desig' , phoneNum = '$phoneNum' , mobileNum = '$mobileNum' , email = '$email' , web = '$web' , isLocal = $local, isDeleted = $inactive WHERE supID = $supID",$conn);
+		mysql_query("UPDATE supplier SET supCode = '$supCode' , supCompName = '$compName' , address = '$address' , creditLine = '$creditLine' , tin = '$tin' , sup_term = '$term' , conPerson = '$conPerson' , desig = '$desig' , phoneNum = '$phoneNum' , mobileNum = '$mobileNum' , email = '$email' , web = '$web' , isLocal = $local, isDeleted = $inactive WHERE supID = $supID",$conn);
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM supplier WHERE supID = '$supID'",$conn);
 	}else if ($type == "search"){
@@ -44,7 +44,7 @@
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$local = $row['isLocal']=="1"?"true":"false";
-				$xml .= "<item supID=\"".$row['supID']."\" supCode=\"".$row['supCode']."\" compName=\"".$row['supCompName']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['cus_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" local=\"".$local."\"/>";
+				$xml .= "<item supID=\"".$row['supID']."\" supCode=\"".$row['supCode']."\" compName=\"".$row['supCompName']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['sup_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" local=\"".$local."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
@@ -53,8 +53,11 @@
 	
 		$xml = "<root>";
 		while($row = mysql_fetch_assoc($query)){
-			$xml .= "<item supID=\"".$row['supID']."\" supCode=\"".$row['supCode']."\" compName=\"".$row['supCompName']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['cus_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" local=\"".$local."\"/>";
+			$local = $row['isLocal']=="1"?"true":"false";
+			$xml .= "<item supID=\"".$row['supID']."\" supCode=\"".$row['supCode']."\" compName=\"".$row['supCompName']."\" creditLine=\"".$row['creditLine']."\" address=\"".$row['address']."\" pNum=\"".$row['phoneNum']."\" mNum=\"".$row['mobileNum']."\" tin=\"".$row['tin']."\" term=\"".$row['sup_term']."\" conPerson=\"".$row['conPerson']."\" desig=\"".$row['desig']."\" email=\"".$row['email']."\" web=\"".$row['web']."\" local=\"".$local."\"/>";
 		}
 		$xml .= "</root>";
+		echo $xml;
 	}
+	//echo "CODE OK";
 ?>
