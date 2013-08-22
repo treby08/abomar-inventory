@@ -13,6 +13,7 @@
 			import com.adobe.cairngorm.control.CairngormEventDispatcher;
 			import com.module.events.DataListEvent;
 			import com.module.events.ItemsTransEvent;
+			import com.module.events.UserEvent;
 			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
 			
@@ -43,6 +44,7 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
+				var log2:DataListEvent;
 				switch(_sType){
 					case 0:
 						purReq.visible = purReq.includeInLayout = true;
@@ -51,7 +53,7 @@
 						cmbStatus.dataProvider = AccessVars.instance().arrStat
 						cmbStatus.selectedIndex = 0;
 						if (AccessVars.instance().branches == null){
-							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+							log2 = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 						}else
 							updateDataList();
@@ -63,7 +65,7 @@
 						cmbStatusPO.dataProvider = AccessVars.instance().arrStat
 						cmbStatusPO.selectedIndex = 0;
 						if (AccessVars.instance().supplier == null){
-							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_SUPPLIERS_LIST,{pBox:this})
+							log2 = new DataListEvent(DataListEvent.GET_SUPPLIERS_LIST,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 						}else
 							updateDataList();
@@ -73,7 +75,7 @@
 						sDate_wr.selectedDate = new Date();
 						eDate_wr.selectedDate = new Date();
 						if (AccessVars.instance().branches == null){
-							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+							log2 = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 						}else
 							updateDataList();
@@ -83,7 +85,7 @@
 						sDate_wd.selectedDate = new Date();
 						eDate_wd.selectedDate = new Date();
 						if (AccessVars.instance().branches == null){
-							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+							log2 = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 						}else
 							updateDataList();
@@ -91,11 +93,23 @@
 					case 4:
 						product.visible = product.includeInLayout = true;
 						if (AccessVars.instance().supplier == null){
-							var log2:DataListEvent = new DataListEvent(DataListEvent.GET_SUPPLIERS_LIST,{pBox:this})
+							log2 = new DataListEvent(DataListEvent.GET_SUPPLIERS_LIST,{pBox:this})
 							CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 						}else
 							updateDataList();
 					break;
+					case 5:
+						salesQuote.visible = salesQuote.includeInLayout = true;
+						sqDate.selectedDate = new Date();
+						eqDate.selectedDate = new Date();
+						cmbQStatus.dataProvider = AccessVars.instance().arrStat
+						cmbQStatus.selectedIndex = 0;
+						if (AccessVars.instance().customers == null){
+							var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
+							CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+						}else
+							updateDataList();
+						break;
 				}
 			}
 			
@@ -103,11 +117,13 @@
 			{
 				var log:ItemsTransEvent;
 				var condition:String;
+				var onProcess:String;
+				var condExp:String
 				switch (_sType){
 					case 0:
 						var condPurReqID:String = (reqNo.text == "")?"":"purReqID = "+String(int(reqNo.text))+" OR ";
-						var onProcess:String = cmbStatus.selectedItem.type==-1?"":" AND purReq_status="+cmbStatus.selectedItem.type;
-						var condExp:String = cmbStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"')";
+						onProcess = cmbStatus.selectedItem.type==-1?"":" AND purReq_status="+cmbStatus.selectedItem.type;
+						condExp = cmbStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"')";
 						condition = condPurReqID+"b.branchID ="+cmbBranch.selectedItem.branchID+onProcess+" "+condExp;
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:"null",condition:condition,qBox:mainComp})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
@@ -138,6 +154,14 @@
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"-1",pBox:mainComp,condition:condition})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
+					case 5:
+						var condSQID:String = (salesQuoteNo.text == "")?"":"q.sq_quoteNo = "+String(int(salesQuoteNo.text))+" OR";
+						onProcess = cmbQStatus.selectedItem.type==-1?"":"AND sq_status="+cmbQStatus.selectedItem.type;
+						condExp = cmbQStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(sqDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eqDate.selectedDate)+"')";
+						condition = condSQID+" "+"q.sq_custID ="+cmbCustomer.selectedItem.custID+" "+onProcess+" "+condExp;
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:"null",condition:condition,qBox:mainComp})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log);
+						break;
 				}
 				trace("condition",condition);
 				popPanel.cancelClickHandler(null);
@@ -171,6 +195,9 @@
 						cmbProdSupplier.selectedIndex = 0;
 					}
 				}
+				
+				if(AccessVars.instance().customers)
+					cmbCustomer.dataProvider = AccessVars.instance().customers;
 			}
 			
 		]]>
@@ -267,6 +294,28 @@
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="Inactive" width="100" textAlign="right"/>
 			<s:CheckBox id="cbInactive" selected="true"/>
+		</s:HGroup>
+	</s:VGroup>
+	<s:VGroup id="salesQuote" width="100%" visible="false" includeInLayout="false">
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Quote No." width="100" textAlign="right"/>
+			<s:TextInput id="salesQuoteNo" width="100%" restrict="0-9"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Account No." width="100" textAlign="right"/>
+			<s:ComboBox id="cmbCustomer" width="100%" tabIndex="2" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Status" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbQStatus" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Start Date" width="100" textAlign="right"/>
+			<mx:DateField id="sqDate" width="100%" showToday="true"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="End Date" width="100" textAlign="right"/>
+			<mx:DateField id="eqDate" width="100%" showToday="true"/>
 		</s:HGroup>
 	</s:VGroup>
 	<mx:HRule width="90%"/>

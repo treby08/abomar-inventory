@@ -319,12 +319,12 @@ package com.module.business
 			var obj:XML;
 						
 			if (str){
-				str+=_params.type!="change_stat"?" Quote Complete":"";
+				str+=_paramsQuote.type!="change_stat"?" Quote Complete":"";
 			
 				Alert.show(str, str2,4,null,function():void{
 					if (_paramsQuote.pBox){
-						if (_params.type == "change_stat")
-							_params.pBox.updateRenderer(_params.stat);
+						if (_paramsQuote.type == "change_stat")
+							_paramsQuote.pBox.updateRenderer(_paramsQuote.stat);
 						else if (str == "Adding")
 							_paramsQuote.pBox.clearFields(new MouseEvent(MouseEvent.CLICK));
 						else
