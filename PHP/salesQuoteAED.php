@@ -20,7 +20,7 @@
 		$sqID = $_REQUEST['sqID'];
 	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
 	}else if ($type == "get_details")
 		$sqID = $_REQUEST['sqID'];
 	else if ($type == "change_stat"){

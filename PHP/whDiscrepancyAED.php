@@ -11,13 +11,13 @@
 			$whdID = $_REQUEST['whdID'];
 	}else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
 	}else if ($type == "get_details"){
 		$whrID = $_REQUEST['whrID'];
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
 	}else if ($type == "get_exists"){
-		$whdID = $_REQUEST['whdID'];
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		//$whdID = $_REQUEST['whdID'];
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
 	}
 	if ($type == "edit"){
 		mysql_query("UPDATE wh_discrepancy SET whd_prepBy='$prepBy' , whd_checkBy='$checkBy' , dateTrans='$dateTrans' WHERE whdID = $whdID",$conn);

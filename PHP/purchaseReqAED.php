@@ -20,8 +20,8 @@
 		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
 	}else if ($type == "get_details"){
 		$purReqID = $_REQUEST['purReqID'];
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
-		$isPurOrd = $_REQUEST['isPurOrd']?$_REQUEST['isPurOrd']:"";
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
+		$isPurOrd = $_REQUEST['isPurOrd']!=""?$_REQUEST['isPurOrd']:"";
 	}else if ($type == "change_stat"){
 		$purReqID = $_REQUEST['purReqID'];
 		$stat = $_REQUEST['stat'];

@@ -22,8 +22,8 @@
 		$purReqID = $_REQUEST['purReqID'];
 	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-		$onProcess = $_REQUEST['onProcess']?$_REQUEST['onProcess']:0;
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		$onProcess = $_REQUEST['onProcess']!=""?$_REQUEST['onProcess']:0;
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
 	}else if ($type == "get_details"){
 		$purOrdID = $_REQUEST['purOrdID'];
 		//$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
@@ -66,7 +66,7 @@
 			$sql = "UPDATE `purchaseOrd` SET onProcess=0, purOrd_status=2 WHERE purOrdID=$purOrdID";
 			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 			
-			$sql = "INSERT INTO wh_discrepancy (whd_whrID) VALUES ($whr_whrID)";
+			$sql = "INSERT INTO wh_discrepancy (whd_whrID, dateTrans, whd_prepBy, whd_checkBy) VALUES ($whr_whrID, NOW(),'$prepBy', '$checkBy')";
 			$query = mysql_query($sql,$conn) or die(mysql_error().' $sql '. __LINE__);
 		}else{
 			$sql = "UPDATE `purchaseOrd` SET onProcess=1, purOrd_status=1 WHERE purOrdID=$purOrdID";
