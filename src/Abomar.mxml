@@ -45,7 +45,7 @@
 			
 			protected function preInit(event:FlexEvent):void
 			{
-				var configLoad:URLLoader = new URLLoader(new URLRequest("config/config.xml"));
+				var configLoad:URLLoader = new URLLoader(new URLRequest("config/config.xml?v=1"));
 				configLoad.addEventListener(Event.COMPLETE,configLoadComp);
 				
 				AccessVars.instance().test = parameters.test?parameters.test:0;
@@ -75,7 +75,7 @@
 			
 			private function initNonClosableTab():void
 			{
-				trace("tn.numChildren",tn.numChildren);
+				//trace("tn.numChildren",tn.numChildren);
 				tn.setClosePolicyForTab(0, SuperTab.CLOSE_NEVER);
 			}
 			
@@ -163,7 +163,11 @@
 							_cnv.label = "Invoice";
 						}else if (code == "sal_pay"){
 							objBox = new PaymentBox();
-							_cnv.label = "Payment";
+							_cnv.label = "Payment";						
+						}else if (code == "rep_sal_nsq"){							
+							objBox = new SalesQuoteBox();
+							SalesQuoteBox(objBox).isProcess = true;
+							_cnv.label = "Quote List";
 						}
 						
 					break;
