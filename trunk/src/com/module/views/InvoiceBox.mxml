@@ -39,7 +39,7 @@
 			}
 			
 			private function init():void{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
 				
@@ -503,7 +503,7 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:txtSearchStr.text,qBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:txtSearchStr.text,condition:"",qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 				btnEdit.visible = btnEdit.includeInLayout = false;

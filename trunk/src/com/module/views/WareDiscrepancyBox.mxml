@@ -202,7 +202,7 @@
 			protected function SearchClickHandler(event:MouseEvent):void
 			{			
 				if (!isProcess){
-					var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:txtSearchStr.text,qBox:this})
+					var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:txtSearchStr.text,condition:"",qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				}else{
 					var popPnl:PopupPanel = new PopupPanel();

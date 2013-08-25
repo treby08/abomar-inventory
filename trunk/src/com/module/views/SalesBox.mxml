@@ -39,7 +39,7 @@
 			}
 			
 			private function init():void{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				if (AccessVars.instance().branches == null){
 					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
@@ -358,7 +358,7 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:txtSearchStr.text,qBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:txtSearchStr.text,condition:"",qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 				btnEdit.visible = btnEdit.includeInLayout = false;

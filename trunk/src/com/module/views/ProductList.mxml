@@ -99,7 +99,7 @@
 					_isOpen = false;
 					anim.play(null,true);
 				}
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:txtSearchStr.text,pBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:txtSearchStr.text,condition:"",pBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
 				_type = 0;
@@ -542,10 +542,10 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
+				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
 					<s:TextInput prompt="[Supplier / Item/Model No.]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
-					<s:Button label="Search" click="SearchClickHandler(event)"/>
-					<s:Label text="Adv. Search" width="50" textAlign="center" color="blue" buttonMode="true" fontSize="10" textDecoration="underline" click="advSearch_clickHandler(event)"/>
+					<mx:Button width="28" height="28" click="SearchClickHandler(event)" buttonMode="true" styleName="btnSearch" toolTip="Search"/>
+					<s:Button label="Adv. Search" buttonMode="true" click="advSearch_clickHandler(event)"/>
 				</s:HGroup>
 				<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
 					<s:Label text="Item /Model No." width="65%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>

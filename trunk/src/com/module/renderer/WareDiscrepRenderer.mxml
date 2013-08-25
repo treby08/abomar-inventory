@@ -87,7 +87,7 @@
 				
 				/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_DISCREPANCY_NUMBER,{qBox:_theBox})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS,{whrID:obj.whrID,qBox:_theBox,itemRen:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS,{whrID:obj.whrID,qBox:_theBox,itemRen:this,condition:""})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				//_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = true;

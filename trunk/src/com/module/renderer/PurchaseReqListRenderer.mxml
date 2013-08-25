@@ -88,7 +88,7 @@
 					_theBox.reqStat.text = AccessVars.statLabel(int(obj.prStatus)).toUpperCase();
 					condition = " ";
 				}
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this,condition:condition})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_REQUISITION_DETAILS,{purReqID:obj.purReqID,qBox:_theBox,itemRen:this,condition:condition,isPurOrd:""})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				if (!_theBox.isProcess && int(obj.prStatus)!=1){
 					_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;

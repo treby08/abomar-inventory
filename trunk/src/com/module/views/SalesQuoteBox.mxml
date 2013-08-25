@@ -32,6 +32,7 @@
 			public var _data:Object;
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
+			public var isProcess:Boolean = false;
 			public var _salesNo:String = "000";
 			
 			public function set salesNo(val:String):void{
@@ -42,7 +43,7 @@
 			}
 			
 			private function init():void{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				if (AccessVars.instance().branches == null){
 					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
@@ -58,12 +59,18 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				dfDate.selectedDate = new Date(); 
-				
-				updateDataList();
-				genReqNoCode();
+				trace(isProcess)
+				if(isProcess == false){
+					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					dfDate.selectedDate = new Date(); 
+					
+					updateDataList();
+					genReqNoCode();
+				}else{
+					hgControl.visible = hgControl.includeInLayout = false;
+					gcRemove.visible = false;
+				}
 			}
 			
 			public function updateDataList():void{
@@ -472,7 +479,7 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:txtSearchStr.text,qBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:txtSearchStr.text,condition:"",qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 				btnEdit.visible = btnEdit.includeInLayout = false;
@@ -554,7 +561,7 @@
 			}
 			
 			public function updateRenderer(stat:int):void{
-				_data.stat = stat;
+				_data.sq_status = stat;
 				if (theOwner){
 					(theOwner as SalesQuoteRenderer).data = _data;
 				}
@@ -580,9 +587,14 @@
 				txtPrepBy.editable = value;
 				txtAppBy.editable = value;
 				dfDate.editable = dfDate.enabled = value;
-				gcRemove.visible = value;
+				if(!isProcess)
+					gcRemove.visible = value;
 				txtVat.editable = value
 				cmbBranch.enabled = value;
+				mainCont.enabled = !value;
+				//hgControl.visible = value;
+				//btnNew.visible = btnNew.includeInLayout = !value;
+				//btnEdit.visible = btnEdit.includeInLayout = !value;
 			}
 			
 		]]>
@@ -646,10 +658,6 @@
 							<s:Label text="Prepared By" width="90" textAlign="right"/>
 							<s:TextInput id="txtPrepBy" width="100%" styleName="required" valueCommit="{txtPrepBy.styleName = txtPrepBy.text==''?'required':''}"/>
 						</s:HGroup>
-						<s:HGroup id="statChange" width="100%" verticalAlign="middle" visible="false" includeInLayout="false" horizontalAlign="right">
-							<s:CheckBox label="InActive" id="cbCancel" selected="false" change="cbCancel_changeHandler(event)"/>
-							<s:Button label="Confirm" click="updateCancel_clickHandler(event)"/>
-						</s:HGroup>
 					</s:VGroup>
 					
 					<s:VGroup  width="60%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5">
@@ -673,7 +681,10 @@
 								<mx:Text id="txtSub" width="100%" text="0.00" textAlign="right" />
 							</s:HGroup>
 						</s:VGroup>
-						
+						<s:HGroup id="statChange" width="100%" verticalAlign="middle" visible="false" includeInLayout="false">
+							<s:CheckBox label="InActive" id="cbCancel" selected="false" change="cbCancel_changeHandler(event)"/>
+							<s:Button label="Confirm" click="updateCancel_clickHandler(event)"/>
+						</s:HGroup>
 						<!--<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom">
 						<s:HGroup verticalAlign="middle" paddingLeft="10">
 						<s:Label text="Stock:" backgroundColor="0xFCFCFC" fontWeight="bold"/>
@@ -697,7 +708,7 @@
 						gridItemEditorSessionStart="dg_gridItemEditorSessionStartHandler(event)">
 				<s:columns>
 					<s:ArrayList>
-						<s:GridColumn width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
+						<s:GridColumn id="gcRemove" width="20" itemRenderer="com.module.renderer.RemoveItemRenderer" editable="false"/>
 						<s:GridColumn width="40" dataField="num" headerText="No." editable="false" headerRenderer="com.module.renderer.GridHeadRenderer"/>
 						<s:GridColumn dataField="qty" headerText="Qty" width="40"  editable="true" headerRenderer="com.module.renderer.GridHeadRenderer"/>
 						<s:GridColumn dataField="modelNo" headerText="Item / Model No." width="120"  editable="false">
