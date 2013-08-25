@@ -32,7 +32,7 @@
 		$prodID = $_REQUEST['prodID'];
 	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr']==-1?"":$_REQUEST['searchstr'];
-		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+		$condition = $_REQUEST['condition']!=""?$_REQUEST['condition']:"";
 	}else if ($type == "get_price_list")
 		$prodID = $_REQUEST['prodID'];
 	
