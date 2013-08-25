@@ -34,7 +34,7 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				
 				var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST,{pBox:this})
@@ -438,7 +438,7 @@
 				var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PURORD_NUMBER,{qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PURORD,{searchstr:txtSearchStr.text,qBox:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PURORD,{searchstr:txtSearchStr.text,condition:"",qBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 			}
 						

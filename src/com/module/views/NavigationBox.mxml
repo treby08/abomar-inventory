@@ -112,6 +112,7 @@
 					case "sal_nsi":	
 					case "sal_nsq":
 					case "sal_pay":
+					case "rep_sal_nsq":
 						AccessVars.instance().mainApp.appChange(null,3,String(event.item.@code));
 					break;
 					case "cus_new":	

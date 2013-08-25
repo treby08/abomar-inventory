@@ -65,6 +65,7 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_QUOTE_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_QUOTE_NUMBER, ItemsTransCommand );
+			addCommand( ItemsTransEvent.CHANGE_QUOTE_STATUS, ItemsTransCommand );
 			
 			addCommand( ItemsTransEvent.ADD_REQUISITION, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_REQUISITION, ItemsTransCommand );

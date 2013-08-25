@@ -373,7 +373,7 @@ package com.module.business
 					 *<item sqID=\"".$row['sqID']."\" sq_quoteNo=\"".$row['sq_quoteNo']."\" quoteLabel=\"".number_pad($row['sqID'])."\" sq_custID=\"".$row['sq_custID']."\" 
 					acctno=\"".$row['acctno']."\" conPerson=\"".$row['conPerson']."\" sq_branchID=\"".$row['sq_branchID']."\" 
 					prepBy=\"".$row['prepBy']."\" apprBy=\"".$row['apprBy']."\" dateTrans=\"".$row['dateTrans']."\" sq_vat=\"".$row['sq_vat']."\" 
-					totalAmt=\"".$row['totalAmt']."\"/> 
+					totalAmt=\"".$row['totalAmt']."\" sq_status=\"".$row['sq_status']."\"/> 
 					*/
 					arrObj = new Object();
 					arrObj.sqID = obj.@sqID;
@@ -388,6 +388,7 @@ package com.module.business
 					arrObj.dateTrans = obj.@dateTrans;
 					arrObj.sq_vat = obj.@sq_vat;
 					arrObj.totalAmt = obj.@totalAmt;
+					arrObj.sq_status = obj.@sq_status;
 					arrCol.addItem(arrObj);
 				}
 				if (_paramsQuote.qBox){					

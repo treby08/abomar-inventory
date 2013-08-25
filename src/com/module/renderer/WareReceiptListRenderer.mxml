@@ -96,7 +96,7 @@
 				_theBox.txtPrepBy.text = _data.whr_preparedBy;
 				_theBox.txtCheckBy.text = _data.whr_checkedBy;
 				
-				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS,{whrID:obj.whrID,qBox:_theBox,itemRen:this})
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_WH_DISCREPANCY_DETAILS,{whrID:obj.whrID,qBox:_theBox,itemRen:this,condition:""})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
 				

@@ -282,7 +282,7 @@
 			{				
 				
 				if (!isProcess){
-					var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,condition:"",qBox:this})
+					var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:txtSearchStr.text,condition:"",onProcess:"",qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;

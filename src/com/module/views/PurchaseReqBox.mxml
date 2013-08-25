@@ -46,7 +46,7 @@
 			
 			private function init():void{
 				if (!isProcess){
-					var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+					var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log);
 				}
 				if(AccessVars.instance().branches == null){

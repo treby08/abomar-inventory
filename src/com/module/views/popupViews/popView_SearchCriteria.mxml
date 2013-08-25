@@ -125,33 +125,33 @@
 						onProcess = cmbStatus.selectedItem.type==-1?"":" AND purReq_status="+cmbStatus.selectedItem.type;
 						condExp = cmbStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(sDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eDate.selectedDate)+"')";
 						condition = condPurReqID+"b.branchID ="+cmbBranch.selectedItem.branchID+onProcess+" "+condExp;
-						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:"null",condition:condition,qBox:mainComp})
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_REQUISITION,{searchstr:"null",condition:condition,qBox:mainComp,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 1:
 						var condPurOrdID:String = (PONo.text == "")?"":"purOrdID = "+String(int(PONo.text))+" OR ";
 						var onProcessPO:String = cmbStatusPO.selectedItem.type==-1?"":" AND purOrd_status="+cmbStatusPO.selectedItem.type;
 						condition = condPurOrdID+"po.purOrd_supID ="+cmbSupplier.selectedItem.supID+onProcessPO+" OR (po.dateTrans >='"+setDateFormat(sDate_po.selectedDate)+"' AND po.dateTrans <='"+setDateFormat(eDate_po.selectedDate)+"')";
-						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:"null",qBox:mainComp,condition:condition})
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_RECEIPT,{searchstr:"null",qBox:mainComp,condition:condition,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 2:
 						var condWRID:String = (WRNo_wr.text == "")?"":"whrID = "+String(int(WRNo_wr.text))+" OR ";
 						condition = condWRID+"whr_branchID ="+cmbBranch_wr.selectedItem.branchID+" OR (whr_date >='"+setDateFormat(sDate_wr.selectedDate)+"' AND whr_date <='"+setDateFormat(eDate_wr.selectedDate)+"')";
-						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 3:
 						var condWDID:String = (WDNo_wd.text == "")?"":"whdID = "+String(int(WDNo_wd.text))+" OR ";
 						condition = condWDID+"whr_branchID ="+cmbBranch_wd.selectedItem.branchID+" OR (wd.dateTrans >='"+setDateFormat(sDate_wd.selectedDate)+"' AND wd.dateTrans <='"+setDateFormat(eDate_wd.selectedDate)+"')";
-						log = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition})
+						log = new ItemsTransEvent(ItemsTransEvent.GET_EXIST_WH_DISCREPANCY,{searchstr:"null",qBox:mainComp,condition:condition,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 4:
 						var condProd:String = (prodNo.text == "")?"":"prodCode LIKE '%"+String(int(prodNo.text))+"%' OR prodModel LIKE '%"+String(int(prodNo.text))+"%' AND ";
 						var inact:String = cbInactive.selected?"1":"0";
 						condition = condProd+"supplier ="+cmbProdSupplier.selectedItem.supID+" OR isDeleted="+inact
-						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"-1",pBox:mainComp,condition:condition})
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"-1",pBox:mainComp,condition:condition,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 					break;
 					case 5:
@@ -159,7 +159,7 @@
 						onProcess = cmbQStatus.selectedItem.type==-1?"":"AND sq_status="+cmbQStatus.selectedItem.type;
 						condExp = cmbQStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(sqDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eqDate.selectedDate)+"')";
 						condition = condSQID+" "+"q.sq_custID ="+cmbCustomer.selectedItem.custID+" "+onProcess+" "+condExp;
-						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:"null",condition:condition,qBox:mainComp})
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:"null",condition:condition,qBox:mainComp,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
 						break;
 				}
@@ -196,8 +196,10 @@
 					}
 				}
 				
-				if(AccessVars.instance().customers)
+				if(AccessVars.instance().customers){
 					cmbCustomer.dataProvider = AccessVars.instance().customers;
+					cmbCustomer.selectedIndex = 0;
+				}
 			}
 			
 		]]>

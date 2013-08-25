@@ -22,7 +22,7 @@
 			{				
 				cmbRemarks.dataProvider = AccessVars.instance().remarks;
 				addEventListener("closePanel",closeThisPanel);
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",sBox:this})
+				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log);
 			}
 						
