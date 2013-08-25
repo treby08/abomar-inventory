@@ -68,8 +68,10 @@
 					updateDataList();
 					genReqNoCode();
 				}else{
-					hgControl.visible = hgControl.includeInLayout = false;
+					hgControl.visible = false;
 					gcRemove.visible = false;
+					hgMain.visible = hgMain.includeInLayout = false;
+					hgAdv.visible = hgAdv.includeInLayout = true;
 				}
 			}
 			
@@ -614,10 +616,13 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
+			<s:HGroup id="hgMain" width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
 				<s:TextInput prompt="[Quote. No/Customer]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
 				<mx:Button width="28" height="28" click="SearchClickHandler(event)" buttonMode="true" styleName="btnSearch" toolTip="Search"/>
 				<s:Button label="Adv. Search" buttonMode="true" click="advSearch_clickHandler(event)"/>
+			</s:HGroup>
+			<s:HGroup id="hgAdv" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">
+				<s:Button label="Select Search Criteria " click="advSearch_clickHandler(event)" buttonMode="true" width="90%"/>				
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
 				<s:Label text="Quote No." width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
