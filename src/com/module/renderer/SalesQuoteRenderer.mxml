@@ -86,38 +86,22 @@
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_DETAILS,{sqID:obj.sqID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
-				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
-				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
-				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 				
 				if (obj.sq_status){
 					_theBox.cbCancel.selected = int(obj.sq_status)==3?true:false;
 					if (int(obj.sq_status)!=1 && int(obj.sq_status)!=3){
+						_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
+						_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
+						_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
 						_theBox.statChange.visible = _theBox.statChange.includeInLayout = false;
+						
 						_theBox.viewOnly(true);
 					}else{
 						_theBox.statChange.visible = _theBox.statChange.includeInLayout = true;
 						_theBox.viewOnly(false);
 					}
 				}
-				
-				/*if (!_theBox.isProcess && int(obj.prStatus)!=1){
-					_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
-					_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
-					_theBox.mainCont.enabled = false;
-					_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
-					_theBox.statChange.visible = _theBox.statChange.includeInLayout = true;
-				}else{
-					_theBox.mainCont.enabled = true;
-					if(int(obj.prStatus)==1){
-						_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
-						_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
-						_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = false;
-						_theBox.statChange.visible = _theBox.statChange.includeInLayout = false;
-						_theBox.viewOnly(false);
-					}
-				}*/
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void
