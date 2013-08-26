@@ -503,6 +503,24 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					statChange.visible = statChange.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					
+					prodBox.visible = prodBox.includeInLayout = true;
+					dg.editable = true;
+					dg.doubleClickEnabled = true;
+					txtPrepBy.editable = true;
+					txtAppBy.editable = true;
+					dfDate.editable = dfDate.enabled = true;
+					
+					gcRemove.visible = true;
+					txtVat.editable = true
+					cmbBranch.enabled = true;
+					cmbCustomer.enabled = true;
+					txtSalesNo.editable = true;
+					
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as SalesQuoteRenderer).isSelected = false;
+					}
+					
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
@@ -517,6 +535,24 @@
 					btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 					statChange.visible = statChange.includeInLayout = false;
 					btnEdit.visible = btnEdit.includeInLayout = false;
+					
+					prodBox.visible = prodBox.includeInLayout = true;
+					dg.editable = true;
+					dg.doubleClickEnabled = true;
+					txtPrepBy.editable = true;
+					txtAppBy.editable = true;
+					dfDate.editable = dfDate.enabled = true;
+					
+					gcRemove.visible = true;
+					txtVat.editable = true
+					cmbBranch.enabled = true;
+					cmbCustomer.enabled = true;
+					txtSalesNo.editable = true;
+					
+					for (var i:int =0; i < dgSearch.numElements; i++){
+						(dgSearch.getElementAt(i) as SalesQuoteRenderer).isSelected = false;
+					}
+					
 					clearFields(null);
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);

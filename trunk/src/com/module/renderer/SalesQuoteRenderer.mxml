@@ -88,7 +88,7 @@
 				
 				_theBox.mainCont.enabled = false;
 				
-				if (obj.sq_status){
+				if (obj.hasOwnProperty('sq_status')){
 					_theBox.cbCancel.selected = int(obj.sq_status)==3?true:false;
 					if (int(obj.sq_status)!=1 && int(obj.sq_status)!=3){
 						_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
