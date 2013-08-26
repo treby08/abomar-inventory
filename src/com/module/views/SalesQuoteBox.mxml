@@ -60,7 +60,7 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				trace(isProcess)
-				if(isProcess == false){
+				if(!isProcess){
 					var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
 					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
 					dfDate.selectedDate = new Date(); 
@@ -488,6 +488,7 @@
 				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
 				btnEdit.visible = btnEdit.includeInLayout = false;
 				mainCont.enabled = false;
+				clearFields(null);
 			}
 			
 			protected function btnNewclickHandler(event:MouseEvent):void
@@ -597,6 +598,7 @@
 					mainCont.enabled = !value;
 					txtVat.editable = value
 					cmbBranch.enabled = value;
+					btnEdit.visible = btnEdit.includeInLayout = !value;
 				}else{
 					
 					mainCont.enabled = true;
