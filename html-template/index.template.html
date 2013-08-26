@@ -41,6 +41,7 @@
             // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
+            flashvars.test=0
             var params = {};
             params.quality = "high";
             params.bgcolor = "${bgcolor}";
@@ -50,8 +51,9 @@
             attributes.id = "${application}";
             attributes.name = "${application}";
             attributes.align = "middle";
+            var ver = new Date();
             swfobject.embedSWF(
-                "${swf}.swf", "flashContent", 
+                "${swf}.swf?version="+ver, "flashContent", 
                 "${width}", "${height}", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);

@@ -1,3 +1,18 @@
+Abomar v1.0.3a - 8/27/2013
+ - update bugs on viewing quote on advance mode. (doesn't hide control buttons)
+ - update report viewing quote list function. (hide control buttons)
+ 
+Abomar v1.0.3 - 8/23/2013
+ - added Advance Search for Quote.
+ - updated db structure
+ - added help link button for user guide
+ - fixed errors and bugs on some module
+
+Abomar v1.0.2b - 8/21/2013
+ - fixed bugs on creating invoice without loading Quote
+ - accepts WR items without remarks. for fully served items
+ - add auto format on cash and check fields
+
 Abomar v1.0.2a - 8/20/2013
  - change UI for search button with adv search
  - PO: click a search item, SUBMIT PURCHASE ORDER appears without editing
