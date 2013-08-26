@@ -72,6 +72,8 @@
 					gcRemove.visible = false;
 					hgMain.visible = hgMain.includeInLayout = false;
 					hgAdv.visible = hgAdv.includeInLayout = true;
+					prodBox.visible = prodBox.includeInLayout = false;
+					statChange.visible = statChange.includeInLayout = true;
 				}
 			}
 			
@@ -582,18 +584,35 @@
 			}
 			
 			public function viewOnly(value:Boolean):void{
-				prodBox.visible = prodBox.includeInLayout = value;
-				dg.editable = value;
-				dg.doubleClickEnabled = value;
-				
-				txtPrepBy.editable = value;
-				txtAppBy.editable = value;
-				dfDate.editable = dfDate.enabled = value;
-				if(!isProcess)
+				if(!isProcess){
+					prodBox.visible = prodBox.includeInLayout = value;
+					dg.editable = value;
+					dg.doubleClickEnabled = value;
+					
+					txtPrepBy.editable = value;
+					txtAppBy.editable = value;
+					dfDate.editable = dfDate.enabled = value;
+					
 					gcRemove.visible = value;
-				txtVat.editable = value
-				cmbBranch.enabled = value;
-				mainCont.enabled = !value;
+					mainCont.enabled = !value;
+					txtVat.editable = value
+					cmbBranch.enabled = value;
+				}else{
+					
+					mainCont.enabled = true;
+					dg.editable = false;
+					dg.doubleClickEnabled = false;
+					txtPrepBy.editable = false;
+					txtAppBy.editable = false;
+					dfDate.editable = dfDate.enabled = false;
+					
+					gcRemove.visible = false;
+					txtVat.editable = false
+					cmbBranch.enabled = false;
+					cmbCustomer.enabled = false;
+					txtSalesNo.editable = false;
+				}
+				
 				//hgControl.visible = value;
 				//btnNew.visible = btnNew.includeInLayout = !value;
 				//btnEdit.visible = btnEdit.includeInLayout = !value;

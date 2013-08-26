@@ -45,7 +45,8 @@
 			
 			protected function preInit(event:FlexEvent):void
 			{
-				var configLoad:URLLoader = new URLLoader(new URLRequest("config/config.xml?v=1"));
+				var d:Date = new Date()
+				var configLoad:URLLoader = new URLLoader(new URLRequest("config/config.xml?v="+d.toDateString()));
 				configLoad.addEventListener(Event.COMPLETE,configLoadComp);
 				
 				AccessVars.instance().test = parameters.test?parameters.test:0;
