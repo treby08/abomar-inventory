@@ -598,7 +598,10 @@
 					mainCont.enabled = !value;
 					txtVat.editable = value
 					cmbBranch.enabled = value;
-					btnEdit.visible = btnEdit.includeInLayout = !value;
+					cmbCustomer.enabled = value;
+					txtSalesNo.editable = value;
+					
+					btnEdit.visible = btnEdit.includeInLayout = value;
 				}else{
 					
 					mainCont.enabled = true;
