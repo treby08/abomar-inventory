@@ -29,8 +29,8 @@
 		}
 		
 	}else if ($type == "edit"){
-		//echo "UPDATE branches SET bCode = '$bCode' , bLocation = '$bLoc' , lname = '$lname' , bAddress = '$address', bConPerson = '$conPerson', bDesig = '$desig' , bPhoneNum = '$phoneNum' , bMobileNum = '$mobileNum' , bEmailAdd = '$email' , bLocMap = '$LocMap' WHERE branchID = $branchID";
-		mysql_query("UPDATE branches SET bCode = '$bCode' , bLocation = '$bLoc' , lname = '$lname' , bAddress = '$address', bConPerson = '$conPerson', bDesig = '$desig' , bPhoneNum = '$phoneNum' , bMobileNum = '$mobileNum' , bEmailAdd = '$email' , bLocMap = '$LocMap' WHERE branchID = $branchID",$conn);
+		//echo "UPDATE branches SET bCode = '$bCode' , bLocation = '$bLoc' , bAddress = '$address', bConPerson = '$conPerson', bDesig = '$desig' , bPhoneNum = '$phoneNum' , bMobileNum = '$mobileNum' , bEmailAdd = '$email' , bLocMap = '$LocMap' WHERE branchID = $branchID";
+		mysql_query("UPDATE branches SET bCode = '$bCode' , bLocation = '$bLoc' , bAddress = '$address', bConPerson = '$conPerson', bDesig = '$desig' , bPhoneNum = '$phoneNum' , bMobileNum = '$mobileNum' , bEmailAdd = '$email' , bLocMap = '$LocMap' WHERE branchID = $branchID",$conn);
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM branches WHERE custID = '$custID'",$conn);
 	}else if ($type == "search"){
