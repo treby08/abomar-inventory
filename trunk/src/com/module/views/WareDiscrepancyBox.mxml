@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" minWidth="1000" minHeight="500"
-		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingLeft="10" paddingRight="10"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -283,10 +283,10 @@
 		<mx:NumberFormatter id="numFmttr" precision="2" useThousandsSeparator="true"  />
 	</fx:Declarations>
 	<!--<s:Label text="Purchase Order" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:HGroup id="searchWD" width="30%" height="100%" minWidth="320" maxWidth="350">
+	<s:HGroup id="searchWD" width="30%" height="100%" minWidth="320" maxWidth="350" paddingBottom="5" paddingTop="5">
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:layout>
-				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
+				<s:VerticalLayout paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5"/>
 			</s:layout>
 			<s:borderStroke> 
 				<mx:SolidColorStroke 
@@ -295,7 +295,7 @@
 			</s:borderStroke> 
 			<s:HGroup id="hgWD" width="100%" horizontalAlign="left" verticalAlign="middle" height="30">
 				<s:Label text="Search"/>
-				<s:TextInput prompt="[PO No./WR No./Supplier]" id="txtSearchStr" enter="SearchClickHandler(null)" width="180"/>
+				<s:TextInput prompt="[PO No./WR No./Supplier]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
 				<s:Button label="Search" click="SearchClickHandler(event)"/>
 			</s:HGroup>
 			<s:HGroup id="hgProcessWD" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">

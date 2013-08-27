@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" minWidth="1000" minHeight="550"
-		  xmlns:s="library://ns.adobe.com/flex/spark" paddingBottom="5" paddingLeft="10" paddingRight="10" paddingTop="5" initialize="init()"
+		  xmlns:s="library://ns.adobe.com/flex/spark" paddingLeft="10" paddingRight="10" initialize="init()"
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -499,10 +499,10 @@
 		<mx:NumberFormatter id="numFmttr" precision="2" useThousandsSeparator="true"  />
 	</fx:Declarations>
 	<!--<s:Label text="Sales Quote" fontWeight="bold" fontSize="18" fontStyle="italic"/>-->
-	<s:VGroup id="searchProd" width="25%" height="100%" minWidth="300" maxWidth="350">
+	<s:VGroup id="searchProd" width="25%" height="100%" minWidth="300" maxWidth="350" paddingBottom="5" paddingTop="5">
 		<s:BorderContainer width="100%" height="100%" cornerRadius="10" borderStyle="inset">
 			<s:layout>
-				<s:VerticalLayout paddingTop="5" paddingLeft="2" paddingRight="2" paddingBottom="5"/>
+				<s:VerticalLayout paddingTop="5" paddingLeft="5" paddingRight="5" paddingBottom="5"/>
 			</s:layout>
 			<s:borderStroke> 
 				<mx:SolidColorStroke 
