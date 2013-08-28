@@ -2,7 +2,7 @@ package com.variables
 {
 	public class SecurityType
 	{
-		public static var ADMIN:String = "administrator";
+		public static var ADMIN:String = "admin";
 		public static var MODERATOR:String = "moderator";
 		public static var ENCODER:String = "encoder";
 		

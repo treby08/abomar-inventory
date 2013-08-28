@@ -99,12 +99,17 @@
 					menNav.lblforTest.visible = AccessVars.instance().test ==1?true:false;
 				},100);
 				floatMenuVisible(true);
-				initNonClosableTab()
-				//PopUpManager.removePopUp(logPanel);				
-				//logPanel = null;
+				initNonClosableTab();
 				
-				
-					
+				var d:Date = new Date()
+				var configLoad:URLLoader = new URLLoader(new URLRequest("assets/menuXML/"+SecurityType.accessMode()+".xml?v="+d.toDateString()));
+				configLoad.addEventListener(Event.COMPLETE,configUserPriv);
+			}
+			
+			protected function configUserPriv(event:Event):void
+			{
+				var userPrivXML:XML = XML(event.target.data);
+				navBox.updateNavList(userPrivXML);
 			}
 			
 			public function initializeApp():void{

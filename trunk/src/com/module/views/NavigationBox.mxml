@@ -87,6 +87,11 @@
 				menuNav = new XMLListCollection(menuNavList);
 				
 			}
+			
+			public function updateNavList(dataXML:XML):void{
+				menuNav = new XMLListCollection(dataXML.children());
+			}
+			
 			[Embed(source="assets/icons/icon_sales.png")]
 			public var iconTwo_App:Class;
 			
@@ -118,6 +123,9 @@
 					case "cus_new":	
 					case "cus_lst":	
 						AccessVars.instance().mainApp.appChange(null,1,String(event.item.@code));
+					break;
+					case "branch":		
+						AccessVars.instance().mainApp.appChange(null,5,String(event.item.@code));
 					break;
 				}
 			}
