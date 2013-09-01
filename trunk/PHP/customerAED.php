@@ -16,7 +16,7 @@
 		
 		$conPerson = $_REQUEST['conPerson'];
 		$desig = $_REQUEST['desig'];
-		$bMobileNum = $_REQUEST['bMobileNum'];
+		//$bMobileNum = $_REQUEST['bMobileNum'];
 		$email = $_REQUEST['email'];
 		$web = $_REQUEST['web'];
 		if ($type == "edit")
