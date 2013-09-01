@@ -54,12 +54,13 @@
 				
 				_theBox.txtAcctNo.text = _data.acctno;
 				_theBox.txtCompName.text = _data.companyName;
+				//trace("_data.branchID",_data.branchID,"_data.branchId",_data.branchId)
 				_theBox.cmbOpenBranch.selectedIndex = _theBox.setSelectedItem(_theBox.arrBranch,"branchID",_data.branchID);
 				_theBox.txtAdd.text = _data.address;
 				_theBox.txtTin.text = _data.tin;
 				_theBox.txtCreditLine.text = _data.creditLine;
 				_theBox.cmbTerm.selectedIndex = _theBox.setSelectedItem(_theBox.arrTerm,"termId",_data.term);
-				trace("_data.inactive:",_data.inactive)
+				//trace("_data.inactive:",_data.inactive)
 				_theBox.cbInactive.selected = (_data.inactive as Boolean);
 				
 				_theBox.txtConName.text = _data.conPerson;

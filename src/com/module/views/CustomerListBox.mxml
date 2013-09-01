@@ -219,7 +219,7 @@
 			
 			public function updateDataList():void{
 				if(AccessVars.instance().branches){
-					cmbOpenBranch.dataProvider = AccessVars.instance().branches;			
+					cmbOpenBranch.dataProvider = arrBranch = AccessVars.instance().branches;			
 					cmbOpenBranch.selectedIndex = 0;
 				}
 			}

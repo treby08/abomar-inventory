@@ -178,7 +178,7 @@ package com.module.business
 					arrObj.custID = obj.@custID;
 					arrObj.acctno = obj.@acctno;
 					arrObj.companyName = obj.@companyName;
-					arrObj.branchID = obj.@branchID;
+					arrObj.branchID = obj.@branchId;
 					arrObj.creditLine = obj.@creditLine;
 					arrObj.address = obj.@address;
 					arrObj.pNum = obj.@pNum;
