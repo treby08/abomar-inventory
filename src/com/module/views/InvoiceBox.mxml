@@ -315,7 +315,7 @@
 				obj.dateTrans = setDateFormat(dfDate.selectedDate);
 				obj.totalAmt = txtGT.text.replace(/\b,\b/g,"");
 				obj.vat = txtVat.text.replace(/\b,\b/g,"");
-				//obj.salesQuoteID = _data?_data.sqID:"";
+				obj.salesQuoteID = _data?_data.sqID:"";
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					//strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.sqdID);
