@@ -10,16 +10,18 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import com.flexlib.controls.VerticalMenuBar;
 			import com.variables.AccessVars;
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.controls.menuClasses.MenuBarItem;
 			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
 			import mx.events.MenuEvent;
 			[Bindable]
 			private var menuNav:XMLListCollection;
-			
+			//private var vMenuBar:VerticalMenuBar;
 			private var menuNavList:XMLList = 
 				<>
 				<main icon="assets/icons/icon_inv.png" name="Purchasing">
@@ -84,12 +86,31 @@
 			</sub>*/
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				menuNav = new XMLListCollection(menuNavList);
-				
+				//menuNav = new XMLListCollection(menuNavList);
+				//createVerticalMenuBar()
 			}
 			
+			private function createVerticalMenuBar():void{
+				vMenuBar = new VerticalMenuBar();
+				vMenuBar.dataProvider = menuNav;
+				vMenuBar.direction = "right";
+				vMenuBar.labelField="@name";
+				vMenuBar.width=200;
+				vMenuBar.percentHeight=100;
+				vMenuBar.useHandCursor=true;
+				vMenuBar.buttonMode=true;
+				vMenuBar.setStyle("itemSkin",assets.skins.skin_menuBar);
+				vMenuBar.addEventListener(MouseEvent.CLICK,menuClickHandler);
+				vMenuBar.addEventListener(ItemClickEvent.ITEM_CLICK,itemClickHandler);
+				vMenuBar.setStyle("fontSize",16);
+				vMenuBar.setStyle("fontWeight","bold");
+				addElement(vMenuBar);
+				
+			}
 			public function updateNavList(dataXML:XML):void{
+				removeElement(vMenuBar);
 				menuNav = new XMLListCollection(dataXML.children());
+				createVerticalMenuBar()
 			}
 			
 			[Embed(source="assets/icons/icon_sales.png")]
@@ -134,10 +155,6 @@
 			{
 				if(VerticalMenuBar(event.currentTarget).selectedIndex == -1)
 					return;
-				/* trace(VerticalMenuBar(event.currentTarget).selectedIndex);
-				trace(VerticalMenuBar(event.currentTarget).getMenuAt(VerticalMenuBar(event.currentTarget).selectedIndex).dataProvider.length());
-				trace(VerticalMenuBar(event.currentTarget).getMenuAt(VerticalMenuBar(event.currentTarget).selectedIndex).dataProvider.toXMLString())
-				return; */
 				try{
 					var item:XML = XML(VerticalMenuBar(event.currentTarget).getMenuAt(VerticalMenuBar(event.currentTarget).selectedIndex).dataProvider.toXMLString());
 				}catch(e:Error){
@@ -164,8 +181,8 @@
 			
 		]]>
 	</fx:Script>
-	<controls:VerticalMenuBar dataProvider="{menuNav}" click="menuClickHandler(event)" iconField="{iconTwo_App}" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
+	<controls:VerticalMenuBar id="vMenuBar" dataProvider="{menuNav}" click="menuClickHandler(event)" direction="right" labelField="@name"  width="200" height="100%" useHandCursor="true"
 							  fontSize="16" fontWeight="bold" itemClick="itemClickHandler(event)" buttonMode="true" itemSkin="assets.skins.skin_menuBar">
 	
-	</controls:VerticalMenuBar>	
+	</controls:VerticalMenuBar>
 </s:Group>
