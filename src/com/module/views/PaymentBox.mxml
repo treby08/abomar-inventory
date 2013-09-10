@@ -363,7 +363,7 @@
 				
 				var obj:Object = new Object();
 				
-				if(dg.dataProviderLength == 0 && AccessVars.instance().invoiceList.length > 0){
+				/*if(dg.dataProviderLength == 0 && AccessVars.instance().invoiceList.length > 0){
 					
 					obj.num = arrCol.length+1;
 					obj.invID = -1;
@@ -383,6 +383,17 @@
 					arrCol.addItem(obj);
 					dg.dataProvider = arrCol;
 					
+				}else*/ 
+				if(AccessVars.instance().invoiceList && AccessVars.instance().invoiceList.length > 0){
+					if (arrCol.length > 0 && arrCol.getItemAt(dg.dataProviderLength-1).invID != -1){
+						obj.num = arrCol.length+1;
+						obj.invID = -1;
+						obj.amt = "0.00";
+						obj.credit = "0.00";
+						obj.totalAmt = "0.00";
+						arrCol.addItem(obj);
+						dg.dataProvider = arrCol;
+					}
 				}
 			}
 			
@@ -401,11 +412,11 @@
 				addPayItem();
 				if (!dg.selectedItem)return;
 				
-				dg.selectedItem.credit=txtAmtPaid.text;
-				dg.selectedItem.totalAmt=txtAmtPaid.text;
-				
-				dg.dataProvider.itemUpdated(dg.selectedItem);
-				
+				if((dg.selectedItem.acctNo == "" || dg.selectedItem.acctNo == undefined) && dg.selectedItem.credit == "0.00"){
+					dg.selectedItem.credit=txtAmtPaid.text;
+					dg.selectedItem.totalAmt=txtAmtPaid.text;
+					dg.dataProvider.itemUpdated(dg.selectedItem);
+				}
 				txtAmtPaid.text = "0.00";
 				var _totAmt:Number = 0;
 				for each (var item:Object in dg.dataProvider){
