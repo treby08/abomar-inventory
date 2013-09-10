@@ -40,6 +40,7 @@
 		$row = mysql_fetch_assoc($query);
 		$prd_payID = $row['payID'];
 		$arr_invID = array();
+		$arr_invID_process = array();
 		for ($i=0; $i < count($arr_payDetails); $i++){
 			$arrDetails = explode("|",$arr_payDetails[$i]);
 			//strItem.push(item.invID+"|"+item.amt+"|"+item.credit+"|"+item.totalAmt);
@@ -47,10 +48,14 @@
 			if ($arrDetails[1]-$arrDetails[2] == 0)
 				array_push($arr_invID,$arrDetails[0]);
 				
+			array_push($arr_invID_process,$arrDetails[0]);
 			mysql_query($sql,$conn) or die(mysql_error().' '.$sql.' '. __LINE__);
 		}
+		$sql = "UPDATE salesInvoice SET onProcess=1 , si_status=2 WHERE sqID IN (".implode(",",$arr_invID_process).")";
+			mysql_query($sql,$conn) or die(mysql_error().' '.$sql.' '. __LINE__);
+			
 		if (count($arr_invID) > 0){
-			$sql = "UPDATE salesInvoice SET onProcess=1 WHERE sqID IN (".implode(",",$arr_invID).")";
+			$sql = "UPDATE salesInvoice SET si_status=1 WHERE sqID IN (".implode(",",$arr_invID).")";
 			mysql_query($sql,$conn) or die(mysql_error().' '.$sql.' '. __LINE__);
 		}
 		

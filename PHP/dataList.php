@@ -23,7 +23,7 @@
 		$custID = $_REQUEST['custID'];
 		if ($custID)
 			$add = " AND sq_custID=".$custID;
-		$query = mysql_query('SELECT sqID,totalAmt,sq_quoteNo FROM salesInvoice WHERE onProcess=0'.$add,$conn);
+		$query = mysql_query('SELECT sqID,totalAmt,sq_quoteNo FROM salesInvoice WHERE si_status<>1'.$add,$conn);
 		/*SELECT sqID,totalAmt, pd.pd_amt, pd.pd_credit,sq_quoteNo,onProcess, pd.pd_amt- pd.pd_credit AS bal
 FROM payment p 
 INNER JOIN salesInvoice si ON p.pay_custID=si.sq_custID
@@ -31,7 +31,16 @@ INNER JOIN payment_details pd ON p.payID=pd.pd_payID AND pd.pd_amt>0 AND pd.pd_c
 WHERE  sq_custID=2 AND (pd.pd_amt-pd.pd_credit)<>0  ORDER BY `si`.`sqID` ASC*/
 		
 		while($row = mysql_fetch_assoc($query)){
-			$xml .= "<item invID=\"".$row['sqID']."\" totalAmt=\"".$row['totalAmt']."\" invIDLabel=\"".$row['sq_quoteNo']."\" />";
+			$query2 = mysql_query('SELECT  pd_invID,pd.pd_amt, pd.pd_credit, pd.pd_amt- pd.pd_credit AS bal
+								FROM payment_details pd
+								RIGHT JOIN salesInvoice si ON si.sqID=pd.pd_invID AND si.si_status<>1 AND si.si_status<>3
+								INNER JOIN payment p ON p.payID=pd.pd_payID 
+								WHERE si.sqID ='.$row['sqID'],$conn);
+			$row2 = mysql_fetch_assoc($query2);
+			if ($row2)
+				$xml .= "<item invID=\"".$row['sqID']."\" totalAmt=\"".$row2['bal']."\" invIDLabel=\"".$row['sq_quoteNo']."\" />";
+			else
+				$xml .= "<item invID=\"".$row['sqID']."\" totalAmt=\"".$row['totalAmt']."\" invIDLabel=\"".$row['sq_quoteNo']."\" />";
 		}
 	}else if ($type == "suppliers"){
 		$query = mysql_query('SELECT * FROM supplier',$conn);
