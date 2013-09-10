@@ -363,7 +363,7 @@
 				
 				var obj:Object = new Object();
 				
-				/*if(dg.dataProviderLength == 0 && AccessVars.instance().invoiceList.length > 0){
+				if(dg.dataProviderLength == 0 && AccessVars.instance().invoiceList.length > 0){
 					
 					obj.num = arrCol.length+1;
 					obj.invID = -1;
@@ -383,8 +383,7 @@
 					arrCol.addItem(obj);
 					dg.dataProvider = arrCol;
 					
-				}else*/ 
-				if(AccessVars.instance().invoiceList && AccessVars.instance().invoiceList.length > 0){
+				}else if(AccessVars.instance().invoiceList && AccessVars.instance().invoiceList.length > 0){
 					if (arrCol.length > 0 && arrCol.getItemAt(dg.dataProviderLength-1).invID != -1){
 						obj.num = arrCol.length+1;
 						obj.invID = -1;
