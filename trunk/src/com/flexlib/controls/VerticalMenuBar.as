@@ -26,6 +26,7 @@ package com.flexlib.controls
 	import com.flexlib.controls.menuClasses.VerticalMenuItemRenderer;
 	
 	import flash.display.DisplayObject;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -39,6 +40,7 @@ package com.flexlib.controls
 	import mx.events.MenuEvent;
 	import mx.managers.ISystemManager;
 	import mx.styles.ISimpleStyleClient;
+	import mx.utils.object_proxy;
 
 	[IconFile("VerticalMenuBar.png")]
 	
@@ -339,6 +341,31 @@ package com.flexlib.controls
 	    	
 	    	menu.move(pt.x, pt.y);
 	    }
+		private var dataProviderChanged:Boolean;
+		override public function set dataProvider(value:Object):void
+		{
+			super.dataProvider = value;
+			dataProviderChanged = false;
+		}
+		
+		public function removeMenuBarItemAt(index:int):void{
+			if (dataProviderChanged){
+				commitProperties();
+				dataProviderChanged = false;
+			}
+			
+			var item:IMenuBarItemRenderer = menuBarItems[index];
+			
+			if (item)
+			{
+				removeChild(DisplayObject(item));
+				menuBarItems.splice(index, 1);
+				invalidateSize();
+				invalidateDisplayList();
+				item=null;
+			}
+		}
+		
 	    
 	}
 }

@@ -114,6 +114,11 @@
 			
 			public function initializeApp():void{
 				floatMenuVisible(false);
+				if (tn.numChildren>1){
+					for(var i:int=tn.numChildren-1;i>=1;i--){
+						tn.removeElementAt(i);
+					}
+				}
 			}
 			
 			public function appChange(event:MouseEvent,type:int,code:String=""):void
