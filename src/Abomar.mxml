@@ -13,6 +13,7 @@
 			import com.module.views.CustomerListBox;
 			import com.module.views.InventoryBox;
 			import com.module.views.InvoiceBox;
+			import com.module.views.InvoiceListBox;
 			import com.module.views.LoginPanel;
 			import com.module.views.PaymentBox;
 			import com.module.views.ProductBox;
@@ -172,6 +173,11 @@
 						}else if (code == "sal_nsi"){
 							objBox = new InvoiceBox();
 							_cnv.label = "Invoice";
+						
+						}else if (code == "sal_nsil"){
+							objBox = new InvoiceListBox();
+							InvoiceListBox(objBox).isProcess = true;
+							_cnv.label = "Invoice List";
 						}else if (code == "sal_pay"){
 							objBox = new PaymentBox();
 							_cnv.label = "Payment";						

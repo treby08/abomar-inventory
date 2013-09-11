@@ -136,6 +136,7 @@
 						AccessVars.instance().mainApp.appChange(null,4,String(event.item.@code));
 					break;
 					case "sal_nsi":	
+					case "sal_nsil":	
 					case "sal_nsq":
 					case "sal_pay":
 					case "rep_sal_nsq":

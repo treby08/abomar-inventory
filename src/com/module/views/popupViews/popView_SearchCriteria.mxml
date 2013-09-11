@@ -110,6 +110,18 @@
 						}else
 							updateDataList();
 						break;
+					case 6:
+						salesInvoice.visible = salesInvoice.includeInLayout = true;
+						siDate.selectedDate = new Date();
+						eiDate.selectedDate = new Date();
+						cmbIStatus.dataProvider = AccessVars.instance().arrStat
+						cmbIStatus.selectedIndex = 0;
+						if (AccessVars.instance().customers == null){
+							var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
+							CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+						}else
+							updateDataList();
+					break;
 				}
 			}
 			
@@ -161,7 +173,15 @@
 						condition = condSQID+" "+"q.sq_custID ="+cmbCustomer.selectedItem.custID+" "+onProcess+" "+condExp;
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_QUOTE,{searchstr:"null",condition:condition,qBox:mainComp,onProcess:""})
 						CairngormEventDispatcher.getInstance().dispatchEvent(log);
-						break;
+					break;
+					case 4:
+						var condSIID:String = (salesQuoteNo.text == "")?"":"q.sq_quoteNo = "+String(int(salesInvoiceNo.text))+" OR";
+						onProcess = cmbIStatus.selectedItem.type==-1?"":"AND sq_status="+cmbQStatus.selectedItem.type;
+						condExp = cmbIStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(siDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eiDate.selectedDate)+"')";
+						condition = condSIID+" "+"q.sq_custID ="+cmbICustomer.selectedItem.custID+" "+onProcess+" "+condExp;
+						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_SALES,{searchstr:"null",condition:condition,qBox:mainComp,onProcess:""})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log);
+					break;
 				}
 				trace("condition",condition);
 				popPanel.cancelClickHandler(null);
@@ -197,8 +217,13 @@
 				}
 				
 				if(AccessVars.instance().customers){
-					cmbCustomer.dataProvider = AccessVars.instance().customers;
-					cmbCustomer.selectedIndex = 0;
+					if (_sType == 5){
+						cmbCustomer.dataProvider = AccessVars.instance().customers;
+						cmbCustomer.selectedIndex = 0;
+					}else if (_sType == 6){
+						cmbICustomer.dataProvider = AccessVars.instance().customers;
+						cmbICustomer.selectedIndex = 0;
+					}
 				}
 			}
 			
@@ -318,6 +343,28 @@
 		<s:HGroup width="100%" verticalAlign="middle">
 			<s:Label text="End Date" width="100" textAlign="right"/>
 			<mx:DateField id="eqDate" width="100%" showToday="true"/>
+		</s:HGroup>
+	</s:VGroup>
+	<s:VGroup id="salesInvoice" width="100%" visible="false" includeInLayout="false">
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Invoice No." width="100" textAlign="right"/>
+			<s:TextInput id="salesInvoiceNo" width="100%" restrict="0-9"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Customer" width="100" textAlign="right"/>
+			<s:ComboBox id="cmbICustomer" width="100%" tabIndex="2" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Status" width="100" textAlign="right"/>
+			<s:DropDownList id="cmbIStatus" width="100%" labelField="label"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="Start Date" width="100" textAlign="right"/>
+			<mx:DateField id="siDate" width="100%" showToday="true"/>
+		</s:HGroup>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:Label text="End Date" width="100" textAlign="right"/>
+			<mx:DateField id="eiDate" width="100%" showToday="true"/>
 		</s:HGroup>
 	</s:VGroup>
 	<mx:HRule width="90%"/>

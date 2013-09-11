@@ -9,6 +9,7 @@
 			import com.module.events.ItemsTransEvent;
 			import com.module.events.UserEvent;
 			import com.module.renderer.SalesInvoiceListRenderer;
+			import com.module.views.panels.PopupPanel;
 			import com.variables.AccessVars;
 			
 			import mx.collections.ArrayCollection;
@@ -30,6 +31,7 @@
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
 			public var _salesNo:String = "000";
+			public var isProcess:Boolean = false;
 			
 			public function set salesNo(val:String):void{
 				_salesNo = val;
@@ -39,29 +41,35 @@
 			}
 			
 			private function init():void{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-				
+				if (!isProcess){
+					var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_PRODUCT,{searchstr:"",condition:"",sBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log);
+				}
 				
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				/* var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3); */
 				dfDate.selectedDate = new Date(); 
 				
-				if (AccessVars.instance().branches == null){
-					var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+				if (!isProcess){
+					if (AccessVars.instance().branches == null){
+						var log2:DataListEvent = new DataListEvent(DataListEvent.GET_BRANCH_LIST2,{pBox:this})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log2);
+					}
+					
+					if (AccessVars.instance().customers == null){
+						var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
+						CairngormEventDispatcher.getInstance().dispatchEvent(log3);
+					}
+					
+					updateDataList();
+					
+				}else{
+					cont.visible = false;
+					hgMain.visible = hgMain.includeInLayout = false;
+					hgProcessSI.visible = hgProcessSI.includeInLayout = true;
 				}
-				
-				if (AccessVars.instance().customers == null){
-					var log3:UserEvent = new UserEvent(UserEvent.GET_CUSTOMER_LIST,{qBox:this})
-					CairngormEventDispatcher.getInstance().dispatchEvent(log3);
-				}
-				
-				updateDataList();
 			
 				//genReqNoCode();
 			}
@@ -132,6 +140,7 @@
 					var itemUser:SalesInvoiceListRenderer;
 					for each (var obj:Object in arrCol){
 						itemUser = new SalesInvoiceListRenderer()
+						itemUser.isProcess = isProcess;
 						itemUser.data = obj;
 						itemUser.theBox = this
 						dgSearch.addElement(itemUser);
@@ -293,19 +302,6 @@
 					return;
 				}
 				
-				/*
-				$sq_quoteNo = $_REQUEST['sq_quoteNo'];
-				$sq_branchID = $_REQUEST['sq_branchID'];
-				$sq_custID = $_REQUEST['sq_custID'];
-				$preparedBy = $_REQUEST['preparedBy'];
-				$approvedBy = $_REQUEST['approvedBy'];
-				$dateTrans = $_REQUEST['dateTrans'];
-				$totalAmt = $_REQUEST['totalAmt']; 
-				$vat = $_REQUEST['vat']; 
-				$sqDetails = $_REQUEST['sqDetails']; 
-				$sqID = $_REQUEST['sqID']; 
-				*/
-				
 				var obj:Object = {}
 				obj.sq_quoteNo = txtInvoiceNo.text;
 				obj.sq_branchID = cmbBranch.selectedItem.branchID;
@@ -322,10 +318,11 @@
 					strItem.push(item.prodID+"|"+item.qty+"|"+item.price+"|"+item.total);
 				}
 				obj.sqDetails = strItem.join("||");
+				
+				obj.sqID = _data.sqID;
 				obj.pBox = this;
-				trace("obj.sqDetails",obj.sqDetails);
-				var log2:ItemsTransEvent;
-				log2 = new ItemsTransEvent(ItemsTransEvent.ADD_SALES,obj)
+				_fromUpdate = true;
+				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.EDIT_SALES,obj)
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				/*if (_type==0){
 					log2 = new ItemsTransEvent(ItemsTransEvent.ADD_QUOTE,obj)
@@ -510,6 +507,18 @@
 				mainCont.enabled = false;
 			}
 			
+			protected function advSearch_clickHandler(event:MouseEvent):void
+			{
+				var popPnl:PopupPanel = new PopupPanel();
+				popPnl.width = searchProd.width;
+				//popPnl.height = undefined;
+				popPnl.popView = 2;
+				popPnl.mainID = "6";
+				popPnl.mainComp = this;
+				PopUpManager.addPopUp(popPnl,searchProd,true);
+				PopUpManager.centerPopUp(popPnl);
+			}
+			
 			protected function btnNewclickHandler(event:MouseEvent):void
 			{
 				
@@ -587,10 +596,13 @@
 					color="{AccessVars.instance().borderStrokeColor}" 
 					weight="2"/> 
 			</s:borderStroke> 
-			<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
-				<s:Label text="Search: "/>
+			<s:HGroup id="hgMain" width="100%" horizontalAlign="left" verticalAlign="middle" height="30" paddingRight="5">
 				<s:TextInput prompt="[Invoice. No/Customer]" id="txtSearchStr" enter="SearchClickHandler(null)" width="90%"/>
-				<s:Button label="Search" click="SearchClickHandler(event)"/>				
+				<mx:Button width="28" height="28" click="SearchClickHandler(event)" buttonMode="true" styleName="btnSearch" toolTip="Search"/>
+				<s:Button label="Adv. Search" buttonMode="true" click="advSearch_clickHandler(event)"/>
+			</s:HGroup>
+			<s:HGroup id="hgProcessSI" width="100%" horizontalAlign="center" verticalAlign="middle" height="30" paddingRight="5" visible="false" includeInLayout="false">
+				<s:Button label="Select Search Criteria " click="SearchClickHandler(event)" buttonMode="true" width="90%"/>				
 			</s:HGroup>
 			<s:HGroup width="100%" fontSize="14" horizontalAlign="center" fontWeight="bold" gap="2">
 				<s:Label text="Invoice No." width="25%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
