@@ -24,6 +24,7 @@
 			private var _isSelected:Boolean = false;
 			private var _theBox:InvoiceListBox;
 			public var isDispatch:Boolean = false;
+			public var isProcess:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
 			
@@ -57,8 +58,14 @@
 				txtCustomer.text = _data.acctno +" - "+_data.conPerson;
 				txtDate.text = _data.dateTrans;
 				
-				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
-				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
+				if (!isProcess){
+					hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
+					hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
+					hbCont2.visible = hbCont2.includeInLayout = false;
+					hbContStat.visible = hbContStat.includeInLayout = false;
+				}else {
+					
+				}
 			}
 			
 			protected function editClickHandler(event:MouseEvent):void
@@ -128,9 +135,17 @@
 		<s:Label id="txtSalesNo" width="25%" textAlign="center" />
 		<s:Label id="txtCustomer" width="50%" textAlign="center"/>
 		<s:Label id="txtDate" width="25%" textAlign="center" />
-		<!--<s:HGroup width="15%" horizontalAlign="center" paddingRight="5">
-			<s:Button icon="{DEFAULT_CLOSE_UP}" label="Cancel" click="deleteClickHandler(event)"  useHandCursor="true" buttonMode="true"/>
-		</s:HGroup>-->
+	</s:HGroup>
+	<s:HGroup id="hbCont2" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
+			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)" visible="false" includeInLayout="false">
+		<s:Label id="txtSalesNo" width="22%" textAlign="center" />
+		<s:Label id="txtCustomer" width="25%" textAlign="center"/>
+		<s:Label id="txtDate" width="25%" textAlign="center" />
+	</s:HGroup>
+	<s:HGroup id="hbContStat" width="28%" height="100%"  useHandCursor="true" buttonMode="true" verticalAlign="middle" visible="false" includeInLayout="false">
+		<s:Button id="btnCancel" width="100%" label="Cancel" click="cancel_clickHandler(event)" visible="false" includeInLayout="false"/>
+		<s:Button id="btnOpen" width="100%" label="Open" click="open_clickHandler(event)" visible="false" includeInLayout="false"/>
+		<s:Label id="lblStatus" width="100%" fontSize="12" horizontalCenter="0" textAlign="center"/>
 	</s:HGroup>
 	
 </s:Group>
