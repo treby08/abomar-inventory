@@ -20,11 +20,16 @@
 			$salesQuoteID = $_REQUEST['salesQuoteID'];
 	}else if ($type == "delete")
 		$sqID = $_REQUEST['sqID'];
-	else if ($type == "search")
+	else if ($type == "search"){
 		$searchSTR = $_REQUEST['searchstr'];
-	else if ($type == "get_details")
+		$condition = $_REQUEST['condition']?$_REQUEST['condition']:"";
+	}else if ($type == "get_details")
 		$sqID = $_REQUEST['sqID'];
-			
+	else if ($type == "change_stat"){
+		$sqID = $_REQUEST['sqID'];
+		$stat = $_REQUEST['stat'];
+	}
+
 	if ($type == "add"){
 		$sql = "INSERT INTO salesInvoice (sq_quoteNo, sq_custID, sq_branchID, prepBy, apprBy, dateTrans, timeTrans, sq_vat, totalAmt) VALUES ('$sq_quoteNo', $sq_custID, $sq_branchID, '$preparedBy', '$approvedBy', '$dateTrans', NOW(), $vat, $totalAmt)";
 		mysql_query($sql,$conn) or die(mysql_error().' '.$sql .' '. __LINE__);
@@ -68,11 +73,13 @@
 	}else if ($type == "delete"){
 		mysql_query("DELETE FROM salesInvoice WHERE sqID = '$sqID'",$conn);
 	}else if ($type == "search"){		
+		$condition = ($condition == "")?"onProcess=0":stripslashes($condition);
+		$sCont = ($searchSTR == "null")?"":"q.sq_quoteNo LIKE '%$searchSTR%' OR c.acctno LIKE '%$searchSTR%' OR c.conPerson LIKE '%$searchSTR%' AND";
 		
 		$query = mysql_query("SELECT q.*, c.acctno, c.conPerson, b.branchID, b.bCode, b.bLocation FROM salesInvoice q
 							INNER JOIN customers c ON c.custID=q.sq_custID
 							INNER JOIN branches b ON b.branchID=q.sq_branchID
-							WHERE q.sq_quoteNo LIKE '%$searchSTR%' OR c.acctno LIKE '%$searchSTR%' OR c.conPerson LIKE '%$searchSTR%' AND q.onProcess=0",$conn);
+							WHERE ".$sCont." ".$condition,$conn) or die(mysql_error().' '.$sql.' '. __LINE__); 
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
 				$xml .= "<item sqID=\"".$row['sqID']."\" sq_quoteNo=\"".$row['sq_quoteNo']."\" quoteLabel=\"".number_pad($row['sqID'])."\" sq_custID=\"".$row['sq_custID']."\" acctno=\"".$row['acctno']."\" conPerson=\"".$row['conPerson']."\" sq_branchID=\"".$row['sq_branchID']."\" prepBy=\"".$row['prepBy']."\" apprBy=\"".$row['apprBy']."\" dateTrans=\"".$row['dateTrans']."\" sq_vat=\"".$row['sq_vat']."\" totalAmt=\"".$row['totalAmt']."\"/>";
@@ -80,15 +87,11 @@
 		$xml .= "</root>";
 		echo $xml;
 	}else if ($type == "get_details"){
-		$query = mysql_query("SELECT sqdID,sqd_sqID,sqd_prodID,quantity,totalPurchase,
-							prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice,prodWeight 
-							FROM salesInvoice_details sqd 
-							INNER JOIN products p ON sqd.sqd_prodID=p.prodID
-							INNER JOIN branches b ON p.prod_branchID=b.branchID
-							WHERE sqd_sqID = $sqID AND isRemove = 0",$conn);
+		$query = mysql_query("SELECT sqdID,sqd_sqID,sqd_prodID,quantity,totalPurchase,			prodModel,prodCode,prodSubNum,prodComModUse,prodDescrip,srPrice,prodWeight FROM salesInvoice_details sqd INNER JOIN products p ON sqd.sqd_prodID=p.prodID INNER JOIN branches b ON p.prod_branchID=b.branchID WHERE sqd_sqID = $sqID AND isRemove = 0",$conn);
+		
 		$xml = "<root>";
 			while($row = mysql_fetch_assoc($query)){
-				$xml .= "<item sqdID=\"".$row['sqdID']."\" sqd_sqID=\"".$row['sqd_sqID']."\" sqd_prodID=\"".$row['sqd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\"/>";
+				$xml .= "<item sqdID=\"".$row['sqdID']."\" sqd_sqID=\"".$row['sqd_sqID']."\" sqd_prodID=\"".$row['sqd_prodID']."\" prodModel=\"".$row['prodModel']."\" desc=\"".$row['prodDescrip']."\" quantity=\"".$row['quantity']."\" totalPurchase=\"".$row['totalPurchase']."\" prodCode=\"".$row['prodCode']."\" prodSubNum=\"".$row['prodSubNum']."\" prodComModUse=\"".$row['prodComModUse']."\" srPrice=\"".$row['srPrice']."\" weight=\"".$row['prodWeight']."\" siStatus=\"".$row['si_status']."\"/>";
 			}
 		$xml .= "</root>";
 		echo $xml;
@@ -99,6 +102,8 @@
 		$row = mysql_fetch_assoc($query);
 		$reqNum = $row['sqID']?$row['sqID']:1;
 		echo number_pad($reqNum);
+	}else if ($type == "change_stat"){
+		mysql_query("UPDATE salesInvoice SET si_status = $stat WHERE sqID = $sqID",$conn);
 	}
 	
 	function number_pad($number) {
