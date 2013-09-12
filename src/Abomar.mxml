@@ -55,12 +55,10 @@
 			
 			protected function configLoadComp(event:Event):void
 			{
-				var configXML:XML = XML(event.target.data);
+				var configXML:XML = XML("<config>" +
+					"<http host=\"../flexServices\" imgPath=\"../images/\"/>" +
+					"</config>");//XML(event.target.data);
 				trace("configXML:",configXML.toXMLString())
-				/* SecurityType.HOST = configXML.@host;
-				SecurityType.DBUSER = configXML.@user;
-				SecurityType.DBPASS = configXML.@pass;
-				SecurityType.DBNAME = configXML.@dbname; */
 				SecurityType.HTTP_HOST = configXML.http.@host;
 				SecurityType.IMG_PATH = configXML.http.@imgPath;
 				
@@ -176,7 +174,7 @@
 						
 						}else if (code == "sal_nsil"){
 							objBox = new InvoiceListBox();
-							InvoiceListBox(objBox).isProcess = true;
+							//InvoiceListBox(objBox).isProcess = true;
 							_cnv.label = "Invoice List";
 						}else if (code == "sal_pay"){
 							objBox = new PaymentBox();

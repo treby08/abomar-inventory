@@ -176,7 +176,7 @@
 					break;
 					case 4:
 						var condSIID:String = (salesQuoteNo.text == "")?"":"q.sq_quoteNo = "+String(int(salesInvoiceNo.text))+" OR";
-						onProcess = cmbIStatus.selectedItem.type==-1?"":"AND sq_status="+cmbQStatus.selectedItem.type;
+						onProcess = cmbIStatus.selectedItem.type==-1?"":"AND si_status="+cmbQStatus.selectedItem.type;
 						condExp = cmbIStatus.selectedItem.type==-1?"":"OR (dateTrans >='"+setDateFormat(siDate.selectedDate)+"' AND dateTrans <='"+setDateFormat(eiDate.selectedDate)+"')";
 						condition = condSIID+" "+"q.sq_custID ="+cmbICustomer.selectedItem.custID+" "+onProcess+" "+condExp;
 						log = new ItemsTransEvent(ItemsTransEvent.SEARCH_SALES,{searchstr:"null",condition:condition,qBox:mainComp,onProcess:""})
