@@ -58,6 +58,7 @@ package com.module.control
 			addCommand( ItemsTransEvent.SEARCH_SALES, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_SALES_DETAILS, ItemsTransCommand );
 			addCommand( ItemsTransEvent.GET_SALES_NUMBER, ItemsTransCommand );
+			addCommand( ItemsTransEvent.CHANGE_SALESINV_STATUS, ItemsTransCommand );
 			
 			addCommand( ItemsTransEvent.ADD_QUOTE, ItemsTransCommand );
 			addCommand( ItemsTransEvent.EDIT_QUOTE, ItemsTransCommand );

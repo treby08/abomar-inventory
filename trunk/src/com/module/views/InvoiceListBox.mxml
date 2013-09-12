@@ -298,7 +298,7 @@
 					return;
 				}
 				if (cmbCustomer.selectedIndex == -1){
-					Alert.show("No Custoemr Selected","Submit Invoice Error");
+					Alert.show("No Customer Selected","Submit Invoice Error");
 					return;
 				}
 				
@@ -315,10 +315,10 @@
 				var strItem:Array = new Array();
 				for each (var item:Object in dg.dataProvider){
 					//strItem.push(item.prodDBID+"|"+item.qty+"|"+item.total+"|"+item.sqdID);
-					strItem.push(item.prodID+"|"+item.qty+"|"+item.price+"|"+item.total);
+					strItem.push(item.prodID+"|"+item.qty+"|"+item.price+"|"+item.total+"|"+item.sqdID);
 				}
 				obj.sqDetails = strItem.join("||");
-				
+				trace("obj.sqDetails:", obj.sqDetails)
 				obj.sqID = _data.sqID;
 				obj.pBox = this;
 				_fromUpdate = true;
@@ -406,7 +406,7 @@
 			protected function btnAdd_keyUpHandler(event:KeyboardEvent):void
 			{
 				if(event.keyCode == Keyboard.ENTER)
-					(event.target as Button).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+					event.target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 			}
 			
 			
@@ -417,11 +417,6 @@
 				}
 			}
 			
-			/*protected function dg_gridItemEditorSessionSave(event:GridItemEditorEvent):void
-			{
-				var item:Object = event.column.grid.dataGrid.selectedItem;
-				item.total = Number(item.qty * item.price);
-				dg.dataProvider.itemUpdated(item);*/
 			private var prevQty:int = 1;
 			protected function dg_gridItemEditorSessionStartHandler(event:GridItemEditorEvent):void
 			{
@@ -500,11 +495,21 @@
 			
 			protected function SearchClickHandler(event:MouseEvent):void
 			{
-				var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_SALES,{searchstr:txtSearchStr.text,condition:"",qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log);
-				btnCheckOut.visible = btnCheckOut.includeInLayout = false;
-				btnEdit.visible = btnEdit.includeInLayout = false;
-				mainCont.enabled = false;
+				if (!isProcess){
+					var log:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.SEARCH_SALES,{searchstr:txtSearchStr.text,condition:"",sBox:this})
+					CairngormEventDispatcher.getInstance().dispatchEvent(log);
+					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+					btnEdit.visible = btnEdit.includeInLayout = false;
+					mainCont.enabled = false;
+				}else{
+					var popPnl:PopupPanel = new PopupPanel();
+					popPnl.width = searchProd.width;
+					popPnl.popView = 2;
+					popPnl.mainID = "6";
+					popPnl.mainComp = this;
+					PopUpManager.addPopUp(popPnl,searchProd,true);
+					PopUpManager.centerPopUp(popPnl);
+				}
 			}
 			
 			protected function advSearch_clickHandler(event:MouseEvent):void
@@ -754,7 +759,7 @@
 		<mx:HRule height="5" width="100%"/>
 		<s:HGroup id="hgControl" width="100%" height="100%" paddingBottom="5" paddingTop="5" paddingLeft="5" paddingRight="5"
 				  horizontalAlign="left" verticalAlign="top">						
-			<s:Button id="btnCheckOut" label="Submit Invoice" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnCheckOut" label="Save Changes" click="CheckOutclickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Spacer width="100%"/>
 			<s:Button id="btnEdit"  label="Edit Invoice" click="editClickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnView"  label="View Invoice" click="printPrevPO()" visible="false" includeInLayout="false"/>

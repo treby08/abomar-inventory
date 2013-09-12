@@ -57,11 +57,15 @@ package com.module.commands
 				case ItemsTransEvent.GET_SALES_DETAILS:
 					obj.type = "get_details";
 					ItemsTransDelegate.instance().sales_AED(obj);
-					break;
+				break;
 				case ItemsTransEvent.GET_SALES_NUMBER:
 					obj.type = "get_sales_no";
 					ItemsTransDelegate.instance().sales_No(obj);
-					break;
+				break;
+				case ItemsTransEvent.CHANGE_SALESINV_STATUS:
+					obj.type = "change_stat";
+					ItemsTransDelegate.instance().sales_AED(obj);
+				break;
 				
 				
 				/*QOUTATION*/

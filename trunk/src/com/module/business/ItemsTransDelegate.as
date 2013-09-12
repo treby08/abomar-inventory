@@ -162,6 +162,7 @@ package com.module.business
 			trace("Sales_AED_onResult",strResult);
 			
 			var str:String;
+			var str2:String = "Invoice";
 			switch(_params.type){
 				case "add":
 					str="Adding";
@@ -172,6 +173,9 @@ package com.module.business
 				case "delete":
 					str="Deleting";
 					break;
+				case "change_stat":
+					str="Status Changed";
+					break;
 			}
 			
 			if (strResult != "" && str != null){
@@ -180,9 +184,13 @@ package com.module.business
 			}
 			
 			if (str){
-				Alert.show(str+" Invoice Complete.", str+" Invoice",4,null,function():void{
+				str+=_params.type!="change_stat"?" Invoice Complete":"";
+				
+				Alert.show(str, str2,4,null,function():void{
 					if (_params.pBox){
-						if (str == "Adding")
+						if (_params.type == "change_stat")
+							_params.pBox.updateRenderer(_params.stat);
+						else if (str == "Adding")
 							_params.pBox.updateCurrentInvoice();
 						else
 							_params.pBox.clearFields(null);
@@ -193,7 +201,7 @@ package com.module.business
 					}
 					_params = null;
 				});
-			}else if (_paramsQuote.type=="get_details"){
+			}else if (_params.type=="get_details"){
 				listXML = XML(evt.result);
 				arrCol = new ArrayCollection();
 				var num:int = 1;
@@ -218,11 +226,11 @@ package com.module.business
 					arrCol.addItem(arrObj);
 					num++;
 				}
-				if (_paramsQuote.qBox){
-					_paramsQuote.itemRen.isDispatch = false;
-					_paramsQuote.qBox.setDataProvider(arrCol,3);
-					_paramsQuote.qBox = null;
-					_paramsQuote = null;
+				if (_params.qBox){
+					_params.itemRen.isDispatch = false;
+					_params.qBox.setDataProvider(arrCol,3);
+					_params.qBox = null;
+					_params = null;
 				}
 			}else{
 				var listXML:XML = XML(evt.result);
@@ -234,6 +242,9 @@ package com.module.business
 					arrObj.sq_quoteNo = obj.@sq_quoteNo;
 					arrObj.sq_custID = obj.@sq_custID;
 					arrObj.sq_branchID = obj.@sq_branchID;
+					arrObj.acctno = obj.@acctno;
+					arrObj.conPerson = obj.@conPerson;
+					arrObj.siStatus = obj.@siStatus;
 					arrObj.prepBy = obj.@prepBy;
 					arrObj.apprBy = obj.@apprBy;
 					arrObj.dateTrans = obj.@dateTrans;
@@ -247,7 +258,7 @@ package com.module.business
 					_params.qBox = null;
 					_params = null;
 				}else if (_params.sBox){
-					_params.sBox.setDataProvider(arrCol,0);
+					_params.sBox.dataCollection = arrCol;
 					_params.sBox = null;
 					_params = null;
 				}
