@@ -172,9 +172,10 @@
 							objBox = new InvoiceBox();
 							_cnv.label = "Invoice";
 						
-						}else if (code == "sal_nsil"){
+						}else if (code == "sal_nsil" || code == "rep_sal_nsi"){
 							objBox = new InvoiceListBox();
-							//InvoiceListBox(objBox).isProcess = true;
+							if(code == "rep_sal_nsi")
+								InvoiceListBox(objBox).isProcess = true;
 							_cnv.label = "Invoice List";
 						}else if (code == "sal_pay"){
 							objBox = new PaymentBox();
