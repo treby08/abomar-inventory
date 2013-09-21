@@ -63,12 +63,12 @@
 				if (!isProcess){
 					txtSalesNo.percentWidth = 25
 					txtCustomer.percentWidth = 50
-					txtSalesNo.percentWidth = 25
+					txtDate.percentWidth = 25
 					hbContStat.visible = hbContStat.includeInLayout = false;
 				}else {
-					txtSalesNo.percentWidth = 22
-					txtCustomer.percentWidth = 25
-					txtSalesNo.percentWidth = 25
+					txtSalesNo.percentWidth = 33
+					txtCustomer.percentWidth = 33
+					txtDate.percentWidth = 33
 					hbContStat.visible = hbContStat.includeInLayout = true;
 				}
 			}
@@ -83,6 +83,7 @@
 				isDispatch = true;
 				_theBox.theOwner = this;
 				_theBox.clearFields(null);
+				//_theBox.isProcess = isProcess;
 				
 				var obj:Object = _theBox._data = _data;
 								
@@ -101,11 +102,28 @@
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_SALES_DETAILS,{sqID:obj.sqID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
-				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
+				/*_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
 				//_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
 				_theBox.mainCont.enabled = false;
 				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = !isProcess;
-				_theBox.btnView.visible = _theBox.btnView.includeInLayout = isProcess;
+				_theBox.btnView.visible = _theBox.btnView.includeInLayout = isProcess;*/
+				_theBox.mainCont.enabled = false;
+				_theBox.btnView.visible = _theBox.btnView.includeInLayout = true;
+				if (obj.hasOwnProperty('si_status')){
+					_theBox.cbCancel.selected = int(obj.si_status)==3?true:false;
+					if (int(obj.si_status)!=1 && int(obj.si_status)!=2 && int(obj.si_status)!=3){
+						_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
+						//_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
+						_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+						//_theBox.statChange.visible = _theBox.statChange.includeInLayout = false;
+						
+						_theBox.viewOnly(true);
+					}else{
+						//if(int(obj.si_status)!=1)
+						_theBox.statChange.visible = _theBox.statChange.includeInLayout = false;
+						_theBox.viewOnly(false);
+					}
+				}
 			}
 			
 			
@@ -158,16 +176,18 @@
 	<s:Rect width="100%" height="100%">
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" verticalAlign="middle" 
-			  useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
-		<s:Label id="txtSalesNo" width="25%" textAlign="center" />
-		<s:Label id="txtCustomer" width="50%" textAlign="center"/>
-		<s:Label id="txtDate" width="25%" textAlign="center" />
+	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14">
+		<s:HGroup width="77%" height="100%" verticalAlign="middle" useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
+			<s:Label id="txtSalesNo" width="25%" textAlign="center" />
+			<s:Label id="txtCustomer" width="50%" textAlign="center"/>
+			<s:Label id="txtDate" width="25%" textAlign="center" />
+		</s:HGroup>
+		<s:HGroup id="hbContStat" width="23%" height="100%" useHandCursor="true" buttonMode="true" verticalAlign="middle" visible="false" includeInLayout="false">
+			<s:Button id="btnCancel" width="100%" label="Cancel" click="cancel_clickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Button id="btnOpen" width="100%" label="Open" click="open_clickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Label id="lblStatus" width="100%" fontSize="12" horizontalCenter="0" textAlign="center"/>
+		</s:HGroup>
 	</s:HGroup>
-	<s:HGroup id="hbContStat" width="28%" height="100%"  useHandCursor="true" buttonMode="true" verticalAlign="middle" visible="false" includeInLayout="false">
-		<s:Button id="btnCancel" width="100%" label="Cancel" click="cancel_clickHandler(event)" visible="false" includeInLayout="false"/>
-		<s:Button id="btnOpen" width="100%" label="Open" click="open_clickHandler(event)" visible="false" includeInLayout="false"/>
-		<s:Label id="lblStatus" width="100%" fontSize="12" horizontalCenter="0" textAlign="center"/>
-	</s:HGroup>
+	
 	
 </s:Group>

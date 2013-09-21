@@ -137,6 +137,7 @@
 					break;
 					case "sal_nsi":	
 					case "sal_nsil":	
+					case "rep_sal_nsi":	
 					case "sal_nsq":
 					case "sal_pay":
 					case "rep_sal_nsq":

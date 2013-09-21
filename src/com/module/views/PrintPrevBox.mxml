@@ -137,7 +137,7 @@
 					break;
 					case 2:// Invoice
 						var pntInv:PrintInvoice = new PrintInvoice();
-						pntInv.salesBox = _salesBox as InvoiceBox;
+						pntInv.salesBox = _salesBox ;//as InvoiceBox;
 						pntInv.orderTypeText = String(arrOrderType.getItemAt(_orderTypeID).name).toUpperCase();
 						childCanvas.addElement(pntInv);
 					break;

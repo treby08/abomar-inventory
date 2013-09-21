@@ -1,6 +1,7 @@
 package com.module.business
 {
 	
+	import com.module.views.InvoiceListBox;
 	import com.module.views.ProductBox;
 	import com.module.views.PurchaseOrderBox;
 	import com.module.views.SalesBox;
@@ -244,7 +245,8 @@ package com.module.business
 					arrObj.sq_branchID = obj.@sq_branchID;
 					arrObj.acctno = obj.@acctno;
 					arrObj.conPerson = obj.@conPerson;
-					arrObj.siStatus = obj.@siStatus;
+					arrObj.si_status = obj.@si_status;
+					arrObj.onProcess = obj.@onProcess;
 					arrObj.prepBy = obj.@prepBy;
 					arrObj.apprBy = obj.@apprBy;
 					arrObj.dateTrans = obj.@dateTrans;
