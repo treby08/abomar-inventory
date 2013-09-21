@@ -20,11 +20,11 @@
 			
 			import spark.utils.TextFlowUtil;
 			
-			private var _salesBox:InvoiceBox;
+			private var _salesBox:Object;
 			private var _orderTypeText:String;
 			private var _totWeight:Number = 0;
 			
-			public function set salesBox(value:InvoiceBox):void{
+			public function set salesBox(value:Object):void{
 				_salesBox = value;
 			}
 			public function set orderTypeText(value:String):void{
