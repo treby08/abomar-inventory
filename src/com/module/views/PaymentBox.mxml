@@ -30,6 +30,7 @@
 			private var _fromUpdate:Boolean = false;
 			public var theOwner:Object;
 			public var _salesNo:String = "000";
+			public var isProcess:Boolean = false;
 			
 			public function set salesNo(val:String):void{
 				_salesNo = val;
@@ -52,8 +53,19 @@
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				/*var log3:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_QUOTE_NUMBER,{qBox:this})
-				CairngormEventDispatcher.getInstance().dispatchEvent(log3);*/
+				if (isProcess){
+					dfDate.enabled = false;
+					cmbCustomer.enabled = false;
+					txtORNo.editable = false;
+					hgAmtPaid.visible = hgAmtPaid.includeInLayout = false;
+					bcTrans.visible = bcTrans.includeInLayout = false;
+					txtPrepBy.editable = false;
+					
+					btnNew.visible = btnNew.includeInLayout = false;
+					btnCheckOut.visible = btnCheckOut.includeInLayout = false;
+					btnEdit.visible = btnEdit.includeInLayout = false;
+					btnView.visible = btnView.includeInLayout = true;
+				}
 				dfDate.selectedDate = new Date(); 
 				dg.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE,propChange);
 			}
@@ -567,7 +579,7 @@
 							<s:Label text="TIN No." width="100" textAlign="right"/>
 							<s:TextInput id="txtTin" width="100%" editable="false"/>
 						</s:HGroup>
-						<s:HGroup width="100%" verticalAlign="middle">
+						<s:HGroup id="hgAmtPaid" width="100%" verticalAlign="middle">
 							<s:Label text="Amount Paid" width="100" textAlign="right"/>
 							<s:TextInput id="txtAmtPaid" width="100%" textAlign="right" text="0.00" restrict="0-9." focusIn="selectAllfocusInHandler(event)"/>
 							<s:Button id="btnAdd" label="Add Payment" click="btnAddclickHandler(event)" enabled="false" toolTip="Select Customer First"/>
@@ -577,7 +589,7 @@
 			</s:BorderContainer>
 			<s:Spacer height="5"/>
 			<s:HGroup width="100%" gap="0">
-				<s:BorderContainer cornerRadius="3" borderStyle="solid" height="100%">
+				<s:BorderContainer cornerRadius="3" borderStyle="solid" height="100%" id="bcTrans">
 					<s:borderStroke> 
 						<mx:SolidColorStroke 
 							color="0xCCCCCC" 

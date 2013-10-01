@@ -61,15 +61,18 @@
 				hbCont.addEventListener(MouseEvent.MOUSE_OVER,itemMouseOver);
 				hbCont.addEventListener(MouseEvent.MOUSE_OUT,itemMouseOut);
 				if (!isProcess){
+					//hbCont.percentWidth = 100;
 					txtSalesNo.percentWidth = 25
 					txtCustomer.percentWidth = 50
 					txtDate.percentWidth = 25
 					hbContStat.visible = hbContStat.includeInLayout = false;
 				}else {
+					//hbCont.percentWidth = 77;
 					txtSalesNo.percentWidth = 33
 					txtCustomer.percentWidth = 33
 					txtDate.percentWidth = 33
 					hbContStat.visible = hbContStat.includeInLayout = true;
+					
 				}
 			}
 			
@@ -176,13 +179,14 @@
 	<s:Rect width="100%" height="100%">
 		<s:fill><s:SolidColor color="{AccessVars.instance().colBgColor}" alpha="0.5" id="sFill"/></s:fill>
 	</s:Rect>
-	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14">
-		<s:HGroup width="77%" height="100%" verticalAlign="middle" useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
+	<s:HGroup id="hbCont" paddingBottom="3" paddingTop="3" width="100%" fontSize="14" >
+		<s:HGroup width="100%" height="100%" verticalAlign="middle" useHandCursor="true" buttonMode="true" click="editClickHandler(event)">
 			<s:Label id="txtSalesNo" width="25%" textAlign="center" />
 			<s:Label id="txtCustomer" width="50%" textAlign="center"/>
 			<s:Label id="txtDate" width="25%" textAlign="center" />
 		</s:HGroup>
-		<s:HGroup id="hbContStat" width="23%" height="100%" useHandCursor="true" buttonMode="true" verticalAlign="middle" visible="false" includeInLayout="false">
+		<s:HGroup id="hbContStat" width="35%" height="100%" useHandCursor="true" buttonMode="true" verticalAlign="middle" 
+				  visible="false" includeInLayout="false" paddingRight="5">
 			<s:Button id="btnCancel" width="100%" label="Cancel" click="cancel_clickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Button id="btnOpen" width="100%" label="Open" click="open_clickHandler(event)" visible="false" includeInLayout="false"/>
 			<s:Label id="lblStatus" width="100%" fontSize="12" horizontalCenter="0" textAlign="center"/>
