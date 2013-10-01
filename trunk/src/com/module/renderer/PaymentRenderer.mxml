@@ -25,6 +25,7 @@
 			public var isDispatch:Boolean = false;
 			[Embed(source="assets/assets.swf", symbol="firefox_close_up")]
 			private static var DEFAULT_CLOSE_UP:Class;
+			public var isProcess:Boolean = false;
 			
 			public function set data(value:Object):void{
 				_data = value
@@ -98,10 +99,15 @@
 				var log2:ItemsTransEvent = new ItemsTransEvent(ItemsTransEvent.GET_PAYMENT_DETAILS,{payID:obj.payID,qBox:_theBox,itemRen:this})
 				CairngormEventDispatcher.getInstance().dispatchEvent(log2);
 				
-				_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
-				_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
-				_theBox.mainCont.enabled = false;
-				_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				if (!isProcess){
+					_theBox.btnCheckOut.visible = _theBox.btnCheckOut.includeInLayout = false;
+					_theBox.btnNew.visible = _theBox.btnNew.includeInLayout = true;
+					_theBox.mainCont.enabled = false;
+					_theBox.btnEdit.visible = _theBox.btnEdit.includeInLayout = true;
+				}else{
+					_theBox.mainCont.enabled = true;
+					_theBox.btnView.visible = _theBox.btnView.includeInLayout = true;
+				}
 			}
 			
 			protected function deleteClickHandler(event:MouseEvent):void

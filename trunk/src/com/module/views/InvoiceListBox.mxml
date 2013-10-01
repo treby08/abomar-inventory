@@ -563,7 +563,7 @@
 			protected function editClickHandler(event:MouseEvent):void
 			{
 				_type = 1;
-				btnCheckOut.label = "Submit Invoice";
+				//btnCheckOut.label = "Submit Invoice";
 				btnCheckOut.visible = btnCheckOut.includeInLayout = true;
 				btnView.visible = btnView.includeInLayout = true;
 				mainCont.enabled = true;
@@ -672,7 +672,7 @@
 				<s:Label text="Invoice No." width="25%" height="100%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
 				<s:Label text="Customer Name" width="30%" height="100%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5"  color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
 				<s:Label text="Date" width="27%" height="100%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
-				<s:Label text="Status" width="23%" height="100%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
+				<s:Label text="Status" width="33%" height="100%" backgroundColor="{AccessVars.instance().headerBgColor}" textAlign="center" paddingTop="5" paddingBottom="5" color="{AccessVars.instance().headerFontColor}" verticalAlign="middle"/>
 			</s:HGroup>
 			<s:Group width="100%" height="100%">
 				<s:Scroller width="100%" height="100%">
